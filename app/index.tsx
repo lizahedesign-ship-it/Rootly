@@ -1,10 +1,18 @@
 import { useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, ActivityIndicator } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Colors, Typography, Spacing } from '../src/theme';
+import { Colors } from '../src/theme';
 import { supabase } from '../src/services/supabase';
 import { useAuthStore } from '../src/store/authStore';
 
+/**
+ * Loading gate — checks the stored session once and routes:
+ *   session present  → /(parent)/home
+ *   no session       → /(auth)/login
+ *
+ * Ongoing session changes (expiry, sign-out) are handled by
+ * the onAuthStateChange listener in app/_layout.tsx.
+ */
 export default function IndexScreen() {
   const router = useRouter();
   const setSession = useAuthStore((s) => s.setSession);
@@ -18,32 +26,11 @@ export default function IndexScreen() {
         router.replace('/(auth)/login');
       }
     });
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-
-    return () => subscription.unsubscribe();
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Rootly</Text>
+    <View style={{ flex: 1, backgroundColor: Colors.bgPrimary, alignItems: 'center', justifyContent: 'center' }}>
+      <ActivityIndicator size="large" color={Colors.green600} />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.bgPrimary,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  text: {
-    fontFamily: 'Nunito_800ExtraBold',
-    fontSize: Typography.size['2xl'],
-    color: Colors.green700,
-    letterSpacing: Typography.tracking.tight,
-  },
-});

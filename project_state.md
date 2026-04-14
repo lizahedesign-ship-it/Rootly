@@ -4,10 +4,10 @@
 ---
 
 ## Current Stage
-**Active development — Slice 2 complete**
+**Active development — Slice 4 complete**
 
-Done: PRD v5, ARCH.md, theme.ts, project_state.md, wireframes (all 13 screens), user journey map (J1–J10), mode switch flow, design system, Slice 1 (scaffold), Slice 2 (Supabase schema + RLS)
-Next: Slice 3 (Auth: sign up / login)
+Done: PRD v5, ARCH.md, theme.ts, project_state.md, wireframes (all 13 screens), user journey map (J1–J10), mode switch flow, design system, Slice 1 (scaffold), Slice 2 (Supabase schema + RLS), Slice 3 (Auth), Slice 4 (Child profile)
+Next: Slice 5 (Mode switch: "Hand to [child]" button, PIN setup + storage, PIN modal bottom sheet)
 
 ---
 
@@ -17,8 +17,8 @@ Next: Slice 3 (Auth: sign up / login)
 |---|---|---|---|
 | 1 | Project scaffold: Expo init, folder structure, Supabase connection, theme.ts wired | All | ✅ Done |
 | 2 | Supabase schema + RLS: all tables, RLS policies, subscription_status + gender fields reserved | All | ✅ Done |
-| 3 | Auth: sign up / login (email + Apple ID + Google), email verification state, session expiry handling | J1, J2 | ⬜ Not started |
-| 4 | Child profile: create, store, max 4 guard, gender field, tab switcher on parent home | J1, J9 | ⬜ Not started |
+| 3 | Auth: sign up / login (email + Apple ID + Google), email verification state, session expiry handling | J1, J2 | ✅ Done |
+| 4 | Child profile: create, store, max 4 guard, gender field, tab switcher on parent home | J1, J9 | ✅ Done |
 | 5 | Mode switch: "Hand to [child]" button on parent home, PIN setup + storage (expo-secure-store), PIN modal (bottom sheet) on child mode exit | J9, J8 | ⬜ Not started |
 | 6 | Child home screen: task list, checkmark animation, long-press uncheck (0.65s), progress bar, date + greeting | J8 | ⬜ Not started |
 | 7 | All done screen + milestone animation: standard vs special (day 7/30/100), milestone table write | J8 | ⬜ Not started |
@@ -45,7 +45,7 @@ Next: Slice 3 (Auth: sign up / login)
 ---
 
 ## Next Step
-Start Slice 3 (Auth: sign up / login — email + Apple ID + Google, email verification, session expiry).
+Start Slice 5 (Mode switch: "Hand to [child]" button on parent home, PIN setup + storage in expo-secure-store, PIN modal as bottom sheet on child mode exit).
 
 **First Claude Code prompt:**
 ```
