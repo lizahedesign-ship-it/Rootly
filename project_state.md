@@ -4,10 +4,10 @@
 ---
 
 ## Current Stage
-**Active development — Slice 4 complete**
+**Active development — Slice 5 complete**
 
-Done: PRD v5, ARCH.md, theme.ts, project_state.md, wireframes (all 13 screens), user journey map (J1–J10), mode switch flow, design system, Slice 1 (scaffold), Slice 2 (Supabase schema + RLS), Slice 3 (Auth), Slice 4 (Child profile)
-Next: Slice 5 (Mode switch: "Hand to [child]" button, PIN setup + storage, PIN modal bottom sheet)
+Done: PRD v5, ARCH.md, theme.ts, project_state.md, wireframes (all 13 screens), user journey map (J1–J10), mode switch flow, design system, Slice 1 (scaffold), Slice 2 (Supabase schema + RLS), Slice 3 (Auth), Slice 4 (Child profile), Slice 5 (Mode switch)
+Next: Slice 6 (Child home: task list, checkmark animation, long-press uncheck, progress bar)
 
 ---
 
@@ -19,7 +19,7 @@ Next: Slice 5 (Mode switch: "Hand to [child]" button, PIN setup + storage, PIN m
 | 2 | Supabase schema + RLS: all tables, RLS policies, subscription_status + gender fields reserved | All | ✅ Done |
 | 3 | Auth: sign up / login (email + Apple ID + Google), email verification state, session expiry handling | J1, J2 | ✅ Done |
 | 4 | Child profile: create, store, max 4 guard, gender field, tab switcher on parent home | J1, J9 | ✅ Done |
-| 5 | Mode switch: "Hand to [child]" button on parent home, PIN setup + storage (expo-secure-store), PIN modal (bottom sheet) on child mode exit | J9, J8 | ⬜ Not started |
+| 5 | Mode switch: "Hand to [child]" button on parent home, PIN setup + storage (expo-secure-store), PIN modal (bottom sheet) on child mode exit | J9, J8 | ✅ Done |
 | 6 | Child home screen: task list, checkmark animation, long-press uncheck (0.65s), progress bar, date + greeting | J8 | ⬜ Not started |
 | 7 | All done screen + milestone animation: standard vs special (day 7/30/100), milestone table write | J8 | ⬜ Not started |
 | 8 | Task creation: 4-step flow (Name → Emoji picker → Category + Frequency → Commitment), quantity guard at 5 | J3, J10 | ⬜ Not started |
@@ -45,7 +45,7 @@ Next: Slice 5 (Mode switch: "Hand to [child]" button, PIN setup + storage, PIN m
 ---
 
 ## Next Step
-Start Slice 5 (Mode switch: "Hand to [child]" button on parent home, PIN setup + storage in expo-secure-store, PIN modal as bottom sheet on child mode exit).
+Start Slice 6 (Child home screen: task list, checkmark animation, long-press uncheck 0.65s, progress bar, date + greeting).
 
 **First Claude Code prompt:**
 ```

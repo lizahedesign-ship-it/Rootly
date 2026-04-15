@@ -13,6 +13,8 @@ import { Colors, Typography, Spacing, Radius } from '../../src/theme';
 import { useAuthStore } from '../../src/store/authStore';
 import { useChildStore } from '../../src/store/childStore';
 import { useChildProfile } from '../../src/hooks/useChildProfile';
+import { usePin } from '../../src/hooks/usePin';
+import { PinModal } from '../../src/components/PinModal';
 
 export default function ParentHomeScreen() {
   const router = useRouter();
@@ -21,8 +23,11 @@ export default function ParentHomeScreen() {
   const childProfiles = useChildStore((s) => s.childProfiles);
   const selectedChildId = useChildStore((s) => s.selectedChildId);
   const setSelectedChildId = useChildStore((s) => s.setSelectedChildId);
+  const setIsChildMode = useChildStore((s) => s.setIsChildMode);
   const { loadProfiles } = useChildProfile();
+  const { hasPin } = usePin();
   const [isLoading, setIsLoading] = useState(true);
+  const [showPinSetup, setShowPinSetup] = useState(false);
 
   useEffect(() => {
     if (!userId) return;
@@ -38,6 +43,17 @@ export default function ParentHomeScreen() {
   }, [userId]);
 
   const selectedChild = childProfiles.find((c) => c.id === selectedChildId);
+
+  const handleHandToChild = async () => {
+    if (!selectedChild) return;
+    const pinExists = await hasPin();
+    if (pinExists) {
+      setIsChildMode(true);
+      router.push('/(parent)/child-home');
+    } else {
+      setShowPinSetup(true);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -120,8 +136,33 @@ export default function ParentHomeScreen() {
               </>
             )}
           </View>
+
+          {/* "Hand to [child]" CTA */}
+          {selectedChild && (
+            <TouchableOpacity
+              style={styles.handToChildBtn}
+              onPress={handleHandToChild}
+              activeOpacity={0.85}
+            >
+              <Text style={styles.handToChildText}>
+                Hand to {selectedChild.name}
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
       )}
+
+      {/* PIN setup modal — shown first time parent enters child mode */}
+      <PinModal
+        visible={showPinSetup}
+        mode="setup"
+        onSuccess={() => {
+          setShowPinSetup(false);
+          setIsChildMode(true);
+          router.push('/(parent)/child-home');
+        }}
+        onCancel={() => setShowPinSetup(false)}
+      />
     </SafeAreaView>
   );
 }
@@ -229,6 +270,20 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito_600SemiBold',
     fontSize: Typography.size.base,
     color: Colors.textSecondary,
+  },
+  // ── Hand to child button ───────────────────────────────────────
+  handToChildBtn: {
+    marginHorizontal: Spacing.xl,
+    marginBottom: Spacing.xl,
+    paddingVertical: Spacing.lg,
+    borderRadius: Radius.full,
+    backgroundColor: Colors.green700,
+    alignItems: 'center',
+  },
+  handToChildText: {
+    fontFamily: 'Nunito_800ExtraBold',
+    fontSize: Typography.size.base,
+    color: Colors.white,
   },
   // ── Content area ───────────────────────────────────────────────
   contentArea: {
