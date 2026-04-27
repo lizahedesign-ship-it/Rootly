@@ -33,7 +33,7 @@
 - Task frequency: Daily / Weekdays / Weekend / Custom days
 - Task quantity guard: soft warning at 5 active tasks per child
 - Daily task completion with checkmark animation + confetti
-- Long-press to uncheck (0.65s red ring — deliberate friction)
+- Tap completed task to uncheck directly, shows toast confirmation
 - Completion screen: "Great job today!" — no streak numbers shown to child
 - Milestone animations: larger surprise animation at day 7, day 30, 100 completions — child sees no number, no explanation
 - Habit health system: Sprouting → Growing → Rooted → Blooming (computed server-side nightly)
@@ -92,7 +92,7 @@
 1. Parent hands device to child (via "Hand to [child]" button)
 2. Child sees task list with date + greeting
 3. Taps circle → fills green + confetti burst
-4. Long-press completed task 0.65s → red ring fills → release = uncheck + toast
+4. Tap completed task → immediately unchecked + toast shown
 5. All tasks done → "All done!" celebration screen, no numbers shown
 6. Milestone trigger (day 7 / 30 / 100): larger surprise animation, no number shown to child
 
@@ -227,7 +227,7 @@ consistency_rate, avg_recovery_days, trend (up | flat | down)
 | Child mode lock | Child cannot exit without correct PIN |
 | PIN modal | Slides up from bottom as sheet, numpad visible, 4 dots fill as typed |
 | Checkmark | Tap completes task, circle fills green + animation + confetti |
-| Long-press uncheck | 0.65s red ring → release = unchecked, toast appears |
+| Tap to uncheck | Tap completed task → immediately unchecked, toast appears |
 | All done screen | Fires only when all active tasks completed for that day |
 | Milestone animation | Day 7/30/100 triggers visibly different larger animation, no number shown |
 | Habit sort | Growing cards always appear first on parent home |
