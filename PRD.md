@@ -93,8 +93,8 @@
 2. Child sees task list with date + greeting
 3. Taps circle → fills green + confetti burst
 4. Tap completed task → immediately unchecked + toast shown
-5. All tasks done → "All done!" celebration screen, no numbers shown
-6. Milestone trigger (day 7 / 30 / 100): larger surprise animation, no number shown to child
+5. All tasks done → 400 ms delay → "Great job today, [name]!" full-screen celebration, no numbers shown. Child taps "Back to my tasks" to return to task list.
+6. Milestone trigger (day 7 / 30 / 100): larger surprise animation on same screen, no number shown to child
 
 ### 3.6 Parent views habit health
 1. Parent home shows cards sorted: Growing (yellow) first → Sprouting → Rooted → Blooming last
@@ -122,7 +122,7 @@
 | Parent Home | Child tab switcher, "Hand to [child]" button, habit health cards (worst→best), "+ Add task" |
 | Habit Detail | Stage bar, 3 signals + ❓, stage insight, say-to-child, milestone section for this task |
 | Child Home | Date + greeting, task circles, progress bar, "Parent exit · PIN" at bottom |
-| Child All Done | "Great job today!" — standard version + milestone surprise version (dark green) |
+| Child All Done | Full-screen celebration. Title: "Great job today, [name]!" Standard (green bg + confetti) + milestone (dark green bg + burst). Subtle "Back to my tasks" button at bottom. No numbers shown to child. |
 | Login / Sign Up | Email + Apple ID + Google. Email requires verification. |
 | Onboarding | 4 steps: illustration top + content bottom. First launch only. |
 | PIN Modal | Bottom sheet over dimmed bg. 4-dot indicator + numpad. Used on child mode exit only. |
@@ -228,7 +228,7 @@ consistency_rate, avg_recovery_days, trend (up | flat | down)
 | PIN modal | Slides up from bottom as sheet, numpad visible, 4 dots fill as typed |
 | Checkmark | Tap completes task, circle fills green + animation + confetti |
 | Tap to uncheck | Tap completed task → immediately unchecked, toast appears |
-| All done screen | Fires only when all active tasks completed for that day |
+| All done screen | Fires only when all active tasks completed for that day, with a 400 ms delay after the last completion. Shows "Great job today, [name]!". "Back to my tasks" returns to task list. No numbers shown to child. |
 | Milestone animation | Day 7/30/100 triggers visibly different larger animation, no number shown |
 | Habit sort | Growing cards always appear first on parent home |
 | ❓ tooltips | Tapping ❓ on each signal shows plain-language explanation |

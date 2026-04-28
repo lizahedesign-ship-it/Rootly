@@ -32,8 +32,21 @@ export default function ChildHomeScreen() {
   const setIsChildMode = useChildStore((s) => s.setIsChildMode);
 
   const child = childProfiles.find((c) => c.id === selectedChildId);
-  const { tasks, loading, completeTask, uncompleteTask, completedCount, totalCount } =
+  const { tasks, loading, completeTask, uncompleteTask, completedCount, totalCount, allDone } =
     useTasks(selectedChildId);
+
+  // Navigate to all-done screen when every task is complete.
+  // Use a ref guard so we only push once per session; reset when tasks are unchecked.
+  const allDoneNavigated = useRef(false);
+  useEffect(() => {
+    if (allDone && !allDoneNavigated.current) {
+      allDoneNavigated.current = true;
+      setTimeout(() => router.push('/(parent)/all-done'), 400);
+    }
+    if (!allDone) {
+      allDoneNavigated.current = false;
+    }
+  }, [allDone]);
 
   // PIN modal
   const [showPin, setShowPin] = useState(false);
