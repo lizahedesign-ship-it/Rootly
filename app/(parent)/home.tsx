@@ -14,7 +14,9 @@ import { useAuthStore } from '../../src/store/authStore';
 import { useChildStore } from '../../src/store/childStore';
 import { useChildProfile } from '../../src/hooks/useChildProfile';
 import { usePin } from '../../src/hooks/usePin';
+import { useHabitHealth } from '../../src/hooks/useHabitHealth';
 import { PinModal } from '../../src/components/PinModal';
+import { HabitCard } from '../../src/components/HabitCard';
 
 export default function ParentHomeScreen() {
   const router = useRouter();
@@ -26,6 +28,7 @@ export default function ParentHomeScreen() {
   const setIsChildMode = useChildStore((s) => s.setIsChildMode);
   const { loadProfiles } = useChildProfile();
   const { hasPin } = usePin();
+  const { habits, loading: habitsLoading } = useHabitHealth(selectedChildId);
   const [isLoading, setIsLoading] = useState(true);
   const [showPinSetup, setShowPinSetup] = useState(false);
 
@@ -64,95 +67,126 @@ export default function ParentHomeScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.headerRow}>
-        <Text style={styles.appName}>Rootly</Text>
-        <TouchableOpacity onPress={signOut}>
-          <Text style={styles.signOutText}>Sign out</Text>
-        </TouchableOpacity>
-      </View>
-
-      {childProfiles.length === 0 ? (
-        /* ── Empty state ── */
-        <View style={styles.emptyState}>
-          <Text style={styles.emptyEmoji}>🌱</Text>
-          <Text style={styles.emptyTitle}>Add your first child</Text>
-          <Text style={styles.emptySubtitle}>
-            Create a profile to start tracking habits together.
-          </Text>
-          <TouchableOpacity
-            style={styles.addFirstBtn}
-            onPress={() => router.push('/(parent)/create-profile')}
-          >
-            <Text style={styles.addFirstBtnText}>Create child profile</Text>
-          </TouchableOpacity>
-        </View>
-      ) : (
-        /* ── Child tabs + content ── */
+    <>
+      <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
         <View style={styles.flex}>
-          {/* Tab strip */}
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.tabStrip}
-          >
-            {childProfiles.map((child) => (
-              <TouchableOpacity
-                key={child.id}
-                style={[
-                  styles.tab,
-                  selectedChildId === child.id && styles.tabSelected,
-                ]}
-                onPress={() => setSelectedChildId(child.id)}
-              >
-                <Text
-                  style={[
-                    styles.tabText,
-                    selectedChildId === child.id && styles.tabTextSelected,
-                  ]}
-                >
-                  {child.name}
-                </Text>
-              </TouchableOpacity>
-            ))}
 
-            {childProfiles.length < 4 && (
-              <TouchableOpacity
-                style={styles.addTab}
-                onPress={() => router.push('/(parent)/create-profile')}
-              >
-                <Text style={styles.addTabText}>＋ Add</Text>
-              </TouchableOpacity>
-            )}
-          </ScrollView>
-
-          {/* Content area — habit health cards added in Slice 9 */}
-          <View style={styles.contentArea}>
-            {selectedChild && (
-              <>
-                <Text style={styles.greeting}>{selectedChild.name}'s habits</Text>
-                <Text style={styles.placeholder}>Habit cards coming in Slice 9</Text>
-              </>
-            )}
+          {/* Header */}
+          <View style={styles.headerRow}>
+            <Text style={styles.appName}>Rootly</Text>
+            <TouchableOpacity onPress={signOut}>
+              <Text style={styles.signOutText}>Sign out</Text>
+            </TouchableOpacity>
           </View>
 
-          {/* "Hand to [child]" CTA */}
-          {selectedChild && (
-            <TouchableOpacity
-              style={styles.handToChildBtn}
-              onPress={handleHandToChild}
-              activeOpacity={0.85}
-            >
-              <Text style={styles.handToChildText}>
-                Hand to {selectedChild.name}
+          {childProfiles.length === 0 ? (
+            /* ── Empty state ── */
+            <View style={styles.emptyState}>
+              <Text style={styles.emptyEmoji}>🌱</Text>
+              <Text style={styles.emptyTitle}>Add your first child</Text>
+              <Text style={styles.emptySubtitle}>
+                Create a profile to start tracking habits together.
               </Text>
-            </TouchableOpacity>
-          )}
-        </View>
-      )}
+              <TouchableOpacity
+                style={styles.addFirstBtn}
+                onPress={() => router.push('/(parent)/create-profile')}
+              >
+                <Text style={styles.addFirstBtnText}>Create child profile</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            /* ── Child tabs + content — flat siblings, no wrapper View ── */
+            <>
+              {/* Tab strip — immediately below header */}
+              <View style={styles.tabStrip}>
+                {childProfiles.map((child) => (
+                  <TouchableOpacity
+                    key={child.id}
+                    style={[
+                      styles.tab,
+                      selectedChildId === child.id && styles.tabSelected,
+                    ]}
+                    onPress={() => setSelectedChildId(child.id)}
+                  >
+                    <Text
+                      style={[
+                        styles.tabText,
+                        selectedChildId === child.id && styles.tabTextSelected,
+                      ]}
+                    >
+                      {child.name}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
 
-      {/* PIN setup modal — shown first time parent enters child mode */}
+                {childProfiles.length < 4 && (
+                  <TouchableOpacity
+                    style={styles.addTab}
+                    onPress={() => router.push('/(parent)/create-profile')}
+                  >
+                    <Text style={styles.addTabText}>＋ Add</Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+
+              {/* Habit health cards — flex:1 fills remaining space */}
+              <ScrollView
+                style={styles.flex}
+                contentContainerStyle={styles.contentArea}
+                showsVerticalScrollIndicator={false}
+              >
+                {selectedChild && (
+                  <>
+                    <Text style={styles.greeting}>{selectedChild.name}'s habits</Text>
+                    {habitsLoading ? (
+                      <ActivityIndicator color={Colors.green600} style={styles.loader} />
+                    ) : habits.length === 0 ? (
+                      <Text style={styles.noHabitsText}>
+                        No habits yet. Add a task to get started.
+                      </Text>
+                    ) : (
+                      habits.map((h) => (
+                        <HabitCard
+                          key={h.taskId}
+                          taskIcon={h.taskIcon}
+                          taskName={h.taskName}
+                          stage={h.stage}
+                          onPress={() => router.push(`/(parent)/habit-detail/${h.taskId}`)}
+                        />
+                      ))
+                    )}
+                  </>
+                )}
+              </ScrollView>
+
+              {selectedChild && (
+                <View style={styles.bottomActions}>
+                  <TouchableOpacity
+                    style={styles.addTaskBtn}
+                    onPress={() => router.push('/(parent)/create-task')}
+                    activeOpacity={0.85}
+                  >
+                    <Text style={styles.addTaskBtnText}>＋ Add a new task together</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={styles.handToChildBtn}
+                    onPress={handleHandToChild}
+                    activeOpacity={0.85}
+                  >
+                    <Text style={styles.handToChildText}>
+                      Hand to {selectedChild.name}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+            </>
+          )}
+
+        </View>
+      </SafeAreaView>
+
+      {/* PIN setup modal — outside SafeAreaView, no layout influence */}
       <PinModal
         visible={showPinSetup}
         mode="setup"
@@ -163,7 +197,7 @@ export default function ParentHomeScreen() {
         }}
         onCancel={() => setShowPinSetup(false)}
       />
-    </SafeAreaView>
+    </>
   );
 }
 
@@ -182,7 +216,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: Spacing.xl,
-    paddingVertical: Spacing.md,
+    paddingBottom: Spacing.xs,
   },
   appName: {
     fontFamily: 'Nunito_800ExtraBold',
@@ -232,9 +266,10 @@ const styles = StyleSheet.create({
   },
   // ── Tab strip ──────────────────────────────────────────────────
   tabStrip: {
+    flexDirection: 'row',
     paddingHorizontal: Spacing.xl,
-    paddingTop: Spacing.sm,
-    paddingBottom: Spacing.md,
+    paddingVertical: Spacing.sm,
+    paddingBottom: 12,
     gap: Spacing.sm,
     alignItems: 'center',
   },
@@ -271,10 +306,28 @@ const styles = StyleSheet.create({
     fontSize: Typography.size.base,
     color: Colors.textSecondary,
   },
+  // ── Bottom actions ─────────────────────────────────────────────
+  bottomActions: {
+    paddingHorizontal: Spacing.xl,
+    paddingTop: 12,
+    paddingBottom: Spacing.xl,
+    gap: Spacing.sm,
+  },
+  addTaskBtn: {
+    paddingVertical: Spacing.md,
+    borderRadius: Radius.full,
+    borderWidth: 1.5,
+    borderColor: Colors.green600,
+    alignItems: 'center',
+    backgroundColor: Colors.bgSecondary,
+  },
+  addTaskBtnText: {
+    fontFamily: 'Nunito_700Bold',
+    fontSize: Typography.size.base,
+    color: Colors.green700,
+  },
   // ── Hand to child button ───────────────────────────────────────
   handToChildBtn: {
-    marginHorizontal: Spacing.xl,
-    marginBottom: Spacing.xl,
     paddingVertical: Spacing.lg,
     borderRadius: Radius.full,
     backgroundColor: Colors.green700,
@@ -287,21 +340,26 @@ const styles = StyleSheet.create({
   },
   // ── Content area ───────────────────────────────────────────────
   contentArea: {
-    flex: 1,
     paddingHorizontal: Spacing.xl,
-    paddingTop: Spacing.lg,
-    alignItems: 'center',
-    justifyContent: 'center',
+    paddingTop: 0,
+    paddingBottom: Spacing.lg,
+    gap: Spacing.md,
   },
   greeting: {
     fontFamily: 'Nunito_700Bold',
     fontSize: Typography.size.xl,
     color: Colors.textPrimary,
-    marginBottom: Spacing.md,
+    marginTop: 0,
+    marginBottom: Spacing.xs,
   },
-  placeholder: {
+  loader: {
+    marginTop: Spacing['2xl'],
+  },
+  noHabitsText: {
     fontFamily: 'Nunito_500Medium',
-    fontSize: Typography.size.sm,
+    fontSize: Typography.size.base,
     color: Colors.textMuted,
+    textAlign: 'center',
+    marginTop: Spacing['2xl'],
   },
 });

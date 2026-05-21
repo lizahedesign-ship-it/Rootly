@@ -4,10 +4,10 @@
 ---
 
 ## Current Stage
-**Active development — Slice 7 complete**
+**Active development — Slice 10 in progress**
 
-Done: PRD v5, ARCH.md, theme.ts, project_state.md, wireframes (all 13 screens), user journey map (J1–J10), mode switch flow, design system, Slice 1 (scaffold), Slice 2 (Supabase schema + RLS), Slice 3 (Auth), Slice 4 (Child profile), Slice 5 (Mode switch), Slice 6 (Child home: task list, checkmark animation, long-press uncheck, progress bar), Slice 7 (All done screen + milestone animation)
-Next: Slice 8 (Task creation: 4-step flow)
+Done: PRD v5, ARCH.md, theme.ts, project_state.md, wireframes (all 13 screens), user journey map (J1–J10), mode switch flow, design system, Slice 1 (scaffold), Slice 2 (Supabase schema + RLS), Slice 3 (Auth), Slice 4 (Child profile), Slice 5 (Mode switch), Slice 6 (Child home: task list, checkmark animation, long-press uncheck, progress bar), Slice 7 (All done screen + milestone animation), Slice 8 (Task creation: 4-step flow), Slice 9 (Parent home: habit health cards — sorted Growing→Sprouting→Rooted→Blooming, HabitCard component, useHabitHealth hook, placeholder habit detail page), Slice 10 (Habit detail: stage progress bar, 3 signals + ❓ tooltips, pre-scripted insights, say-to-child, milestone section)
+Next: Slice 10 (Habit detail: stage progress bar, 3 signals + ❓ tooltips, pre-scripted insights, say-to-child, milestone section for this task)
 
 ---
 
@@ -22,9 +22,9 @@ Next: Slice 8 (Task creation: 4-step flow)
 | 5 | Mode switch: "Hand to [child]" button on parent home, PIN setup + storage (expo-secure-store), PIN modal (bottom sheet) on child mode exit | J9, J8 | ✅ Done |
 | 6 | Child home screen: task list, checkmark animation, long-press uncheck (0.65s), progress bar, date + greeting | J8 | ✅ Done |
 | 7 | All done screen + milestone animation: standard vs special (day 7/30/100), milestone table write | J8 | ✅ Done |
-| 8 | Task creation: 4-step flow (Name → Emoji picker → Category + Frequency → Commitment), quantity guard at 5 | J3, J10 | ⬜ Not started |
-| 9 | Parent home: habit health cards with task emoji + stage text, sorted Growing→Sprouting→Rooted→Blooming, "+ Add task" entry | J2 | ⬜ Not started |
-| 10 | Habit detail: stage progress bar, 3 signals + ❓ tooltips, pre-scripted insights, say-to-child, milestone section for this task | J2 | ⬜ Not started |
+| 8 | Task creation: 4-step flow (Name → Emoji picker → Category + Frequency → Commitment), quantity guard at 5 | J3, J10 | ✅ Done |
+| 9 | Parent home: habit health cards with task emoji + stage text, sorted Growing→Sprouting→Rooted→Blooming, "+ Add task" entry | J2 | ✅ Complete |
+| 10 | Habit detail: stage progress bar, 3 signals + ❓ tooltips, pre-scripted insights, say-to-child, milestone section for this task | J2 | 🔄 In progress |
 | 11 | Habit health Edge Function: nightly cron, snapshot table | J2 | ⬜ Not started |
 | 12 | Milestone card: photo upload, text note, Supabase Storage, signed URLs | J4 | ⬜ Not started |
 | 13 | Notifications: push token, milestone push, Never Miss Twice day 2 only, weekly summary Sunday | J4 | ⬜ Not started |
@@ -41,11 +41,12 @@ Next: Slice 8 (Task creation: 4-step flow)
 
 ## Known Issues
 - `npm install` requires `--legacy-peer-deps` due to react-dom@19.2.4 peer dep conflict with react@19.2.0.
+- Tab strip `View` needs `paddingBottom: 12`; `bottomActions` needs `paddingTop: 12` (spacing fix, not yet applied).
 
 ---
 
 ## Next Step
-Start Slice 8 (Task creation: 4-step flow — Name → Emoji picker → Category + Frequency → Commitment card, quantity guard at 5).
+Start Slice 10 (Habit detail: stage progress bar, 3 signals + ❓ tooltips, pre-scripted insights, say-to-child, milestone section for this task).
 
 **First Claude Code prompt:**
 ```
