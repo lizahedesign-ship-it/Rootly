@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Feather } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { supabase } from '../../../src/services/supabase';
 import {
@@ -280,7 +281,7 @@ export default function HabitDetailScreen() {
                     <View
                       style={[
                         styles.progressConnector,
-                        { backgroundColor: leftFilled ? Colors.green500 : Colors.border },
+                        { backgroundColor: leftFilled ? Colors.green700 : Colors.border },
                         isFirst && styles.progressConnectorInvisible,
                       ]}
                     />
@@ -288,18 +289,25 @@ export default function HabitDetailScreen() {
                       style={[
                         styles.progressNode,
                         isCurrent
-                          ? { backgroundColor: stageCfg.bg, borderColor: stageCfg.text, borderWidth: 2.5 }
+                          ? { borderColor: Colors.green700, borderWidth: 2.5 }
                           : isPast
-                          ? { backgroundColor: Colors.green500, borderWidth: 0 }
-                          : { backgroundColor: Colors.bgSecondary, borderColor: Colors.border, borderWidth: 1.5 },
+                          ? { borderColor: Colors.green700, borderWidth: 1.5 }
+                          : {},
                       ]}
                     >
-                      <Text style={styles.progressEmoji}>{cfg.emoji}</Text>
+                      <Text
+                        style={[
+                          styles.progressEmoji,
+                          !isCurrent && !isPast && { opacity: 0.4 },
+                        ]}
+                      >
+                        {cfg.emoji}
+                      </Text>
                     </View>
                     <View
                       style={[
                         styles.progressConnector,
-                        { backgroundColor: rightFilled ? Colors.green500 : Colors.border },
+                        { backgroundColor: rightFilled ? Colors.green700 : Colors.border },
                         isLast && styles.progressConnectorInvisible,
                       ]}
                     />
@@ -308,9 +316,9 @@ export default function HabitDetailScreen() {
                   <Text
                     style={[
                       styles.progressLabel,
-                      isCurrent && { color: stageCfg.text, fontFamily: 'Nunito_700Bold' },
-                      isPast    && { color: Colors.green600 },
-                      !isCurrent && !isPast && { color: Colors.textMuted },
+                      isCurrent && { color: Colors.green700, fontFamily: 'Nunito_700Bold' },
+                      isPast    && { color: Colors.green700, fontFamily: 'Nunito_700Bold' },
+                      !isCurrent && !isPast && { opacity: 0.4 },
                     ]}
                     numberOfLines={1}
                   >
@@ -335,11 +343,11 @@ export default function HabitDetailScreen() {
                 activeOpacity={0.7}
               >
                 <Text style={styles.signalName}>Consistency</Text>
-                <Text style={styles.tooltipToggle}>❓</Text>
+                <Feather name="info" size={14} color={Colors.textMuted} />
               </TouchableOpacity>
               <Text style={styles.signalValue}>
                 {snapshot?.consistency_rate != null
-                  ? `${Math.round(snapshot.consistency_rate * 100)}%`
+                  ? `${Math.round(snapshot.consistency_rate)}%`
                   : '—'}
               </Text>
               {showConsistencyTip && (
@@ -357,7 +365,7 @@ export default function HabitDetailScreen() {
                 activeOpacity={0.7}
               >
                 <Text style={styles.signalName}>Recovery</Text>
-                <Text style={styles.tooltipToggle}>❓</Text>
+                <Feather name="info" size={14} color={Colors.textMuted} />
               </TouchableOpacity>
               <Text style={styles.signalValue}>
                 {snapshot?.avg_recovery_days != null
@@ -379,7 +387,7 @@ export default function HabitDetailScreen() {
                 activeOpacity={0.7}
               >
                 <Text style={styles.signalName}>Trend</Text>
-                <Text style={styles.tooltipToggle}>❓</Text>
+                <Feather name="info" size={14} color={Colors.textMuted} />
               </TouchableOpacity>
               <Text style={[styles.signalValue, { color: trendColor(snapshot?.trend ?? null) }]}>
                 {trendLabel(snapshot?.trend ?? null)}
@@ -592,10 +600,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito_600SemiBold',
     fontSize: Typography.size.sm,
     color: Colors.textSecondary,
-  },
-  tooltipToggle: {
-    fontSize: 13,
-    opacity: 0.65,
   },
   signalValue: {
     fontFamily: 'Nunito_700Bold',
