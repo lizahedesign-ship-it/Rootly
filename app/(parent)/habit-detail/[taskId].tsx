@@ -156,6 +156,9 @@ export default function HabitDetailScreen() {
   async function loadAll() {
     setLoading(true);
 
+    const { data: { user } } = await supabase.auth.getUser();
+    console.log('[HabitDetail] auth.uid =', user?.id, '| taskId =', taskId);
+
     const [taskRes, snapRes, msRes] = await Promise.all([
       supabase
         .from('task')
@@ -175,6 +178,8 @@ export default function HabitDetailScreen() {
         .eq('task_id', taskId)
         .order('triggered_at', { ascending: false }),
     ]);
+
+    console.log('[HabitDetail] milestone query — error:', msRes.error, '| data:', msRes.data);
 
     if (taskRes.data) {
       setTask({ name: taskRes.data.name, icon: taskRes.data.icon });
@@ -440,13 +445,18 @@ export default function HabitDetailScreen() {
                 return (
                   <View key={m.id}>
                     {idx > 0 && <View style={styles.signalDivider} />}
-                    <View style={styles.milestoneRow}>
+                    <TouchableOpacity
+                      style={styles.milestoneRow}
+                      onPress={() => router.push(`/milestone-card/${m.id}` as any)}
+                      activeOpacity={0.7}
+                    >
                       <Text style={styles.milestoneEmoji}>{cfg.emoji}</Text>
                       <View style={styles.milestoneMeta}>
                         <Text style={styles.milestoneLabel}>{cfg.label}</Text>
                         <Text style={styles.milestoneDate}>{formatDate(m.triggered_at)}</Text>
                       </View>
-                    </View>
+                      <Feather name="chevron-right" size={16} color={Colors.textMuted} />
+                    </TouchableOpacity>
                   </View>
                 );
               })}

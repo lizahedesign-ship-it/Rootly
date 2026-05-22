@@ -4,10 +4,10 @@
 ---
 
 ## Current Stage
-**Active development — Slice 11 in progress**
+**Active development — Slice 13 next**
 
-Done: PRD v5, ARCH.md, theme.ts, project_state.md, wireframes (all 13 screens), user journey map (J1–J10), mode switch flow, design system, Slice 1 (scaffold), Slice 2 (Supabase schema + RLS), Slice 3 (Auth), Slice 4 (Child profile), Slice 5 (Mode switch), Slice 6 (Child home: task list, checkmark animation, long-press uncheck, progress bar), Slice 7 (All done screen + milestone animation), Slice 8 (Task creation: 4-step flow), Slice 9 (Parent home: habit health cards — sorted Growing→Sprouting→Rooted→Blooming, HabitCard component, useHabitHealth hook, placeholder habit detail page), Slice 10 (Habit detail: stage progress bar, 3 signals + ❓ tooltips, pre-scripted insights, say-to-child, milestone section)
-Next: Slice 11 (Habit health Edge Function: nightly cron, snapshot table)
+Done: PRD v5, ARCH.md, theme.ts, project_state.md, wireframes (all 13 screens), user journey map (J1–J10), mode switch flow, design system, Slice 1 (scaffold), Slice 2 (Supabase schema + RLS), Slice 3 (Auth), Slice 4 (Child profile), Slice 5 (Mode switch), Slice 6 (Child home: task list, checkmark animation, long-press uncheck, progress bar), Slice 7 (All done screen + milestone animation), Slice 8 (Task creation: 4-step flow), Slice 9 (Parent home: habit health cards — sorted Growing→Sprouting→Rooted→Blooming, HabitCard component, useHabitHealth hook, placeholder habit detail page), Slice 10 (Habit detail: stage progress bar, 3 signals + ❓ tooltips, pre-scripted insights, say-to-child, milestone section), Slice 11 (Habit health Edge Function: nightly cron, snapshot table), Slice 12 (Milestone card: photo upload, text note, Supabase Storage, signed URLs — habit-detail milestone rows tap to open card)
+Next: Slice 13 (Notifications: push token, milestone push, Never Miss Twice day 2 only, weekly summary Sunday)
 
 ---
 
@@ -25,8 +25,8 @@ Next: Slice 11 (Habit health Edge Function: nightly cron, snapshot table)
 | 8 | Task creation: 4-step flow (Name → Emoji picker → Category + Frequency → Commitment), quantity guard at 5 | J3, J10 | ✅ Done |
 | 9 | Parent home: habit health cards with task emoji + stage text, sorted Growing→Sprouting→Rooted→Blooming, "+ Add task" entry | J2 | ✅ Complete |
 | 10 | Habit detail: stage progress bar, 3 signals + ❓ tooltips, pre-scripted insights, say-to-child, milestone section for this task | J2 | ✅ Complete |
-| 11 | Habit health Edge Function: nightly cron, snapshot table | J2 | 🔄 In progress |
-| 12 | Milestone card: photo upload, text note, Supabase Storage, signed URLs | J4 | ⬜ Not started |
+| 11 | Habit health Edge Function: nightly cron, snapshot table | J2 | ✅ Complete |
+| 12 | Milestone card: photo upload, text note, Supabase Storage, signed URLs | J4 | ✅ Complete |
 | 13 | Notifications: push token, milestone push, Never Miss Twice day 2 only, weekly summary Sunday | J4 | ⬜ Not started |
 | 14 | Graduate habit: Blooming-only entry, dialog, graduated section in Records, restore | J5 | ⬜ Not started |
 | 15 | Summary screens + annual PDF export | J6 | ⬜ Not started |
@@ -46,18 +46,9 @@ Next: Slice 11 (Habit health Edge Function: nightly cron, snapshot table)
 ---
 
 ## Next Step
-Start Slice 11 (Habit health Edge Function: nightly cron, snapshot table).
+Start Slice 13 (Notifications: push token, milestone push, Never Miss Twice day 2 only, weekly summary Sunday).
 
-**First Claude Code prompt:**
-```
-先读项目根目录的 PRD.md、ARCH.md、project_state.md，了解当前状态。
-然后做 Slice 1：
-1. 初始化 Expo 项目（TypeScript 模板，项目名 rootly）
-2. 按照 ARCH.md Section 3 的目录结构建好所有文件夹
-3. 把 reference/theme.ts 里的内容接入项目
-4. 连接 Supabase（从 .env 读取 URL 和 anon key）
-只改这些文件，不要做任何其他功能。
-```
+**Before starting Slice 13:** Create the `milestone-photos` Supabase Storage bucket manually (see Decisions Log).
 
 ---
 
@@ -87,3 +78,6 @@ Start Slice 11 (Habit health Edge Function: nightly cron, snapshot table).
 | Mar 2026 | theme.ts: icon field (renamed from emoji) | Type: string | ImageSourcePropType. Allows illustrations to replace emojis in V2 without component changes. |
 | Mar 2026 | Slice 4 (child profile) before Slice 5 (mode switch) | Mode switch depends on profiles existing |
 | Mar 2026 | Hand to [child] button label updates with tab | Multi-child: button always shows current child's name. No extra selection step needed. |
+| May 2026 | Store storage path (not signed URL) in milestone.photo_url | Signed URLs expire in 1hr. Path is permanent; screen generates a fresh signed URL on load via createSignedUrl(). |
+| May 2026 | milestone-photos bucket must be created manually in Supabase Dashboard | Private bucket. RLS: INSERT/SELECT allowed where (storage.foldername(name))[1] = auth.uid()::text. |
+| May 2026 | Camera-library only for milestone photos (no camera capture) | Milestones are past events; parents add a memory photo from their roll, not a live shot. |
