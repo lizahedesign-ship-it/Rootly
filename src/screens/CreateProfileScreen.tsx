@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState } from 'react';
 import {
   View,
@@ -11,7 +12,7 @@ import {
   Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Colors, Typography, Spacing, Radius } from '../theme';
 import { useChildProfile } from '../hooks/useChildProfile';
 import type { ChildProfile } from '../store/childStore';
@@ -26,6 +27,7 @@ const GENDERS: { value: ChildProfile['gender']; label: string }[] = [
 
 export default function CreateProfileScreen() {
   const router = useRouter();
+  const { from } = useLocalSearchParams<{ from?: string }>();
   const { createProfile } = useChildProfile();
 
   const [name, setName] = useState('');
@@ -46,7 +48,12 @@ export default function CreateProfileScreen() {
     if (result.error) {
       setError(result.error);
     } else {
-      router.back();
+      if (from === 'onboarding') {
+        await AsyncStorage.setItem('onboarding_complete', 'true');
+        router.replace('/(parent)/home');
+      } else {
+        router.back();
+      }
     }
   };
 

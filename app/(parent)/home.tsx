@@ -99,9 +99,14 @@ export default function ParentHomeScreen() {
           {/* Header */}
           <View style={styles.headerRow}>
             <Text style={styles.appName}>Rootly</Text>
-            <TouchableOpacity onPress={signOut}>
-              <Text style={styles.signOutText}>Sign out</Text>
-            </TouchableOpacity>
+            <View style={styles.headerActions}>
+              <TouchableOpacity onPress={() => router.push('/(parent)/settings')}>
+                <Text style={styles.signOutText}>Settings</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={signOut}>
+                <Text style={styles.signOutText}>Sign out</Text>
+              </TouchableOpacity>
+            </View>
           </View>
 
           {childProfiles.length === 0 ? (
@@ -278,6 +283,11 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito_800ExtraBold',
     fontSize: Typography.size['2xl'],
     color: Colors.green700,
+  },
+  headerActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.lg,
   },
   signOutText: {
     fontFamily: 'Nunito_500Medium',

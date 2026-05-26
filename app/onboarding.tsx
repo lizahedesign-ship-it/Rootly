@@ -1,4 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -34,17 +33,15 @@ export default function OnboardingScreen() {
   const router = useRouter();
   const [step, setStep] = useState(0);
 
-  async function skip() {
-    await AsyncStorage.setItem('onboarding_complete', 'true');
-    router.push('/(parent)/create-profile');
+  function skip() {
+    router.push('/(parent)/create-profile?from=onboarding');
   }
 
-  async function handlePrimary() {
+  function handlePrimary() {
     if (step < SCREENS.length - 1) {
       setStep((s) => s + 1);
     } else {
-      await AsyncStorage.setItem('onboarding_complete', 'true');
-      router.push('/(parent)/create-profile');
+      router.push('/(parent)/create-profile?from=onboarding');
     }
   }
 

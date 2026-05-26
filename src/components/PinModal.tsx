@@ -116,14 +116,14 @@ export function PinModal({ visible, mode, onSuccess, onCancel }: Props) {
       transparent
       animationType="slide"
       statusBarTranslucent
-      onRequestClose={mode === 'setup' ? onCancel : undefined}
+      onRequestClose={onCancel}
     >
       <View style={styles.overlay}>
-        {/* Backdrop — tappable only in setup mode */}
+        {/* Backdrop — tappable whenever onCancel is provided */}
         <TouchableOpacity
           style={StyleSheet.absoluteFill}
           activeOpacity={1}
-          onPress={mode === 'setup' ? onCancel : undefined}
+          onPress={onCancel}
         />
 
         <View style={styles.sheet}>
@@ -172,7 +172,7 @@ export function PinModal({ visible, mode, onSuccess, onCancel }: Props) {
             ))}
           </View>
 
-          {mode === 'setup' && onCancel ? (
+          {onCancel ? (
             <TouchableOpacity style={styles.cancelBtn} onPress={onCancel}>
               <Text style={styles.cancelText}>Cancel</Text>
             </TouchableOpacity>
