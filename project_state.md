@@ -81,3 +81,4 @@ Start Slice 13 (Notifications: push token, milestone push, Never Miss Twice day 
 | May 2026 | Store storage path (not signed URL) in milestone.photo_url | Signed URLs expire in 1hr. Path is permanent; screen generates a fresh signed URL on load via createSignedUrl(). |
 | May 2026 | milestone-photos bucket must be created manually in Supabase Dashboard | Private bucket. RLS: INSERT/SELECT allowed where (storage.foldername(name))[1] = auth.uid()::text. |
 | May 2026 | Camera-library only for milestone photos (no camera capture) | Milestones are past events; parents add a memory photo from their roll, not a live shot. |
+| May 2026 | expo-file-system/legacy import required for SDK 54 | expo-file-system v19 (SDK 54) deprecates readAsStringAsync at the top-level import. Must use `import * as FileSystem from 'expo-file-system/legacy'` for base64 file reading. Using the standard import throws at runtime even though TypeScript compiles fine. |
