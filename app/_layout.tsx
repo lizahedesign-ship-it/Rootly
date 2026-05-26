@@ -71,7 +71,9 @@ export default function RootLayout() {
           headerShown: false,
           contentStyle: { backgroundColor: Colors.bgPrimary },
         }}
-      />
+      >
+        <Stack.Screen name="onboarding" options={{ gestureEnabled: false, headerShown: false }} />
+      </Stack>
     </>
   );
 }

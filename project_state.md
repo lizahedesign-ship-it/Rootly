@@ -4,9 +4,9 @@
 ---
 
 ## Current Stage
-**Active development — Slice 15 next**
+**Active development — Slice 15 next (Slice 16 done)**
 
-Done: PRD v5, ARCH.md, theme.ts, project_state.md, wireframes (all 13 screens), user journey map (J1–J10), mode switch flow, design system, Slice 1 (scaffold), Slice 2 (Supabase schema + RLS), Slice 3 (Auth), Slice 4 (Child profile), Slice 5 (Mode switch), Slice 6 (Child home: task list, checkmark animation, long-press uncheck, progress bar), Slice 7 (All done screen + milestone animation), Slice 8 (Task creation: 4-step flow), Slice 9 (Parent home: habit health cards — sorted Growing→Sprouting→Rooted→Blooming, HabitCard component, useHabitHealth hook, placeholder habit detail page), Slice 10 (Habit detail: stage progress bar, 3 signals + ❓ tooltips, pre-scripted insights, say-to-child, milestone section), Slice 11 (Habit health Edge Function: nightly cron, snapshot table), Slice 12 (Milestone card: photo upload, text note, Supabase Storage, signed URLs — habit-detail milestone rows tap to open card), Slice 13 (Notifications: push token registration, milestone push, Never Miss Twice day 2 only, weekly summary Sunday — 3 Edge Functions deployed), Slice 14 (Graduate habit: blooming-only button, confirmation dialog, graduated section on home, restore)
+Done: PRD v5, ARCH.md, theme.ts, project_state.md, wireframes (all 13 screens), user journey map (J1–J10), mode switch flow, design system, Slice 1 (scaffold), Slice 2 (Supabase schema + RLS), Slice 3 (Auth), Slice 4 (Child profile), Slice 5 (Mode switch), Slice 6 (Child home: task list, checkmark animation, long-press uncheck, progress bar), Slice 7 (All done screen + milestone animation), Slice 8 (Task creation: 4-step flow), Slice 9 (Parent home: habit health cards — sorted Growing→Sprouting→Rooted→Blooming, HabitCard component, useHabitHealth hook, placeholder habit detail page), Slice 10 (Habit detail: stage progress bar, 3 signals + ❓ tooltips, pre-scripted insights, say-to-child, milestone section), Slice 11 (Habit health Edge Function: nightly cron, snapshot table), Slice 12 (Milestone card: photo upload, text note, Supabase Storage, signed URLs — habit-detail milestone rows tap to open card), Slice 13 (Notifications: push token registration, milestone push, Never Miss Twice day 2 only, weekly summary Sunday — 3 Edge Functions deployed), Slice 14 (Graduate habit: blooming-only button, confirmation dialog, graduated section on home, restore), Slice 16 (Onboarding: 4-screen flow — philosophy, child profile creation, co-create first task, celebration; AsyncStorage gate in index.tsx)
 Next: Slice 15 (Summary screens + annual PDF export)
 
 ---
@@ -30,7 +30,7 @@ Next: Slice 15 (Summary screens + annual PDF export)
 | 13 | Notifications: push token, milestone push, Never Miss Twice day 2 only, weekly summary Sunday | J4 | ✅ Complete |
 | 14 | Graduate habit: Blooming-only entry, dialog, graduated section in Records, restore | J5 | ✅ Complete |
 | 15 | Summary screens + annual PDF export | J6 | ⬜ Not started |
-| 16 | Onboarding: 4 screens (illustration + content layout), first-time gate, philosophy → profile → co-create → enter | J1 | ⬜ Not started |
+| 16 | Onboarding: 4 screens (illustration + content layout), first-time gate, philosophy → profile → co-create → enter | J1 | ✅ Complete |
 | 17 | Settings: notification toggles (milestone non-dismissable), PIN management, child profile editing | J2 | ⬜ Not started |
 | 18 | Offline sync: AsyncStorage queue for completions, sync on reconnect | J8 | ⬜ Not started |
 | 19 | TestFlight: app.json, eas.json, bundle ID, icons, screenshots | — | ⬜ Not started |

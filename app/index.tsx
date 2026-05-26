@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect } from 'react';
 import { View, ActivityIndicator } from 'react-native';
 import { useRouter } from 'expo-router';
@@ -18,10 +19,13 @@ export default function IndexScreen() {
   const setSession = useAuthStore((s) => s.setSession);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       setSession(session);
       if (session) {
-        router.replace('/(parent)/home');
+        // TODO: restore onboarding gate before shipping
+        // const done = await AsyncStorage.getItem('onboarding_complete');
+        // if (done) { router.replace('/(parent)/home'); } else { router.replace('/onboarding'); }
+        router.replace('/onboarding');
       } else {
         router.replace('/(auth)/login');
       }
