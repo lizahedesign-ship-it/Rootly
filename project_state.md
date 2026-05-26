@@ -4,10 +4,10 @@
 ---
 
 ## Current Stage
-**Active development — Slice 15 next (Slice 16 done)**
+**Active development — Slice 17 next (Settings)**
 
-Done: PRD v5, ARCH.md, theme.ts, project_state.md, wireframes (all 13 screens), user journey map (J1–J10), mode switch flow, design system, Slice 1 (scaffold), Slice 2 (Supabase schema + RLS), Slice 3 (Auth), Slice 4 (Child profile), Slice 5 (Mode switch), Slice 6 (Child home: task list, checkmark animation, long-press uncheck, progress bar), Slice 7 (All done screen + milestone animation), Slice 8 (Task creation: 4-step flow), Slice 9 (Parent home: habit health cards — sorted Growing→Sprouting→Rooted→Blooming, HabitCard component, useHabitHealth hook, placeholder habit detail page), Slice 10 (Habit detail: stage progress bar, 3 signals + ❓ tooltips, pre-scripted insights, say-to-child, milestone section), Slice 11 (Habit health Edge Function: nightly cron, snapshot table), Slice 12 (Milestone card: photo upload, text note, Supabase Storage, signed URLs — habit-detail milestone rows tap to open card), Slice 13 (Notifications: push token registration, milestone push, Never Miss Twice day 2 only, weekly summary Sunday — 3 Edge Functions deployed), Slice 14 (Graduate habit: blooming-only button, confirmation dialog, graduated section on home, restore), Slice 16 (Onboarding: 4-screen flow — philosophy, child profile creation, co-create first task, celebration; AsyncStorage gate in index.tsx)
-Next: Slice 15 (Summary screens + annual PDF export)
+Done: PRD v5, ARCH.md, theme.ts, project_state.md, wireframes (all 13 screens), user journey map (J1–J10), mode switch flow, design system, Slice 1 (scaffold), Slice 2 (Supabase schema + RLS), Slice 3 (Auth), Slice 4 (Child profile), Slice 5 (Mode switch), Slice 6 (Child home: task list, checkmark animation, long-press uncheck, progress bar), Slice 7 (All done screen + milestone animation), Slice 8 (Task creation: 4-step flow), Slice 9 (Parent home: habit health cards — sorted Growing→Sprouting→Rooted→Blooming, HabitCard component, useHabitHealth hook, placeholder habit detail page), Slice 10 (Habit detail: stage progress bar, 3 signals + ❓ tooltips, pre-scripted insights, say-to-child, milestone section), Slice 11 (Habit health Edge Function: nightly cron, snapshot table), Slice 12 (Milestone card: photo upload, text note, Supabase Storage, signed URLs — habit-detail milestone rows tap to open card), Slice 13 (Notifications: push token registration, milestone push, Never Miss Twice day 2 only, weekly summary Sunday — 3 Edge Functions deployed), Slice 14 (Graduate habit: blooming-only button, confirmation dialog, graduated section on home, restore), Slice 16 (Onboarding: 3-screen philosophy flow, AsyncStorage gate in index.tsx, gestureEnabled: false in _layout.tsx, push to create-profile on complete/skip)
+Next: Slice 17 (Settings: notification toggles, PIN management, child profile editing)
 
 ---
 
@@ -43,11 +43,12 @@ Next: Slice 15 (Summary screens + annual PDF export)
 - `npm install` requires `--legacy-peer-deps` due to react-dom@19.2.4 peer dep conflict with react@19.2.0.
 - Tab strip `View` needs `paddingBottom: 12`; `bottomActions` needs `paddingTop: 12` (spacing fix, not yet applied).
 - Slice 13 cron jobs (`check-never-miss-twice`, `send-weekly-summary`) are deployed but cron schedules must be registered manually in Supabase Dashboard → Edge Functions → Schedule before going live. Verify this before TestFlight.
+- Onboarding swipe-back gesture (`gestureEnabled: false`) cannot be fully disabled in Expo Go — verify it is suppressed in a development build before TestFlight.
 
 ---
 
 ## Next Step
-Start Slice 15 (Summary screens + annual PDF export).
+Start Slice 17 (Settings: notification toggles, PIN management, child profile editing).
 
 ---
 
