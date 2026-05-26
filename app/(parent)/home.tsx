@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -6,15 +6,18 @@ import {
   ScrollView,
   StyleSheet,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
-import { Colors, Typography, Spacing, Radius } from '../../src/theme';
+import { useRouter, useFocusEffect } from 'expo-router';
+import { Colors, StageColors, Typography, Spacing, Radius } from '../../src/theme';
+import { supabase } from '../../src/services/supabase';
 import { useAuthStore } from '../../src/store/authStore';
 import { useChildStore } from '../../src/store/childStore';
 import { useChildProfile } from '../../src/hooks/useChildProfile';
 import { usePin } from '../../src/hooks/usePin';
 import { useHabitHealth } from '../../src/hooks/useHabitHealth';
+import { useGraduatedHabits } from '../../src/hooks/useGraduatedHabits';
 import { PinModal } from '../../src/components/PinModal';
 import { HabitCard } from '../../src/components/HabitCard';
 
@@ -28,9 +31,11 @@ export default function ParentHomeScreen() {
   const setIsChildMode = useChildStore((s) => s.setIsChildMode);
   const { loadProfiles } = useChildProfile();
   const { hasPin } = usePin();
-  const { habits, loading: habitsLoading } = useHabitHealth(selectedChildId);
+  const { habits, loading: habitsLoading, reload: reloadHabits } = useHabitHealth(selectedChildId);
+  const { graduatedHabits, reload: reloadGraduated } = useGraduatedHabits(selectedChildId);
   const [isLoading, setIsLoading] = useState(true);
   const [showPinSetup, setShowPinSetup] = useState(false);
+  const [restoringId, setRestoringId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!userId) return;
@@ -44,6 +49,26 @@ export default function ParentHomeScreen() {
     // loadProfiles captures userId internally; userId dep ensures reload on user change
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
+
+  // Reload both habit lists when returning from habit-detail (e.g. after graduating).
+  // The hooks' own useEffects handle initial load and child-tab switches.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useFocusEffect(useCallback(() => { reloadHabits(); reloadGraduated(); }, [selectedChildId]));
+
+  async function handleRestore(taskId: string) {
+    setRestoringId(taskId);
+    const { error } = await supabase
+      .from('task')
+      .update({ is_graduated: false, graduated_at: null })
+      .eq('id', taskId);
+
+    if (error) {
+      Alert.alert('Error', "Couldn't restore this habit. Please try again.");
+    } else {
+      await Promise.all([reloadHabits(), reloadGraduated()]);
+    }
+    setRestoringId(null);
+  }
 
   const selectedChild = childProfiles.find((c) => c.id === selectedChildId);
 
@@ -154,6 +179,37 @@ export default function ParentHomeScreen() {
                           onPress={() => router.push(`/(parent)/habit-detail/${h.taskId}`)}
                         />
                       ))
+                    )}
+
+                    {/* ── Graduated section ──────────────────────────────── */}
+                    {graduatedHabits.length > 0 && (
+                      <>
+                        <Text style={styles.graduatedHeader}>Graduated 🎓</Text>
+                        {graduatedHabits.map((h) => (
+                          <View key={h.taskId} style={styles.graduatedRow}>
+                            <Text style={styles.graduatedIcon}>{h.taskIcon}</Text>
+                            <View style={styles.graduatedMeta}>
+                              <Text style={styles.graduatedName}>{h.taskName}</Text>
+                              <Text style={styles.graduatedLabel}>Graduated</Text>
+                            </View>
+                            <TouchableOpacity
+                              style={[
+                                styles.restoreBtn,
+                                restoringId === h.taskId && styles.restoreBtnDisabled,
+                              ]}
+                              onPress={() => handleRestore(h.taskId)}
+                              disabled={restoringId !== null}
+                              activeOpacity={0.7}
+                            >
+                              {restoringId === h.taskId ? (
+                                <ActivityIndicator size="small" color={Colors.textSecondary} />
+                              ) : (
+                                <Text style={styles.restoreBtnText}>Restore</Text>
+                              )}
+                            </TouchableOpacity>
+                          </View>
+                        ))}
+                      </>
                     )}
                   </>
                 )}
@@ -361,5 +417,62 @@ const styles = StyleSheet.create({
     color: Colors.textMuted,
     textAlign: 'center',
     marginTop: Spacing['2xl'],
+  },
+
+  // ── Graduated section ───────────────────────────────────────────
+  graduatedHeader: {
+    fontFamily: 'Nunito_700Bold',
+    fontSize: Typography.size.sm,
+    color: Colors.textMuted,
+    textTransform: 'uppercase',
+    letterSpacing: 0.8,
+    marginTop: Spacing.lg,
+    marginBottom: Spacing.xs,
+  },
+  graduatedRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: StageColors.graduated.bg,
+    borderRadius: Radius.lg,
+    paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.lg,
+    opacity: 0.75,
+    gap: Spacing.md,
+  },
+  graduatedIcon: {
+    fontSize: 28,
+    width: 36,
+    textAlign: 'center',
+  },
+  graduatedMeta: {
+    flex: 1,
+    gap: 2,
+  },
+  graduatedName: {
+    fontFamily: 'Nunito_700Bold',
+    fontSize: Typography.size.base,
+    color: Colors.textPrimary,
+  },
+  graduatedLabel: {
+    fontFamily: 'Nunito_500Medium',
+    fontSize: Typography.size.sm,
+    color: Colors.textMuted,
+  },
+  restoreBtn: {
+    borderWidth: 1.5,
+    borderColor: Colors.borderMedium,
+    borderRadius: Radius.full,
+    paddingVertical: Spacing.xs,
+    paddingHorizontal: Spacing.md,
+    minWidth: 72,
+    alignItems: 'center',
+  },
+  restoreBtnDisabled: {
+    opacity: 0.5,
+  },
+  restoreBtnText: {
+    fontFamily: 'Nunito_600SemiBold',
+    fontSize: Typography.size.sm,
+    color: Colors.textSecondary,
   },
 });

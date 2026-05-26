@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
@@ -141,6 +142,7 @@ export default function HabitDetailScreen() {
   const [snapshot, setSnapshot]   = useState<HabitSnapshot | null>(null);
   const [milestones, setMilestones] = useState<MilestoneItem[]>([]);
   const [loading, setLoading]     = useState(true);
+  const [graduating, setGraduating] = useState(false);
 
   // Tooltip open state for each signal
   const [showConsistencyTip, setShowConsistencyTip] = useState(false);
@@ -205,6 +207,35 @@ export default function HabitDetailScreen() {
     );
 
     setLoading(false);
+  }
+
+  // ── Graduate ─────────────────────────────────────────────────────────────────
+
+  function handleGraduate() {
+    Alert.alert(
+      'Graduate this habit?',
+      "This habit will be removed from the daily task list. All history, milestones, and progress are preserved forever. You can restore it any time.",
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Graduate 🎓', style: 'default', onPress: confirmGraduate },
+      ],
+    );
+  }
+
+  async function confirmGraduate() {
+    if (!taskId) return;
+    setGraduating(true);
+    const { error } = await supabase
+      .from('task')
+      .update({ is_graduated: true, graduated_at: new Date().toISOString() })
+      .eq('id', taskId);
+
+    if (error) {
+      Alert.alert('Error', "Couldn't graduate this habit. Please try again.");
+      setGraduating(false);
+    } else {
+      router.back();
+    }
   }
 
   // ── Loading ──────────────────────────────────────────────────────────────────
@@ -431,7 +462,7 @@ export default function HabitDetailScreen() {
         </View>
 
         {/* ── Milestones ─────────────────────────────────────────────────────── */}
-        <View style={[styles.section, styles.lastSection]}>
+        <View style={[styles.section, stage !== 'blooming' && styles.lastSection]}>
           <Text style={styles.sectionTitle}>Milestones</Text>
           {milestones.length === 0 ? (
             <View style={styles.emptyMilestones}>
@@ -463,6 +494,24 @@ export default function HabitDetailScreen() {
             </View>
           )}
         </View>
+
+        {/* ── Graduate button (blooming only) ────────────────────────────────── */}
+        {stage === 'blooming' && (
+          <View style={[styles.section, styles.lastSection]}>
+            <TouchableOpacity
+              style={[styles.graduateBtn, graduating && styles.graduateBtnDisabled]}
+              onPress={handleGraduate}
+              activeOpacity={0.85}
+              disabled={graduating}
+            >
+              {graduating ? (
+                <ActivityIndicator color={Colors.white} size="small" />
+              ) : (
+                <Text style={styles.graduateBtnText}>Graduate this habit 🎓</Text>
+              )}
+            </TouchableOpacity>
+          </View>
+        )}
 
       </ScrollView>
     </SafeAreaView>
@@ -706,5 +755,22 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito_500Medium',
     fontSize: Typography.size.sm,
     color: Colors.textMuted,
+  },
+
+  // ── Graduate button ──────────────────────────────────────────────────────────
+  graduateBtn: {
+    backgroundColor: Colors.green700,
+    borderRadius: Radius.lg,
+    paddingVertical: Spacing.lg,
+    alignItems: 'center',
+    marginTop: Spacing.sm,
+  },
+  graduateBtnDisabled: {
+    opacity: 0.5,
+  },
+  graduateBtnText: {
+    fontFamily: 'Nunito_700Bold',
+    fontSize: Typography.size.base,
+    color: Colors.white,
   },
 });
