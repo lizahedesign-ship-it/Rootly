@@ -4,10 +4,10 @@
 ---
 
 ## Current Stage
-**Active development — Slice 13 next**
+**Active development — Slice 14 next**
 
-Done: PRD v5, ARCH.md, theme.ts, project_state.md, wireframes (all 13 screens), user journey map (J1–J10), mode switch flow, design system, Slice 1 (scaffold), Slice 2 (Supabase schema + RLS), Slice 3 (Auth), Slice 4 (Child profile), Slice 5 (Mode switch), Slice 6 (Child home: task list, checkmark animation, long-press uncheck, progress bar), Slice 7 (All done screen + milestone animation), Slice 8 (Task creation: 4-step flow), Slice 9 (Parent home: habit health cards — sorted Growing→Sprouting→Rooted→Blooming, HabitCard component, useHabitHealth hook, placeholder habit detail page), Slice 10 (Habit detail: stage progress bar, 3 signals + ❓ tooltips, pre-scripted insights, say-to-child, milestone section), Slice 11 (Habit health Edge Function: nightly cron, snapshot table), Slice 12 (Milestone card: photo upload, text note, Supabase Storage, signed URLs — habit-detail milestone rows tap to open card)
-Next: Slice 13 (Notifications: push token, milestone push, Never Miss Twice day 2 only, weekly summary Sunday)
+Done: PRD v5, ARCH.md, theme.ts, project_state.md, wireframes (all 13 screens), user journey map (J1–J10), mode switch flow, design system, Slice 1 (scaffold), Slice 2 (Supabase schema + RLS), Slice 3 (Auth), Slice 4 (Child profile), Slice 5 (Mode switch), Slice 6 (Child home: task list, checkmark animation, long-press uncheck, progress bar), Slice 7 (All done screen + milestone animation), Slice 8 (Task creation: 4-step flow), Slice 9 (Parent home: habit health cards — sorted Growing→Sprouting→Rooted→Blooming, HabitCard component, useHabitHealth hook, placeholder habit detail page), Slice 10 (Habit detail: stage progress bar, 3 signals + ❓ tooltips, pre-scripted insights, say-to-child, milestone section), Slice 11 (Habit health Edge Function: nightly cron, snapshot table), Slice 12 (Milestone card: photo upload, text note, Supabase Storage, signed URLs — habit-detail milestone rows tap to open card), Slice 13 (Notifications: push token registration, milestone push, Never Miss Twice day 2 only, weekly summary Sunday — 3 Edge Functions deployed)
+Next: Slice 14 (Graduate habit: Blooming-only entry, dialog, graduated section in Records, restore)
 
 ---
 
@@ -27,7 +27,7 @@ Next: Slice 13 (Notifications: push token, milestone push, Never Miss Twice day 
 | 10 | Habit detail: stage progress bar, 3 signals + ❓ tooltips, pre-scripted insights, say-to-child, milestone section for this task | J2 | ✅ Complete |
 | 11 | Habit health Edge Function: nightly cron, snapshot table | J2 | ✅ Complete |
 | 12 | Milestone card: photo upload, text note, Supabase Storage, signed URLs | J4 | ✅ Complete |
-| 13 | Notifications: push token, milestone push, Never Miss Twice day 2 only, weekly summary Sunday | J4 | ⬜ Not started |
+| 13 | Notifications: push token, milestone push, Never Miss Twice day 2 only, weekly summary Sunday | J4 | ✅ Complete |
 | 14 | Graduate habit: Blooming-only entry, dialog, graduated section in Records, restore | J5 | ⬜ Not started |
 | 15 | Summary screens + annual PDF export | J6 | ⬜ Not started |
 | 16 | Onboarding: 4 screens (illustration + content layout), first-time gate, philosophy → profile → co-create → enter | J1 | ⬜ Not started |
@@ -42,13 +42,12 @@ Next: Slice 13 (Notifications: push token, milestone push, Never Miss Twice day 
 ## Known Issues
 - `npm install` requires `--legacy-peer-deps` due to react-dom@19.2.4 peer dep conflict with react@19.2.0.
 - Tab strip `View` needs `paddingBottom: 12`; `bottomActions` needs `paddingTop: 12` (spacing fix, not yet applied).
+- Slice 13 cron jobs (`check-never-miss-twice`, `send-weekly-summary`) are deployed but cron schedules must be registered manually in Supabase Dashboard → Edge Functions → Schedule before going live. Verify this before TestFlight.
 
 ---
 
 ## Next Step
-Start Slice 13 (Notifications: push token, milestone push, Never Miss Twice day 2 only, weekly summary Sunday).
-
-**Before starting Slice 13:** Create the `milestone-photos` Supabase Storage bucket manually (see Decisions Log).
+Start Slice 14 (Graduate habit: Blooming-only entry, dialog, graduated section in Records, restore).
 
 ---
 
