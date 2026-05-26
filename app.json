@@ -32,7 +32,15 @@
       "expo-secure-store",
       "expo-font",
       "expo-web-browser",
-      "expo-apple-authentication"
-    ]
+      "expo-apple-authentication",
+      "expo-notifications"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "c02e507d-e7b8-4604-9c2d-1b84a752a050"
+      },
+      "router": {}
+    },
+    "owner": "lizahedesign"
   }
 }

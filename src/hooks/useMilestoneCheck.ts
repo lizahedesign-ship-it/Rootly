@@ -60,6 +60,15 @@ async function detectAndWriteMilestone(childId: string, userId: string): Promise
           type,
           triggered_at: new Date().toISOString(),
         });
+
+        // Notify parent via push. Fire-and-forget — a push failure must never
+        // block or crash the child UI. The function validates the JWT server-side.
+        supabase.functions
+          .invoke('send-milestone-notification', {
+            body: { parent_id: userId, child_id: childId },
+          })
+          .catch(() => {});
+
         return true; // First milestone found wins; show animation once
       }
     }
