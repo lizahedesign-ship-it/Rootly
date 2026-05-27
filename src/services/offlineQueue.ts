@@ -51,6 +51,14 @@ export async function enqueueCompletion(item: QueuedCompletion): Promise<void> {
 }
 
 /**
+ * Return the current queue without modifying it.
+ * Used by useTasks to overlay offline-queued completions onto the cached task list.
+ */
+export async function getQueue(): Promise<QueuedCompletion[]> {
+  return readQueue();
+}
+
+/**
  * Flush all queued completions to Supabase.
  * - Items that succeed are removed from the queue.
  * - Items that fail are retained for the next reconnect attempt.

@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo from '@react-native-community/netinfo';
 import { supabase } from '../services/supabase';
 import { useAuthStore } from '../store/authStore';
-import { enqueueCompletion } from '../services/offlineQueue';
+import { enqueueCompletion, getQueue } from '../services/offlineQueue';
 
 export interface TaskItem {
   id: string;
@@ -45,6 +46,12 @@ function todayString(): string {
   return `${yyyy}-${mm}-${dd}`;
 }
 
+// AsyncStorage key for the task list cache — scoped to child + date so
+// yesterday's cache never bleeds into today's session.
+function taskCacheKey(childId: string, date: string): string {
+  return `task_cache_${childId}_${date}`;
+}
+
 export function useTasks(childId: string | null) {
   const userId = useAuthStore((s) => s.currentUser?.id);
   const [tasks, setTasks] = useState<TaskItem[]>([]);
@@ -56,7 +63,10 @@ export function useTasks(childId: string | null) {
     if (!childId) return;
     setLoading(true);
 
-    const [{ data: taskData }, { data: completionData }] = await Promise.all([
+    const [
+      { data: taskData, error: taskError },
+      { data: completionData },
+    ] = await Promise.all([
       supabase
         .from('task')
         .select('id, child_id, name, icon, frequency, custom_days')
@@ -70,10 +80,41 @@ export function useTasks(childId: string | null) {
         .eq('completed_at', today),
     ]);
 
+    if (taskError || taskData === null) {
+      // Network / Supabase unavailable — fall back to cached task list.
+      try {
+        const raw = await AsyncStorage.getItem(taskCacheKey(childId, today));
+        if (raw) {
+          const cached: TaskItem[] = JSON.parse(raw);
+          // Overlay completions that are queued but not yet synced to Supabase,
+          // so a task the child completed in a previous offline session still
+          // shows as checked after an app restart.
+          const queue = await getQueue();
+          const queuedIds = new Set(
+            queue
+              .filter((q) => q.childId === childId && q.completedAt === today)
+              .map((q) => q.taskId)
+          );
+          setTasks(
+            cached.map((t) => ({
+              ...t,
+              isCompleted: t.isCompleted || queuedIds.has(t.id),
+            }))
+          );
+        }
+        // If no cache exists yet, tasks stays [] — acceptable first-ever offline launch.
+      } catch {
+        // Cache read failed — leave tasks as [].
+      }
+      setLoading(false);
+      return;
+    }
+
+    // Supabase succeeded — build the task list and write it to cache.
     const now = new Date();
     const completedSet = new Set((completionData ?? []).map((c: any) => c.task_id as string));
 
-    const todaysTasks: TaskItem[] = (taskData ?? [])
+    const todaysTasks: TaskItem[] = taskData
       .filter((t: any) => isScheduledToday(t as RawTask, now))
       .map((t: any) => ({
         id: t.id as string,
@@ -83,6 +124,13 @@ export function useTasks(childId: string | null) {
       }));
 
     setTasks(todaysTasks);
+
+    try {
+      await AsyncStorage.setItem(taskCacheKey(childId, today), JSON.stringify(todaysTasks));
+    } catch {
+      // Cache write failure is non-fatal.
+    }
+
     setLoading(false);
   };
 
