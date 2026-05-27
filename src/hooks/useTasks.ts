@@ -59,76 +59,79 @@ export function useTasks(childId: string | null) {
 
   const today = todayString();
 
+  // Read the cached task list and overlay any offline-queued completions.
+  // Called whenever the Supabase fetch fails or throws.
+  const loadFromCache = async (cid: string) => {
+    try {
+      const raw = await AsyncStorage.getItem(taskCacheKey(cid, today));
+      if (!raw) return; // No cache yet — tasks stays [].
+      const cached: TaskItem[] = JSON.parse(raw);
+      const queue = await getQueue();
+      const queuedIds = new Set(
+        queue
+          .filter((q) => q.childId === cid && q.completedAt === today)
+          .map((q) => q.taskId)
+      );
+      setTasks(
+        cached.map((t) => ({
+          ...t,
+          isCompleted: t.isCompleted || queuedIds.has(t.id),
+        }))
+      );
+    } catch {
+      // Cache read failed — leave tasks as [].
+    }
+  };
+
   const loadTasks = async () => {
     if (!childId) return;
     setLoading(true);
 
-    const [
-      { data: taskData, error: taskError },
-      { data: completionData },
-    ] = await Promise.all([
-      supabase
-        .from('task')
-        .select('id, child_id, name, icon, frequency, custom_days')
-        .eq('child_id', childId)
-        .eq('is_active', true)
-        .eq('is_graduated', false),
-      supabase
-        .from('task_completion')
-        .select('task_id')
-        .eq('child_id', childId)
-        .eq('completed_at', today),
-    ]);
-
-    if (taskError || taskData === null) {
-      // Network / Supabase unavailable — fall back to cached task list.
-      try {
-        const raw = await AsyncStorage.getItem(taskCacheKey(childId, today));
-        if (raw) {
-          const cached: TaskItem[] = JSON.parse(raw);
-          // Overlay completions that are queued but not yet synced to Supabase,
-          // so a task the child completed in a previous offline session still
-          // shows as checked after an app restart.
-          const queue = await getQueue();
-          const queuedIds = new Set(
-            queue
-              .filter((q) => q.childId === childId && q.completedAt === today)
-              .map((q) => q.taskId)
-          );
-          setTasks(
-            cached.map((t) => ({
-              ...t,
-              isCompleted: t.isCompleted || queuedIds.has(t.id),
-            }))
-          );
-        }
-        // If no cache exists yet, tasks stays [] — acceptable first-ever offline launch.
-      } catch {
-        // Cache read failed — leave tasks as [].
-      }
-      setLoading(false);
-      return;
-    }
-
-    // Supabase succeeded — build the task list and write it to cache.
-    const now = new Date();
-    const completedSet = new Set((completionData ?? []).map((c: any) => c.task_id as string));
-
-    const todaysTasks: TaskItem[] = taskData
-      .filter((t: any) => isScheduledToday(t as RawTask, now))
-      .map((t: any) => ({
-        id: t.id as string,
-        name: t.name as string,
-        icon: t.icon as string,
-        isCompleted: completedSet.has(t.id),
-      }));
-
-    setTasks(todaysTasks);
-
     try {
-      await AsyncStorage.setItem(taskCacheKey(childId, today), JSON.stringify(todaysTasks));
+      const [
+        { data: taskData, error: taskError },
+        { data: completionData },
+      ] = await Promise.all([
+        supabase
+          .from('task')
+          .select('id, child_id, name, icon, frequency, custom_days')
+          .eq('child_id', childId)
+          .eq('is_active', true)
+          .eq('is_graduated', false),
+        supabase
+          .from('task_completion')
+          .select('task_id')
+          .eq('child_id', childId)
+          .eq('completed_at', today),
+      ]);
+
+      // A returned error or null data is treated the same as a thrown network
+      // error — both fall through to the cache path.
+      if (taskError || taskData === null) throw taskError ?? new Error('fetch_failed');
+
+      // Supabase succeeded — build task list and write to cache.
+      const now = new Date();
+      const completedSet = new Set((completionData ?? []).map((c: any) => c.task_id as string));
+
+      const todaysTasks: TaskItem[] = taskData
+        .filter((t: any) => isScheduledToday(t as RawTask, now))
+        .map((t: any) => ({
+          id: t.id as string,
+          name: t.name as string,
+          icon: t.icon as string,
+          isCompleted: completedSet.has(t.id),
+        }));
+
+      setTasks(todaysTasks);
+
+      try {
+        await AsyncStorage.setItem(taskCacheKey(childId, today), JSON.stringify(todaysTasks));
+      } catch {
+        // Cache write failure is non-fatal.
+      }
     } catch {
-      // Cache write failure is non-fatal.
+      // Network threw or Supabase returned an error — fall back to cache.
+      await loadFromCache(childId);
     }
 
     setLoading(false);
