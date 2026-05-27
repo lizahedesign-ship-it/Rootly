@@ -17,6 +17,7 @@ import {
   setNotificationHandler,
   registerForPushNotifications,
 } from '../src/services/notificationsService';
+import { useOfflineSync } from '../src/hooks/useOfflineSync';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -24,6 +25,8 @@ SplashScreen.preventAutoHideAsync();
 setNotificationHandler();
 
 export default function RootLayout() {
+  useOfflineSync();
+
   const setSession  = useAuthStore((s) => s.setSession);
   const isLoggedIn  = useAuthStore((s) => s.isLoggedIn);
   const currentUser = useAuthStore((s) => s.currentUser);

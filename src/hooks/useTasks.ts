@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
+import NetInfo from '@react-native-community/netinfo';
 import { supabase } from '../services/supabase';
 import { useAuthStore } from '../store/authStore';
+import { enqueueCompletion } from '../services/offlineQueue';
 
 export interface TaskItem {
   id: string;
@@ -85,15 +87,23 @@ export function useTasks(childId: string | null) {
   };
 
   const completeTask = async (taskId: string) => {
-    // Optimistic update
+    // Optimistic update — always instant, regardless of network.
     setTasks((prev) =>
       prev.map((t) => (t.id === taskId ? { ...t, isCompleted: true } : t))
     );
     if (!userId || !childId) return;
-    await supabase.from('task_completion').upsert(
-      { task_id: taskId, child_id: childId, parent_id: userId, completed_at: today },
-      { onConflict: 'task_id,completed_at' }
-    );
+
+    const net = await NetInfo.fetch();
+    const isOnline = net.isConnected === true && net.isInternetReachable !== false;
+
+    if (isOnline) {
+      await supabase.from('task_completion').upsert(
+        { task_id: taskId, child_id: childId, parent_id: userId, completed_at: today },
+        { onConflict: 'task_id,completed_at' }
+      );
+    } else {
+      await enqueueCompletion({ taskId, childId, parentId: userId, completedAt: today });
+    }
   };
 
   const uncompleteTask = async (taskId: string) => {
