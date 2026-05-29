@@ -87,6 +87,16 @@ export function useTasks(childId: string | null) {
     if (!childId) return;
     setLoading(true);
 
+    // Check connectivity before querying. When offline the Supabase JS client
+    // returns { data: [], error: null } — a successful empty result — so we
+    // cannot rely on the error field alone to detect being offline.
+    const net = await NetInfo.fetch();
+    if (net.isConnected !== true || net.isInternetReachable === false) {
+      await loadFromCache(childId);
+      setLoading(false);
+      return;
+    }
+
     try {
       const [
         { data: taskData, error: taskError },
@@ -105,8 +115,6 @@ export function useTasks(childId: string | null) {
           .eq('completed_at', today),
       ]);
 
-      // A returned error or null data is treated the same as a thrown network
-      // error — both fall through to the cache path.
       if (taskError || taskData === null) throw taskError ?? new Error('fetch_failed');
 
       // Supabase succeeded — build task list and write to cache.

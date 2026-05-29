@@ -10,6 +10,8 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import NetInfo from '@react-native-community/netinfo';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { supabase } from '../../../src/services/supabase';
 import {
@@ -155,56 +157,89 @@ export default function HabitDetailScreen() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [taskId]);
 
+  const DETAIL_CACHE_KEY = `habit_detail_cache_${taskId}`;
+
+  function applyCache(raw: string) {
+    const cached = JSON.parse(raw) as {
+      task: TaskDetail;
+      snapshot: HabitSnapshot;
+      milestones: MilestoneItem[];
+    };
+    setTask(cached.task);
+    setSnapshot(cached.snapshot);
+    setMilestones(cached.milestones);
+  }
+
   async function loadAll() {
     setLoading(true);
 
-    const { data: { user } } = await supabase.auth.getUser();
-    console.log('[HabitDetail] auth.uid =', user?.id, '| taskId =', taskId);
-
-    const [taskRes, snapRes, msRes] = await Promise.all([
-      supabase
-        .from('task')
-        .select('name, icon')
-        .eq('id', taskId)
-        .single(),
-      supabase
-        .from('habit_health_snapshot')
-        .select('stage, consistency_rate, avg_recovery_days, trend')
-        .eq('task_id', taskId)
-        .order('computed_at', { ascending: false })
-        .limit(1)
-        .maybeSingle(),
-      supabase
-        .from('milestone')
-        .select('id, type, triggered_at')
-        .eq('task_id', taskId)
-        .order('triggered_at', { ascending: false }),
-    ]);
-
-    console.log('[HabitDetail] milestone query — error:', msRes.error, '| data:', msRes.data);
-
-    if (taskRes.data) {
-      setTask({ name: taskRes.data.name, icon: taskRes.data.icon });
+    // Check connectivity first — Supabase can return empty data with no error
+    // when offline, which would overwrite a valid cache with nothing.
+    const net = await NetInfo.fetch();
+    if (net.isConnected !== true || net.isInternetReachable === false) {
+      try {
+        const raw = await AsyncStorage.getItem(DETAIL_CACHE_KEY);
+        if (raw) applyCache(raw);
+      } catch { }
+      setLoading(false);
+      return;
     }
 
-    setSnapshot(
-      snapRes.data
-        ? {
-            stage:              snapRes.data.stage as HabitStage,
-            consistency_rate:   snapRes.data.consistency_rate,
-            avg_recovery_days:  snapRes.data.avg_recovery_days,
-            trend:              snapRes.data.trend as HabitSnapshot['trend'],
-          }
-        : { stage: 'sprouting', consistency_rate: null, avg_recovery_days: null, trend: null },
-    );
+    try {
+      const [taskRes, snapRes, msRes] = await Promise.all([
+        supabase
+          .from('task')
+          .select('name, icon')
+          .eq('id', taskId)
+          .single(),
+        supabase
+          .from('habit_health_snapshot')
+          .select('stage, consistency_rate, avg_recovery_days, trend')
+          .eq('task_id', taskId)
+          .order('computed_at', { ascending: false })
+          .limit(1)
+          .maybeSingle(),
+        supabase
+          .from('milestone')
+          .select('id, type, triggered_at')
+          .eq('task_id', taskId)
+          .order('triggered_at', { ascending: false }),
+      ]);
 
-    setMilestones(
-      (msRes.data ?? []).map((m: any) => ({
+      if (!taskRes.data) throw new Error('task_not_found');
+
+      const taskDetail: TaskDetail = { name: taskRes.data.name, icon: taskRes.data.icon };
+      const habitSnapshot: HabitSnapshot = snapRes.data
+        ? {
+            stage:             snapRes.data.stage as HabitStage,
+            consistency_rate:  snapRes.data.consistency_rate,
+            avg_recovery_days: snapRes.data.avg_recovery_days,
+            trend:             snapRes.data.trend as HabitSnapshot['trend'],
+          }
+        : { stage: 'sprouting', consistency_rate: null, avg_recovery_days: null, trend: null };
+      const milestoneItems: MilestoneItem[] = (msRes.data ?? []).map((m: any) => ({
         id:           m.id,
         type:         m.type as MilestoneItem['type'],
         triggered_at: m.triggered_at,
-      })),
-    );
+      }));
+
+      setTask(taskDetail);
+      setSnapshot(habitSnapshot);
+      setMilestones(milestoneItems);
+
+      try {
+        await AsyncStorage.setItem(
+          DETAIL_CACHE_KEY,
+          JSON.stringify({ task: taskDetail, snapshot: habitSnapshot, milestones: milestoneItems })
+        );
+      } catch { }
+    } catch {
+      // Fetch failed — read from cache silently.
+      try {
+        const raw = await AsyncStorage.getItem(DETAIL_CACHE_KEY);
+        if (raw) applyCache(raw);
+      } catch { }
+    }
 
     setLoading(false);
   }
