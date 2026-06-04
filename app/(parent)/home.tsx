@@ -20,6 +20,7 @@ import { useHabitHealth } from '../../src/hooks/useHabitHealth';
 import { useGraduatedHabits } from '../../src/hooks/useGraduatedHabits';
 import { PinModal } from '../../src/components/PinModal';
 import { HabitCard } from '../../src/components/HabitCard';
+import { BottomTabBar } from '../../src/components/BottomTabBar';
 
 export default function ParentHomeScreen() {
   const router = useRouter();
@@ -244,6 +245,7 @@ export default function ParentHomeScreen() {
             </>
           )}
 
+          <BottomTabBar activeTab="home" />
         </View>
       </SafeAreaView>
 
@@ -376,7 +378,7 @@ const styles = StyleSheet.create({
   bottomActions: {
     paddingHorizontal: Spacing.xl,
     paddingTop: 12,
-    paddingBottom: Spacing.xl,
+    paddingBottom: Spacing.md,
     gap: Spacing.sm,
   },
   addTaskBtn: {
