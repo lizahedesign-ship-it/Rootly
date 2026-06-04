@@ -46,10 +46,14 @@ function todayString(): string {
   return `${yyyy}-${mm}-${dd}`;
 }
 
-// AsyncStorage key for the task list cache — scoped to child + date so
-// yesterday's cache never bleeds into today's session.
+// task_cache_{childId}_{date}   → TaskItem[] (schedule-filtered for that date)
+// completions_cache_{childId}_{date} → string[]  (task IDs completed that date)
 function taskCacheKey(childId: string, date: string): string {
   return `task_cache_${childId}_${date}`;
+}
+
+function completionsCacheKey(childId: string, date: string): string {
+  return `completions_cache_${childId}_${date}`;
 }
 
 export function useTasks(childId: string | null) {
@@ -59,23 +63,39 @@ export function useTasks(childId: string | null) {
 
   const today = todayString();
 
-  // Read the cached task list and overlay any offline-queued completions.
-  // Called whenever the Supabase fetch fails or throws.
+  // Read filtered task list + completedIds from cache, overlay offline queue.
   const loadFromCache = async (cid: string) => {
     try {
-      const raw = await AsyncStorage.getItem(taskCacheKey(cid, today));
-      if (!raw) return; // No cache yet — tasks stays [].
-      const cached: TaskItem[] = JSON.parse(raw);
+      const taskKey = taskCacheKey(cid, today);
+      const completionsKey = completionsCacheKey(cid, today);
+      console.log('[useTasks] loadFromCache — taskKey:', taskKey, '| completionsKey:', completionsKey);
+
+      const [tasksRaw, completionsRaw] = await Promise.all([
+        AsyncStorage.getItem(taskKey),
+        AsyncStorage.getItem(completionsKey),
+      ]);
+
+      console.log('[useTasks] loadFromCache — tasks raw:', tasksRaw ? `${tasksRaw.slice(0, 100)}…` : 'NULL');
+      console.log('[useTasks] loadFromCache — completions raw:', completionsRaw ?? 'NULL');
+
+      if (!tasksRaw) return;
+
+      const cachedTasks: Array<{ id: string; name: string; icon: string }> = JSON.parse(tasksRaw);
+      const completedIds = new Set<string>(completionsRaw ? JSON.parse(completionsRaw) : []);
+
       const queue = await getQueue();
       const queuedIds = new Set(
         queue
           .filter((q) => q.childId === cid && q.completedAt === today)
           .map((q) => q.taskId)
       );
+
+      console.log('[useTasks] loadFromCache — tasks:', cachedTasks.length, cachedTasks.map((t) => t.name), '| completedIds:', [...completedIds], '| queuedIds:', [...queuedIds]);
+
       setTasks(
-        cached.map((t) => ({
+        cachedTasks.map((t) => ({
           ...t,
-          isCompleted: t.isCompleted || queuedIds.has(t.id),
+          isCompleted: completedIds.has(t.id) || queuedIds.has(t.id),
         }))
       );
     } catch {
@@ -91,7 +111,9 @@ export function useTasks(childId: string | null) {
     // returns { data: [], error: null } — a successful empty result — so we
     // cannot rely on the error field alone to detect being offline.
     const net = await NetInfo.fetch();
+    console.log('[useTasks] NetInfo —', { isConnected: net.isConnected, isInternetReachable: net.isInternetReachable, childId, today });
     if (net.isConnected !== true || net.isInternetReachable === false) {
+      console.log('[useTasks] OFFLINE — reading from cache');
       await loadFromCache(childId);
       setLoading(false);
       return;
@@ -117,12 +139,17 @@ export function useTasks(childId: string | null) {
 
       if (taskError || taskData === null) throw taskError ?? new Error('fetch_failed');
 
-      // Supabase succeeded — build task list and write to cache.
+      // Supabase succeeded — build task list for display and write full raw data to cache.
       const now = new Date();
+      console.log('[useTasks] Supabase returned', taskData.length, 'tasks (before schedule filter):', taskData.map((t: any) => `${t.name}(${t.frequency})`));
       const completedSet = new Set((completionData ?? []).map((c: any) => c.task_id as string));
 
       const todaysTasks: TaskItem[] = taskData
-        .filter((t: any) => isScheduledToday(t as RawTask, now))
+        .filter((t: any) => {
+          const scheduled = isScheduledToday(t as RawTask, now);
+          if (!scheduled) console.log('[useTasks] FILTERED OUT by schedule:', t.name, '| frequency:', t.frequency, '| custom_days:', t.custom_days, '| today DOW:', isoWeekday(now));
+          return scheduled;
+        })
         .map((t: any) => ({
           id: t.id as string,
           name: t.name as string,
@@ -133,9 +160,14 @@ export function useTasks(childId: string | null) {
       setTasks(todaysTasks);
 
       try {
-        await AsyncStorage.setItem(taskCacheKey(childId, today), JSON.stringify(todaysTasks));
-      } catch {
-        // Cache write failure is non-fatal.
+        const taskKey = taskCacheKey(childId, today);
+        const completionsKey = completionsCacheKey(childId, today);
+        // Store id/name/icon only — isCompleted is derived from completions cache at read time.
+        await AsyncStorage.setItem(taskKey, JSON.stringify(todaysTasks.map(({ id, name, icon }) => ({ id, name, icon }))));
+        await AsyncStorage.setItem(completionsKey, JSON.stringify([...completedSet]));
+        console.log('[useTasks] cache WRITE — tasks:', todaysTasks.length, '| completedIds:', completedSet.size);
+      } catch (e) {
+        console.log('[useTasks] cache WRITE failed:', e);
       }
     } catch {
       // Network threw or Supabase returned an error — fall back to cache.
@@ -160,6 +192,15 @@ export function useTasks(childId: string | null) {
         { task_id: taskId, child_id: childId, parent_id: userId, completed_at: today },
         { onConflict: 'task_id,completed_at' }
       );
+      // Keep completions cache in sync so going offline later reflects this completion.
+      try {
+        const key = completionsCacheKey(childId, today);
+        const raw = await AsyncStorage.getItem(key);
+        const ids: string[] = raw ? JSON.parse(raw) : [];
+        if (!ids.includes(taskId)) {
+          await AsyncStorage.setItem(key, JSON.stringify([...ids, taskId]));
+        }
+      } catch { }
     } else {
       await enqueueCompletion({ taskId, childId, parentId: userId, completedAt: today });
     }
