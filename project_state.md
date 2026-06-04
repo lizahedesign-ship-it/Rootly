@@ -29,7 +29,7 @@ Next: Slice 18 (Offline sync: AsyncStorage queue for completions, sync on reconn
 | 12 | Milestone card: photo upload, text note, Supabase Storage, signed URLs | J4 | ✅ Complete |
 | 13 | Notifications: push token, milestone push, Never Miss Twice day 2 only, weekly summary Sunday | J4 | ✅ Complete |
 | 14 | Graduate habit: Blooming-only entry, dialog, graduated section in Records, restore | J5 | ✅ Complete |
-| 15 | Summary screens + annual PDF export | J6 | ⬜ Not started |
+| 15 | Summary screens: weekly/monthly/annual stats + bar chart (PDF export moved to V2) | J6 | ⬜ Not started |
 | 16 | Onboarding: 4 screens (illustration + content layout), first-time gate, philosophy → profile → co-create → enter | J1 | ✅ Complete |
 | 17 | Settings: notification toggles (milestone non-dismissable), PIN management, child profile editing + delete (PIN-verified, cascade) | J2 | ✅ Complete |
 | 18 | Offline sync: AsyncStorage queue for completions, sync on reconnect | J8 | ⬜ Not started |

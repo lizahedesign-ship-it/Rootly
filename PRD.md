@@ -43,7 +43,7 @@
 - Milestone card: parent adds photo + text note, saved permanently
 - Push notifications: milestone, weekly summary (Sunday), Never Miss Twice (day 2 only), annual summary (Dec 31)
 - Records tab: milestone timeline with task emoji + photo thumbnails
-- Annual summary: stats, 12-month bar chart, milestone timeline, PDF export
+- Summary screens: weekly, monthly, and annual stats + bar chart
 - Offline task completion with sync on reconnect
 - Settings: notification preferences, PIN management, child profile editing
 
@@ -129,7 +129,7 @@
 | Task Creation | 4 steps: Name → Emoji picker → Category + Frequency → Commitment card |
 | Records | Milestone timeline with task emoji + photo thumbnails |
 | Milestone Card | Trophy header, photo upload, text note, save |
-| Annual Summary | Stats, 12-month bar chart, milestone list, PDF export |
+| Summary screens | Weekly, monthly, and annual stats + bar chart |
 | Settings | Notification toggles, PIN management, child profiles, account |
 | Habit Graduate Dialog | Blooming-only. Confirms history preserved. |
 
@@ -237,7 +237,6 @@ consistency_rate, avg_recovery_days, trend (up | flat | down)
 | Multi-child | Tab switch updates all content + Hand to button label |
 | Gender field | Saved on child profile, no UI impact in V1 |
 | Graduate | Blooming-only. Removes from child list. History preserved. Restorable. |
-| PDF export | Annual summary as readable PDF with name, year, stats, milestones |
 
 ---
 
@@ -276,7 +275,7 @@ consistency_rate, avg_recovery_days, trend (up | flat | down)
 | J3 | Parent creates new task | Occasional |
 | J4 | Parent receives notification → acts | Triggered |
 | J5 | Parent graduates a habit | Rare |
-| J6 | Annual summary + PDF export | Yearly |
+| J6 | Summary screens (weekly / monthly / annual) | Yearly |
 | J8 | Child completes daily tasks | Daily |
 | J9 | Parent ↔ child mode switch | Daily |
 | J10 | Parent + child co-create task | Occasional |
@@ -293,6 +292,7 @@ J7 (Paywall) deferred to post-MVP.
 - Illustrations replacing emoji (architecture already prepared: icon field uses ImageSourcePropType)
 - Gender-based themes
 - Physical growth book printing
+- PDF export (annual summary as shareable/printable PDF)
 - Android
 
 ---
