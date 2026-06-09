@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -34,7 +35,8 @@ export default function OnboardingScreen() {
   const [step, setStep] = useState(0);
 
   function skip() {
-    router.push('/(parent)/create-profile?from=onboarding');
+    AsyncStorage.setItem('onboarding_complete', 'true');
+    router.replace('/(parent)/home');
   }
 
   function handlePrimary() {

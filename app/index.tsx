@@ -7,9 +7,12 @@ import { supabase } from '../src/services/supabase';
 import { useAuthStore } from '../src/store/authStore';
 
 /**
- * Loading gate — checks the stored session once and routes:
- *   session present  → /(parent)/home
- *   no session       → /(auth)/login
+ * Loading gate — checks session, then routes:
+ *
+ *   No session                                     → /(auth)/login
+ *   Session + child profiles exist in Supabase     → /(parent)/home  (skip onboarding)
+ *   Session + no children + onboarding_complete    → /(parent)/home
+ *   Session + no children + no flag                → /onboarding
  *
  * Ongoing session changes (expiry, sign-out) are handled by
  * the onAuthStateChange listener in app/_layout.tsx.
@@ -21,13 +24,30 @@ export default function IndexScreen() {
   useEffect(() => {
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       setSession(session);
-      if (session) {
-        // TODO: restore onboarding gate before shipping
-        // const done = await AsyncStorage.getItem('onboarding_complete');
-        // if (done) { router.replace('/(parent)/home'); } else { router.replace('/onboarding'); }
-        router.replace('/onboarding');
-      } else {
+
+      if (!session) {
         router.replace('/(auth)/login');
+        return;
+      }
+
+      // If the parent already has child profiles, skip onboarding entirely.
+      const { data: profiles } = await supabase
+        .from('child_profile')
+        .select('id')
+        .eq('parent_id', session.user.id)
+        .limit(1);
+
+      if (profiles && profiles.length > 0) {
+        router.replace('/(parent)/home');
+        return;
+      }
+
+      // No children — fall back to the onboarding flag.
+      const done = await AsyncStorage.getItem('onboarding_complete');
+      if (done) {
+        router.replace('/(parent)/home');
+      } else {
+        router.replace('/onboarding');
       }
     });
   }, []);
