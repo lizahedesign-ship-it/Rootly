@@ -10,7 +10,7 @@ export default function AuthLayout() {
   // If a logged-in user somehow lands on an auth screen, redirect to home.
   useEffect(() => {
     if (isInitialized && isLoggedIn) {
-      router.replace('/(parent)/home');
+      router.replace('/(parent)/(tabs)/home');
     }
   }, [isLoggedIn, isInitialized]);
 

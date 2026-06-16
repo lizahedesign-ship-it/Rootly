@@ -10,8 +10,8 @@ import { useAuthStore } from '../src/store/authStore';
  * Loading gate — checks session, then routes:
  *
  *   No session                                     → /(auth)/login
- *   Session + child profiles exist in Supabase     → /(parent)/home  (skip onboarding)
- *   Session + no children + onboarding_complete    → /(parent)/home
+ *   Session + child profiles exist in Supabase     → /(parent)/(tabs)/home  (skip onboarding)
+ *   Session + no children + onboarding_complete    → /(parent)/(tabs)/home
  *   Session + no children + no flag                → /onboarding
  *
  * Ongoing session changes (expiry, sign-out) are handled by
@@ -38,14 +38,14 @@ export default function IndexScreen() {
         .limit(1);
 
       if (profiles && profiles.length > 0) {
-        router.replace('/(parent)/home');
+        router.replace('/(parent)/(tabs)/home');
         return;
       }
 
       // No children — fall back to the onboarding flag.
       const done = await AsyncStorage.getItem('onboarding_complete');
       if (done) {
-        router.replace('/(parent)/home');
+        router.replace('/(parent)/(tabs)/home');
       } else {
         router.replace('/onboarding');
       }

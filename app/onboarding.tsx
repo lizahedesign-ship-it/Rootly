@@ -36,7 +36,7 @@ export default function OnboardingScreen() {
 
   function skip() {
     AsyncStorage.setItem('onboarding_complete', 'true');
-    router.replace('/(parent)/home');
+    router.replace('/(parent)/(tabs)/home');
   }
 
   function handlePrimary() {

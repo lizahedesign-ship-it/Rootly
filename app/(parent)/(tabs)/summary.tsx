@@ -9,10 +9,9 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from 'expo-router';
-import { Colors, Typography, Spacing, Radius } from '../../src/theme';
-import { useChildStore } from '../../src/store/childStore';
-import { useSummary, SummaryView, ChartBar, TaskStat } from '../../src/hooks/useSummary';
-import { BottomTabBar } from '../../src/components/BottomTabBar';
+import { Colors, Typography, Spacing, Radius } from '../../../src/theme';
+import { useChildStore } from '../../../src/store/childStore';
+import { useSummary, SummaryView, ChartBar, TaskStat } from '../../../src/hooks/useSummary';
 
 const VIEWS: Array<{ id: SummaryView; label: string }> = [
   { id: 'weekly',  label: 'Weekly' },
@@ -212,9 +211,6 @@ export default function SummaryScreen() {
           </View>
         </ScrollView>
       )}
-
-      {/* ── Bottom tab bar ─────────────────────────────────────────────────── */}
-      <BottomTabBar activeTab="summary" />
 
     </View>
   );

@@ -14,11 +14,11 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
-import { Colors, Typography, Spacing, Radius } from '../../src/theme';
-import { useAuthStore } from '../../src/store/authStore';
-import { useChildStore, type ChildProfile } from '../../src/store/childStore';
-import { supabase } from '../../src/services/supabase';
-import { PinModal } from '../../src/components/PinModal';
+import { Colors, Typography, Spacing, Radius } from '../../../src/theme';
+import { useAuthStore } from '../../../src/store/authStore';
+import { useChildStore, type ChildProfile } from '../../../src/store/childStore';
+import { supabase } from '../../../src/services/supabase';
+import { PinModal } from '../../../src/components/PinModal';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -190,11 +190,7 @@ export default function SettingsScreen() {
 
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
-          <Text style={styles.backText}>← Back</Text>
-        </TouchableOpacity>
         <Text style={styles.title}>Settings</Text>
-        <View style={styles.headerSpacer} />
       </View>
 
       <ScrollView
@@ -455,25 +451,16 @@ const styles = StyleSheet.create({
 
   // ── Header ───────────────────────────────────────────────────────────────
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
     paddingHorizontal: Spacing.xl,
-    paddingVertical: Spacing.md,
+    paddingTop: Spacing.md,
+    paddingBottom: Spacing.xs,
     backgroundColor: Colors.bgSecondary,
-  },
-  backBtn: { minWidth: 60 },
-  backText: {
-    fontFamily: 'Nunito_600SemiBold',
-    fontSize: Typography.size.base,
-    color: Colors.green700,
   },
   title: {
     fontFamily: 'Nunito_800ExtraBold',
-    fontSize: Typography.size.lg,
-    color: Colors.textPrimary,
+    fontSize: Typography.size['2xl'],
+    color: Colors.green700,
   },
-  headerSpacer: { minWidth: 60 },
 
   // ── Scroll ───────────────────────────────────────────────────────────────
   scrollContent: {

@@ -6,10 +6,10 @@ import { Colors, Typography, Spacing } from '../theme';
 export type TabId = 'home' | 'records' | 'summary' | 'settings';
 
 const TABS: Array<{ id: TabId; label: string; icon: string; route: string }> = [
-  { id: 'home',     label: 'Home',     icon: '🏠', route: '/(parent)/home' },
-  { id: 'records',  label: 'Records',  icon: '📋', route: '/(parent)/home' }, // stub — Records screen not yet built
-  { id: 'summary',  label: 'Summary',  icon: '📊', route: '/(parent)/summary' },
-  { id: 'settings', label: 'Settings', icon: '⚙️', route: '/(parent)/settings' },
+  { id: 'home',     label: 'Home',     icon: '🏠', route: '/(parent)/(tabs)/home' },
+  { id: 'records',  label: 'Records',  icon: '📋', route: '/(parent)/(tabs)/records' },
+  { id: 'summary',  label: 'Summary',  icon: '📊', route: '/(parent)/(tabs)/summary' },
+  { id: 'settings', label: 'Settings', icon: '⚙️', route: '/(parent)/(tabs)/settings' },
 ];
 
 interface Props {
@@ -29,7 +29,7 @@ export function BottomTabBar({ activeTab }: Props) {
               key={tab.id}
               style={styles.tab}
               onPress={() => {
-                if (!isActive) router.replace(tab.route as any);
+                if (!isActive) router.navigate(tab.route as any);
               }}
               activeOpacity={0.65}
             >

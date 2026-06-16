@@ -10,17 +10,16 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useFocusEffect } from 'expo-router';
-import { Colors, StageColors, Typography, Spacing, Radius } from '../../src/theme';
-import { supabase } from '../../src/services/supabase';
-import { useAuthStore } from '../../src/store/authStore';
-import { useChildStore } from '../../src/store/childStore';
-import { useChildProfile } from '../../src/hooks/useChildProfile';
-import { usePin } from '../../src/hooks/usePin';
-import { useHabitHealth } from '../../src/hooks/useHabitHealth';
-import { useGraduatedHabits } from '../../src/hooks/useGraduatedHabits';
-import { PinModal } from '../../src/components/PinModal';
-import { HabitCard } from '../../src/components/HabitCard';
-import { BottomTabBar } from '../../src/components/BottomTabBar';
+import { Colors, StageColors, Typography, Spacing, Radius } from '../../../src/theme';
+import { supabase } from '../../../src/services/supabase';
+import { useAuthStore } from '../../../src/store/authStore';
+import { useChildStore } from '../../../src/store/childStore';
+import { useChildProfile } from '../../../src/hooks/useChildProfile';
+import { usePin } from '../../../src/hooks/usePin';
+import { useHabitHealth } from '../../../src/hooks/useHabitHealth';
+import { useGraduatedHabits } from '../../../src/hooks/useGraduatedHabits';
+import { PinModal } from '../../../src/components/PinModal';
+import { HabitCard } from '../../../src/components/HabitCard';
 
 export default function ParentHomeScreen() {
   const router = useRouter();
@@ -100,14 +99,9 @@ export default function ParentHomeScreen() {
           {/* Header */}
           <View style={styles.headerRow}>
             <Text style={styles.appName}>Rootly</Text>
-            <View style={styles.headerActions}>
-              <TouchableOpacity onPress={() => router.push('/(parent)/settings')}>
-                <Text style={styles.signOutText}>Settings</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={signOut}>
-                <Text style={styles.signOutText}>Sign out</Text>
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity onPress={signOut}>
+              <Text style={styles.signOutText}>Sign out</Text>
+            </TouchableOpacity>
           </View>
 
           {childProfiles.length === 0 ? (
@@ -245,7 +239,6 @@ export default function ParentHomeScreen() {
             </>
           )}
 
-          <BottomTabBar activeTab="home" />
         </View>
       </SafeAreaView>
 
@@ -285,11 +278,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito_800ExtraBold',
     fontSize: Typography.size['2xl'],
     color: Colors.green700,
-  },
-  headerActions: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.lg,
   },
   signOutText: {
     fontFamily: 'Nunito_500Medium',
