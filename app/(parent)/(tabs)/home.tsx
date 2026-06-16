@@ -123,7 +123,19 @@ export default function ParentHomeScreen() {
             /* ── Child tabs + content — flat siblings, no wrapper View ── */
             <>
               {/* Tab strip — immediately below header */}
-              <View style={styles.tabStrip}>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                alwaysBounceVertical={false}
+                contentContainerStyle={{
+                  paddingHorizontal: 20,
+                  paddingVertical: 4,
+                  gap: 8,
+                  alignItems: 'center',
+                  height: 56,
+                }}
+                style={{ flexShrink: 0, maxHeight: 56 }}
+              >
                 {childProfiles.map((child) => (
                   <TouchableOpacity
                     key={child.id}
@@ -152,7 +164,7 @@ export default function ParentHomeScreen() {
                     <Text style={styles.addTabText}>＋ Add</Text>
                   </TouchableOpacity>
                 )}
-              </View>
+              </ScrollView>
 
               {/* Habit health cards — flex:1 fills remaining space */}
               <ScrollView
