@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
+import { Feather } from '@expo/vector-icons';
 import { Colors, Typography, Spacing, Radius } from '../src/theme';
 
 // ─── Screen data ──────────────────────────────────────────────────────────────
@@ -56,7 +57,7 @@ export default function OnboardingScreen() {
       <View style={styles.topBar}>
         {step > 0 ? (
           <TouchableOpacity onPress={() => setStep((s) => s - 1)} style={styles.backBtn}>
-            <Text style={styles.backText}>← Back</Text>
+            <Feather name="arrow-left" size={20} color={Colors.green700} />
           </TouchableOpacity>
         ) : (
           <View style={styles.topBarSpacer} />
@@ -123,17 +124,12 @@ const styles = StyleSheet.create({
   backBtn: {
     minWidth: 60,
   },
-  backText: {
-    fontFamily: 'Nunito_600SemiBold',
-    fontSize: Typography.size.base,
-    color: Colors.green700,
-  },
   skipBtn: {
     minWidth: 60,
     alignItems: 'flex-end',
   },
   skipText: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.base,
     color: Colors.textMuted,
   },
@@ -154,12 +150,12 @@ const styles = StyleSheet.create({
     gap: Spacing.md,
   },
   headline: {
-    fontFamily: 'Nunito_800ExtraBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size['2xl'],
     color: Colors.textPrimary,
   },
   subtitle: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.md,
     color: Colors.textSecondary,
     lineHeight: Typography.size.md * 1.6,
@@ -178,7 +174,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   primaryBtnText: {
-    fontFamily: 'Nunito_800ExtraBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size.md,
     color: Colors.white,
   },

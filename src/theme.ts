@@ -97,7 +97,15 @@ export type TaskCategory = keyof typeof CategoryConfig;
 
 export const Typography = {
   // Font family — must be loaded via expo-font before use
-  fontFamily: 'Nunito',
+  fontFamily: 'Outfit',
+
+  // Named font family variants (use these as fontFamily in StyleSheet)
+  family: {
+    light:    'Outfit_300Light',
+    regular:  'Outfit_400Regular',
+    medium:   'Outfit_500Medium',
+    semibold: 'Outfit_600SemiBold',
+  },
 
   // Font sizes
   size: {
@@ -112,13 +120,12 @@ export const Typography = {
     '4xl':42,
   },
 
-  // Font weights (Nunito available: 500, 600, 700, 800, 900)
+  // Font weights (Outfit available: 300, 400, 500, 600)
   weight: {
-    medium:    '500' as const,
-    semibold:  '600' as const,
-    bold:      '700' as const,
-    extrabold: '800' as const,
-    black:     '900' as const,
+    light:    '300' as const,
+    regular:  '400' as const,
+    medium:   '500' as const,
+    semibold: '600' as const,
   },
 
   // Line heights

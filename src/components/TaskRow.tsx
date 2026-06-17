@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
   },
   taskName: {
     flex: 1,
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.md,
     color: Colors.textPrimary,
     lineHeight: Typography.size.md * 1.4,

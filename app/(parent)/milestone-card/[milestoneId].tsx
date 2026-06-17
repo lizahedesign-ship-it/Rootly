@@ -197,7 +197,7 @@ export default function MilestoneCardScreen() {
     return (
       <SafeAreaView style={styles.container}>
         <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
-          <Text style={styles.backText}>‹ Back</Text>
+          <Feather name="arrow-left" size={20} color={Colors.green700} />
         </TouchableOpacity>
         <View style={styles.center}>
           <Text style={styles.errorText}>{error ?? 'Milestone not found.'}</Text>
@@ -223,7 +223,7 @@ export default function MilestoneCardScreen() {
       >
         {/* Back nav */}
         <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
-          <Text style={styles.backText}>‹ Back</Text>
+          <Feather name="arrow-left" size={20} color={Colors.green700} />
         </TouchableOpacity>
 
         <ScrollView
@@ -350,14 +350,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.xl,
     paddingVertical: Spacing.md,
   },
-  backText: {
-    fontFamily: 'Nunito_700Bold',
-    fontSize: Typography.size.base,
-    color: Colors.green700,
-  },
-
   errorText: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.base,
     color: Colors.textMuted,
   },
@@ -378,7 +372,7 @@ const styles = StyleSheet.create({
     fontSize: 52,
   },
   milestoneLabel: {
-    fontFamily: 'Nunito_800ExtraBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size['2xl'],
     color: Colors.textPrimary,
     marginTop: Spacing.xs,
@@ -393,12 +387,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   taskName: {
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.md,
     color: Colors.textSecondary,
   },
   date: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.sm,
     color: Colors.textMuted,
     marginTop: Spacing.xs,
@@ -410,7 +404,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing['2xl'],
   },
   sectionTitle: {
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.sm,
     color: Colors.textMuted,
     textTransform: 'uppercase',
@@ -449,7 +443,7 @@ const styles = StyleSheet.create({
     borderRadius: Radius.full,
   },
   photoHintText: {
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size.sm,
     color: Colors.white,
   },
@@ -465,7 +459,7 @@ const styles = StyleSheet.create({
     gap: Spacing.sm,
   },
   addPhotoText: {
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size.base,
     color: Colors.textSecondary,
   },
@@ -481,7 +475,7 @@ const styles = StyleSheet.create({
     minHeight: 120,
   },
   noteInput: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.base,
     color: Colors.textPrimary,
     lineHeight: Typography.size.base * 1.6,
@@ -501,7 +495,7 @@ const styles = StyleSheet.create({
     opacity: 0.4,
   },
   saveBtnText: {
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.md,
     color: Colors.white,
   },

@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     paddingBottom: Spacing.xs,
   },
   title: {
-    fontFamily: 'Nunito_800ExtraBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size['2xl'],
     color: Colors.green700,
   },
@@ -52,13 +52,13 @@ const styles = StyleSheet.create({
     fontSize: 48,
   },
   emptyTitle: {
-    fontFamily: 'Nunito_800ExtraBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size.xl,
     color: Colors.textPrimary,
     textAlign: 'center',
   },
   emptyText: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.base,
     color: Colors.textSecondary,
     textAlign: 'center',

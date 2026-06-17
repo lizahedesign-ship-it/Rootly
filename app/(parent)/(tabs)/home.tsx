@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useFocusEffect } from 'expo-router';
+import { Feather } from '@expo/vector-icons';
 import { Colors, StageColors, Typography, Spacing, Radius } from '../../../src/theme';
 import { supabase } from '../../../src/services/supabase';
 import { useAuthStore } from '../../../src/store/authStore';
@@ -100,7 +101,7 @@ export default function ParentHomeScreen() {
           <View style={styles.headerRow}>
             <Text style={styles.appName}>Rootly</Text>
             <TouchableOpacity onPress={() => router.push('/(parent)/create-profile')}>
-              <Text style={styles.addChildBtn}>＋</Text>
+              <Feather name="plus" size={24} color={Colors.green700} />
             </TouchableOpacity>
           </View>
 
@@ -279,15 +280,9 @@ const styles = StyleSheet.create({
     paddingBottom: Spacing.xs,
   },
   appName: {
-    fontFamily: 'Nunito_800ExtraBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size['2xl'],
     color: Colors.green700,
-  },
-  addChildBtn: {
-    fontFamily: 'Nunito_600SemiBold',
-    fontSize: Typography.size['2xl'],
-    color: Colors.green700,
-    paddingHorizontal: Spacing.xs,
   },
   // ── Empty state ────────────────────────────────────────────────
   emptyState: {
@@ -301,13 +296,13 @@ const styles = StyleSheet.create({
     fontSize: 56,
   },
   emptyTitle: {
-    fontFamily: 'Nunito_800ExtraBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size.xl,
     color: Colors.textPrimary,
     textAlign: 'center',
   },
   emptySubtitle: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.base,
     color: Colors.textSecondary,
     textAlign: 'center',
@@ -321,7 +316,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing['3xl'],
   },
   addFirstBtnText: {
-    fontFamily: 'Nunito_800ExtraBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size.base,
     color: Colors.white,
   },
@@ -347,7 +342,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.green700,
   },
   tabText: {
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.base,
     color: Colors.textPrimary,
   },
@@ -370,7 +365,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.bgSecondary,
   },
   addTaskBtnText: {
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.base,
     color: Colors.green700,
   },
@@ -382,7 +377,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   handToChildText: {
-    fontFamily: 'Nunito_800ExtraBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size.base,
     color: Colors.white,
   },
@@ -394,7 +389,7 @@ const styles = StyleSheet.create({
     gap: Spacing.md,
   },
   greeting: {
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.xl,
     color: Colors.textPrimary,
     marginTop: 0,
@@ -404,7 +399,7 @@ const styles = StyleSheet.create({
     marginTop: Spacing['2xl'],
   },
   noHabitsText: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.base,
     color: Colors.textMuted,
     textAlign: 'center',
@@ -413,7 +408,7 @@ const styles = StyleSheet.create({
 
   // ── Graduated section ───────────────────────────────────────────
   graduatedHeader: {
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.sm,
     color: Colors.textMuted,
     textTransform: 'uppercase',
@@ -441,12 +436,12 @@ const styles = StyleSheet.create({
     gap: 2,
   },
   graduatedName: {
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.base,
     color: Colors.textPrimary,
   },
   graduatedLabel: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.sm,
     color: Colors.textMuted,
   },
@@ -463,7 +458,7 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   restoreBtnText: {
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size.sm,
     color: Colors.textSecondary,
   },

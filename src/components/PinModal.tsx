@@ -206,13 +206,13 @@ const styles = StyleSheet.create({
     marginBottom: Spacing['2xl'],
   },
   title: {
-    fontFamily: 'Nunito_800ExtraBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size.xl,
     color: Colors.textPrimary,
     marginBottom: Spacing.xs,
   },
   subtitle: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.sm,
     color: Colors.textSecondary,
   },
@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.green600,
   },
   error: {
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size.sm,
     color: Colors.danger,
     height: 20,
@@ -265,12 +265,12 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.transparent,
   },
   numText: {
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size['2xl'],
     color: Colors.textPrimary,
   },
   deleteText: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.xl,
     color: Colors.textSecondary,
   },
@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.sm,
   },
   cancelText: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.base,
     color: Colors.textMuted,
   },

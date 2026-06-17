@@ -1,4 +1,5 @@
 import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import {
   Colors,
   StageColors,
@@ -35,7 +36,7 @@ export function HabitCard({ taskIcon, taskName, stage, onPress }: Props) {
           {cfg.emoji} {cfg.label}
         </Text>
       </View>
-      <Text style={[styles.chevron, { color: cfg.text }]}>›</Text>
+      <Feather name="chevron-right" size={20} color={cfg.text} style={{ opacity: 0.45 }} />
     </TouchableOpacity>
   );
 }
@@ -58,16 +59,12 @@ const styles = StyleSheet.create({
     gap: Spacing.xs,
   },
   taskName: {
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.base,
     color: Colors.textPrimary,
   },
   stageLabel: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.sm,
-  },
-  chevron: {
-    fontSize: 22,
-    opacity: 0.45,
   },
 });

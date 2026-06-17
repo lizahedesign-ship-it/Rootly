@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
+import { Feather } from '@expo/vector-icons';
 import { Colors, Typography, Spacing, Radius } from '../theme';
 import { useChildProfile } from '../hooks/useChildProfile';
 import type { ChildProfile } from '../store/childStore';
@@ -66,7 +67,7 @@ export default function CreateProfileScreen() {
         {/* Header */}
         <View style={styles.header}>
           <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
-            <Text style={styles.backText}>← Back</Text>
+            <Feather name="arrow-left" size={20} color={Colors.green700} />
           </TouchableOpacity>
           <Text style={styles.title}>Add child profile</Text>
         </View>
@@ -174,13 +175,8 @@ const styles = StyleSheet.create({
   backBtn: {
     alignSelf: 'flex-start',
   },
-  backText: {
-    fontFamily: 'Nunito_600SemiBold',
-    fontSize: Typography.size.base,
-    color: Colors.green700,
-  },
   title: {
-    fontFamily: 'Nunito_800ExtraBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size['2xl'],
     color: Colors.textPrimary,
   },
@@ -192,7 +188,7 @@ const styles = StyleSheet.create({
     marginTop: Spacing['2xl'],
   },
   label: {
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.md,
     color: Colors.textPrimary,
     marginBottom: Spacing.sm,
@@ -204,7 +200,7 @@ const styles = StyleSheet.create({
     borderRadius: Radius.md,
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.md,
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.md,
     color: Colors.textPrimary,
   },
@@ -227,7 +223,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.green600,
   },
   ageChipText: {
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size.base,
     color: Colors.textPrimary,
   },
@@ -252,7 +248,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.green600,
   },
   genderText: {
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size.base,
     color: Colors.textPrimary,
   },
@@ -260,7 +256,7 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
   error: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.sm,
     color: Colors.danger,
     marginTop: Spacing.lg,
@@ -281,7 +277,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.green300,
   },
   createBtnText: {
-    fontFamily: 'Nunito_800ExtraBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size.md,
     color: Colors.white,
   },

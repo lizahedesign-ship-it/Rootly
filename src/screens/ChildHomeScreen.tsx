@@ -204,13 +204,13 @@ const styles = StyleSheet.create({
     paddingBottom: Spacing.lg,
   },
   dateLabel: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.sm,
     color: Colors.textMuted,
     marginBottom: Spacing.xs,
   },
   greeting: {
-    fontFamily: 'Nunito_800ExtraBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size['2xl'],
     color: Colors.textPrimary,
     lineHeight: Typography.size['2xl'] * 1.15,
@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.lg,
   },
   emptyText: {
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size.base,
     color: Colors.textMuted,
     textAlign: 'center',
@@ -267,7 +267,7 @@ const styles = StyleSheet.create({
     borderRadius: Radius.full,
   },
   toastText: {
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size.sm,
     color: Colors.white,
   },
@@ -284,7 +284,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.bgSecondary,
   },
   exitText: {
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size.sm,
     color: Colors.textSecondary,
   },

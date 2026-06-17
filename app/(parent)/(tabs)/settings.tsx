@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
+import { Feather } from '@expo/vector-icons';
 import { Colors, Typography, Spacing, Radius } from '../../../src/theme';
 import { useAuthStore } from '../../../src/store/authStore';
 import { useChildStore, type ChildProfile } from '../../../src/store/childStore';
@@ -257,7 +258,7 @@ export default function SettingsScreen() {
             activeOpacity={0.7}
           >
             <Text style={styles.rowLabel}>Change PIN</Text>
-            <Text style={styles.chevron}>›</Text>
+            <Feather name="chevron-right" size={20} color={Colors.textMuted} />
           </TouchableOpacity>
         </View>
 
@@ -282,7 +283,7 @@ export default function SettingsScreen() {
                       <Text style={styles.rowLabel}>{child.name}</Text>
                       <Text style={styles.rowSub}>Age {child.age}</Text>
                     </View>
-                    <Text style={styles.chevron}>›</Text>
+                    <Feather name="chevron-right" size={20} color={Colors.textMuted} />
                   </TouchableOpacity>
                 </View>
               ))}
@@ -457,7 +458,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.bgSecondary,
   },
   title: {
-    fontFamily: 'Nunito_800ExtraBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size['2xl'],
     color: Colors.green700,
   },
@@ -472,7 +473,7 @@ const styles = StyleSheet.create({
 
   // ── Section ──────────────────────────────────────────────────────────────
   sectionHeader: {
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.xs,
     color: Colors.textMuted,
     textTransform: 'uppercase',
@@ -508,12 +509,12 @@ const styles = StyleSheet.create({
     paddingRight: Spacing.md,
   },
   rowLabel: {
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size.base,
     color: Colors.textPrimary,
   },
   rowSub: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.sm,
     color: Colors.textMuted,
   },
@@ -521,11 +522,6 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: Colors.bgSecondary,
     marginLeft: Spacing.lg,
-  },
-  chevron: {
-    fontFamily: 'Nunito_500Medium',
-    fontSize: Typography.size.xl,
-    color: Colors.textMuted,
   },
 
   // ── Locked badge ─────────────────────────────────────────────────────────
@@ -536,7 +532,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.sm,
   },
   lockedText: {
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size.xs,
     color: Colors.textMuted,
   },
@@ -569,13 +565,13 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.xl,
   },
   sheetTitle: {
-    fontFamily: 'Nunito_800ExtraBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size.xl,
     color: Colors.textPrimary,
     marginBottom: Spacing.xl,
   },
   editLabel: {
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.md,
     color: Colors.textPrimary,
     marginBottom: Spacing.sm,
@@ -584,7 +580,7 @@ const styles = StyleSheet.create({
     marginTop: Spacing.xl,
   },
   editInput: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.md,
     color: Colors.textPrimary,
     backgroundColor: Colors.bgSecondary,
@@ -613,7 +609,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.green600,
   },
   ageChipText: {
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size.base,
     color: Colors.textPrimary,
   },
@@ -638,7 +634,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.green600,
   },
   genderBtnText: {
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size.base,
     color: Colors.textPrimary,
   },
@@ -646,7 +642,7 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
   editError: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.sm,
     color: Colors.danger,
     marginTop: Spacing.md,
@@ -663,7 +659,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.green200,
   },
   saveBtnText: {
-    fontFamily: 'Nunito_800ExtraBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size.md,
     color: Colors.white,
   },
@@ -673,7 +669,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   sheetCancelText: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.base,
     color: Colors.textMuted,
   },
@@ -685,7 +681,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   deleteBtnText: {
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size.base,
     color: Colors.danger,
   },

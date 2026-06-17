@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
     paddingBottom:     Spacing.xs,
   },
   title: {
-    fontFamily: 'Nunito_800ExtraBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize:   Typography.size['2xl'],
     color:      Colors.green700,
   },
@@ -271,7 +271,7 @@ const styles = StyleSheet.create({
     borderColor:     Colors.green700,
   },
   childTabText: {
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'Outfit_500Medium',
     fontSize:   Typography.size.base,
     color:      Colors.textPrimary,
   },
@@ -299,12 +299,12 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   viewBtnText: {
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize:   Typography.size.sm,
     color:      Colors.textMuted,
   },
   viewBtnTextActive: {
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'Outfit_500Medium',
     color:      Colors.green700,
   },
 
@@ -324,19 +324,19 @@ const styles = StyleSheet.create({
     gap:              Spacing.xs,
   },
   statPct: {
-    fontFamily: 'Nunito_900Black',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize:   Typography.size['4xl'],
     color:      Colors.green700,
     lineHeight: Typography.size['4xl'] * 1.1,
   },
   statLabel: {
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize:   Typography.size.base,
     color:      Colors.textPrimary,
     textAlign:  'center',
   },
   statSub: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize:   Typography.size.sm,
     color:      Colors.textMuted,
     textAlign:  'center',
@@ -355,7 +355,7 @@ const styles = StyleSheet.create({
     gap:              Spacing.md,
   },
   sectionTitle: {
-    fontFamily:    'Nunito_700Bold',
+    fontFamily:    'Outfit_500Medium',
     fontSize:      Typography.size.sm,
     color:         Colors.textMuted,
     textTransform: 'uppercase',
@@ -366,13 +366,13 @@ const styles = StyleSheet.create({
   // Empty state
   emptyEmoji: { fontSize: 48 },
   emptyTitle: {
-    fontFamily: 'Nunito_800ExtraBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize:   Typography.size.xl,
     color:      Colors.textPrimary,
     textAlign:  'center',
   },
   emptyText: {
-    fontFamily:  'Nunito_500Medium',
+    fontFamily:  'Outfit_500Medium',
     fontSize:    Typography.size.base,
     color:       Colors.textSecondary,
     textAlign:   'center',
@@ -407,7 +407,7 @@ const chartStyles = StyleSheet.create({
     borderRadius: Radius.sm,
   },
   barLabel: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize:   9,
     color:      Colors.textMuted,
     textAlign:  'center',
@@ -428,7 +428,7 @@ const chartStyles = StyleSheet.create({
     borderRadius: 4,
   },
   legendText: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize:   Typography.size.xs,
     color:      Colors.textMuted,
   },
@@ -461,13 +461,13 @@ const rowStyles = StyleSheet.create({
   },
   name: {
     flex:       1,
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'Outfit_500Medium',
     fontSize:   Typography.size.base,
     color:      Colors.textPrimary,
     marginRight: Spacing.sm,
   },
   pct: {
-    fontFamily: 'Nunito_800ExtraBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize:   Typography.size.base,
   },
   track: {
@@ -481,7 +481,7 @@ const rowStyles = StyleSheet.create({
     borderRadius: Radius.full,
   },
   sub: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize:   Typography.size.xs,
     color:      Colors.textMuted,
   },

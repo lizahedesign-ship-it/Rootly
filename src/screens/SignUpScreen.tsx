@@ -11,6 +11,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { useRouter } from 'expo-router';
+import { Feather } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors, Typography, Spacing, Radius } from '../theme';
 import { useAuthStore } from '../store/authStore';
@@ -100,7 +101,7 @@ export default function SignUpScreen() {
           {/* ── Header ── */}
           <View style={styles.header}>
             <TouchableOpacity onPress={() => { clearError(); router.back(); }} hitSlop={12}>
-              <Text style={styles.backBtn}>← Back</Text>
+              <Feather name="arrow-left" size={20} color={Colors.green700} />
             </TouchableOpacity>
             <Text style={styles.title}>Create account</Text>
             <Text style={styles.subtitle}>Start building better habits together</Text>
@@ -197,20 +198,14 @@ const styles = StyleSheet.create({
   header: {
     marginBottom: Spacing['2xl'],
   },
-  backBtn: {
-    fontFamily: 'Nunito_600SemiBold',
-    fontSize: Typography.size.base,
-    color: Colors.textSecondary,
-    marginBottom: Spacing.xl,
-  },
   title: {
-    fontFamily: 'Nunito_900Black',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size['2xl'],
     color: Colors.textPrimary,
     letterSpacing: Typography.tracking.tight,
   },
   subtitle: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.base,
     color: Colors.textMuted,
     marginTop: Spacing.xs,
@@ -225,7 +220,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.lg,
   },
   errorText: {
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size.sm,
     color: Colors.danger,
     textAlign: 'center',
@@ -242,7 +237,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.border,
     backgroundColor: Colors.white,
     paddingHorizontal: Spacing.lg,
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.base,
     color: Colors.textPrimary,
   },
@@ -258,7 +253,7 @@ const styles = StyleSheet.create({
     opacity: 0.6,
   },
   btnLabel: {
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.base,
     color: Colors.white,
   },
@@ -270,12 +265,12 @@ const styles = StyleSheet.create({
     marginTop: Spacing['2xl'],
   },
   footerText: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.sm,
     color: Colors.textMuted,
   },
   footerLink: {
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.sm,
     color: Colors.green700,
   },
@@ -292,14 +287,14 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.lg,
   },
   verifyTitle: {
-    fontFamily: 'Nunito_900Black',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size['2xl'],
     color: Colors.textPrimary,
     textAlign: 'center',
     marginBottom: Spacing.md,
   },
   verifySub: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.base,
     color: Colors.textMuted,
     textAlign: 'center',
@@ -307,11 +302,11 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.lg,
   },
   verifyEmail: {
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'Outfit_500Medium',
     color: Colors.textPrimary,
   },
   verifyHint: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.sm,
     color: Colors.textMuted,
     textAlign: 'center',
@@ -327,7 +322,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   backToLoginText: {
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.base,
     color: Colors.white,
   },

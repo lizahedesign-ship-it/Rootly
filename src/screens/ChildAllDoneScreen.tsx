@@ -273,7 +273,7 @@ const styles = StyleSheet.create({
     // fontSize, opacity, transform applied inline
   },
   headline: {
-    fontFamily: 'Nunito_800ExtraBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize:   Typography.size['3xl'],
     color:      Colors.white,
     textAlign:  'center',
@@ -292,7 +292,7 @@ const styles = StyleSheet.create({
     backgroundColor:  'rgba(255,255,255,0.12)',
   },
   backText: {
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize:   Typography.size.base,
     color:      Colors.white,
   },
@@ -305,7 +305,7 @@ const styles = StyleSheet.create({
     alignItems:       'center',
   },
   exitText: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize:   Typography.size.sm,
     color:      'rgba(255,255,255,0.45)',
   },

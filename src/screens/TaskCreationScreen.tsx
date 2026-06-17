@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
+import { Feather } from '@expo/vector-icons';
 import {
   Colors,
   Typography,
@@ -469,7 +470,7 @@ export default function TaskCreationScreen() {
             style={styles.backBtn}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >
-            <Text style={styles.backBtnText}>← Back</Text>
+            <Feather name="arrow-left" size={20} color={Colors.green700} />
           </TouchableOpacity>
 
           {renderProgress()}
@@ -536,11 +537,6 @@ const styles = StyleSheet.create({
   backBtn: {
     minWidth: 60,
   },
-  backBtnText: {
-    fontFamily: 'Nunito_600SemiBold',
-    fontSize: Typography.size.base,
-    color: Colors.green700,
-  },
   progressRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -574,13 +570,13 @@ const styles = StyleSheet.create({
     paddingTop: Spacing.lg,
   },
   stepTitle: {
-    fontFamily: 'Nunito_800ExtraBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size['2xl'],
     color: Colors.textPrimary,
     marginBottom: Spacing.sm,
   },
   stepSubtitle: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.base,
     color: Colors.textSecondary,
     lineHeight: Typography.size.base * 1.5,
@@ -597,7 +593,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.lg,
   },
   warningText: {
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size.sm,
     color: '#854F0B',
     lineHeight: Typography.size.sm * 1.5,
@@ -605,7 +601,7 @@ const styles = StyleSheet.create({
 
   // ── Step 1: Name input ─────────────────────────────────────────────────────
   nameInput: {
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.xl,
     color: Colors.textPrimary,
     backgroundColor: Colors.white,
@@ -617,7 +613,7 @@ const styles = StyleSheet.create({
     lineHeight: Typography.size.xl * 1.4,
   },
   charHint: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.xs,
     color: Colors.textMuted,
     textAlign: 'right',
@@ -641,12 +637,12 @@ const styles = StyleSheet.create({
     fontSize: 52,
   },
   emojiPreviewPlaceholder: {
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size['2xl'],
     color: Colors.textMuted,
   },
   searchInput: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.base,
     color: Colors.textPrimary,
     backgroundColor: Colors.white,
@@ -679,7 +675,7 @@ const styles = StyleSheet.create({
 
   // ── Step 3: Category ──────────────────────────────────────────────────────
   sectionLabel: {
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.md,
     color: Colors.textPrimary,
     marginBottom: Spacing.md,
@@ -709,7 +705,7 @@ const styles = StyleSheet.create({
     fontSize: Typography.size.base,
   },
   categoryPillLabel: {
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size.sm,
     color: Colors.textPrimary,
   },
@@ -736,7 +732,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.green700,
   },
   freqPillText: {
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size.base,
     color: Colors.textPrimary,
   },
@@ -752,7 +748,7 @@ const styles = StyleSheet.create({
     borderRadius: Radius.lg,
   },
   customDaysLabel: {
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size.sm,
     color: Colors.textSecondary,
     marginBottom: Spacing.sm,
@@ -775,7 +771,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.green500,
   },
   dayPillText: {
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.xs,
     color: Colors.textPrimary,
   },
@@ -798,7 +794,7 @@ const styles = StyleSheet.create({
     fontSize: 72,
   },
   commitName: {
-    fontFamily: 'Nunito_800ExtraBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size.xl,
     color: Colors.textPrimary,
     textAlign: 'center',
@@ -813,12 +809,12 @@ const styles = StyleSheet.create({
     borderRadius: Radius.full,
   },
   commitTagText: {
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.sm,
     color: Colors.textPrimary,
   },
   commitFreqText: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.sm,
     color: Colors.textSecondary,
   },
@@ -828,7 +824,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.border,
   },
   commitPledge: {
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.md,
     color: Colors.green600,
     textAlign: 'center',
@@ -836,7 +832,7 @@ const styles = StyleSheet.create({
 
   // ── Error ──────────────────────────────────────────────────────────────────
   errorText: {
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size.sm,
     color: Colors.danger,
     textAlign: 'center',
@@ -859,7 +855,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.green200,
   },
   nextBtnText: {
-    fontFamily: 'Nunito_800ExtraBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size.md,
     color: Colors.white,
   },

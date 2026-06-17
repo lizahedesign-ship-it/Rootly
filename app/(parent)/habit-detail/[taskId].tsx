@@ -287,7 +287,7 @@ export default function HabitDetailScreen() {
     return (
       <SafeAreaView style={styles.container}>
         <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
-          <Text style={styles.backText}>‹ Back</Text>
+          <Feather name="arrow-left" size={20} color={Colors.green700} />
         </TouchableOpacity>
         <View style={styles.center}>
           <Text style={styles.errorText}>Habit not found.</Text>
@@ -311,7 +311,7 @@ export default function HabitDetailScreen() {
 
       {/* Back nav */}
       <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
-        <Text style={styles.backText}>‹ Back</Text>
+        <Feather name="arrow-left" size={20} color={Colors.green700} />
       </TouchableOpacity>
 
       <ScrollView
@@ -387,8 +387,8 @@ export default function HabitDetailScreen() {
                   <Text
                     style={[
                       styles.progressLabel,
-                      isCurrent && { color: Colors.green700, fontFamily: 'Nunito_700Bold' },
-                      isPast    && { color: Colors.green700, fontFamily: 'Nunito_700Bold' },
+                      isCurrent && { color: Colors.green700, fontFamily: 'Outfit_500Medium' },
+                      isPast    && { color: Colors.green700, fontFamily: 'Outfit_500Medium' },
                       !isCurrent && !isPast && { opacity: 0.4 },
                     ]}
                     numberOfLines={1}
@@ -571,14 +571,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.xl,
     paddingVertical: Spacing.md,
   },
-  backText: {
-    fontFamily: 'Nunito_700Bold',
-    fontSize: Typography.size.base,
-    color: Colors.green700,
-  },
-
   errorText: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.base,
     color: Colors.textMuted,
   },
@@ -599,7 +593,7 @@ const styles = StyleSheet.create({
     fontSize: 56,
   },
   heroName: {
-    fontFamily: 'Nunito_800ExtraBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size['2xl'],
     color: Colors.textPrimary,
     textAlign: 'center',
@@ -611,7 +605,7 @@ const styles = StyleSheet.create({
     marginTop: Spacing.xs,
   },
   stageBadgeText: {
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.sm,
     letterSpacing: 0.3,
   },
@@ -625,7 +619,7 @@ const styles = StyleSheet.create({
     marginBottom: 0,
   },
   sectionTitle: {
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.sm,
     color: Colors.textMuted,
     letterSpacing: 0.8,
@@ -667,7 +661,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   progressLabel: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.xs,
     textAlign: 'center',
   },
@@ -691,17 +685,17 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.xs,
   },
   signalName: {
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size.sm,
     color: Colors.textSecondary,
   },
   signalValue: {
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.md,
     color: Colors.textPrimary,
   },
   tooltipText: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.sm,
     color: Colors.textSecondary,
     lineHeight: Typography.size.sm * 1.55,
@@ -719,7 +713,7 @@ const styles = StyleSheet.create({
 
   // ── Insight text ────────────────────────────────────────────────────────────
   insightText: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.base,
     color: Colors.textPrimary,
     lineHeight: Typography.size.base * 1.6,
@@ -736,14 +730,14 @@ const styles = StyleSheet.create({
     paddingRight: Spacing.lg,
   },
   sayQuoteMark: {
-    fontFamily: 'Nunito_800ExtraBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size['3xl'],
     lineHeight: Typography.size['3xl'],
     marginBottom: Spacing.xs,
     opacity: 0.55,
   },
   sayText: {
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size.base,
     color: Colors.textPrimary,
     lineHeight: Typography.size.base * 1.6,
@@ -762,7 +756,7 @@ const styles = StyleSheet.create({
     fontSize: 36,
   },
   emptyMilestoneText: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.base,
     color: Colors.textMuted,
   },
@@ -782,12 +776,12 @@ const styles = StyleSheet.create({
     gap: Spacing.xs,
   },
   milestoneLabel: {
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.base,
     color: Colors.textPrimary,
   },
   milestoneDate: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.sm,
     color: Colors.textMuted,
   },
@@ -804,7 +798,7 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   graduateBtnText: {
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.base,
     color: Colors.white,
   },

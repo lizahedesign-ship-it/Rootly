@@ -165,13 +165,13 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.sm,
   },
   appName: {
-    fontFamily: 'Nunito_900Black',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size['3xl'],
     color: Colors.green700,
     letterSpacing: Typography.tracking.tight,
   },
   tagline: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.base,
     color: Colors.textMuted,
     marginTop: Spacing.xs,
@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.lg,
   },
   errorText: {
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size.sm,
     color: Colors.danger,
     textAlign: 'center',
@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.border,
     backgroundColor: Colors.white,
     paddingHorizontal: Spacing.lg,
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.base,
     color: Colors.textPrimary,
   },
@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.borderMedium,
   },
   btnLabel: {
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.base,
   },
   btnLabelPrimary: {
@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.border,
   },
   dividerText: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.sm,
     color: Colors.textMuted,
     marginHorizontal: Spacing.md,
@@ -273,12 +273,12 @@ const styles = StyleSheet.create({
     marginTop: Spacing['2xl'],
   },
   footerText: {
-    fontFamily: 'Nunito_500Medium',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.sm,
     color: Colors.textMuted,
   },
   footerLink: {
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.sm,
     color: Colors.green700,
   },

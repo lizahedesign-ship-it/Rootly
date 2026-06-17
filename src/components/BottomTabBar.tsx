@@ -1,15 +1,16 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
+import { Feather } from '@expo/vector-icons';
 import { Colors, Typography, Spacing } from '../theme';
 
 export type TabId = 'home' | 'records' | 'summary' | 'settings';
 
-const TABS: Array<{ id: TabId; label: string; icon: string; route: string }> = [
-  { id: 'home',     label: 'Home',     icon: '🏠', route: '/(parent)/(tabs)/home' },
-  { id: 'records',  label: 'Records',  icon: '📋', route: '/(parent)/(tabs)/records' },
-  { id: 'summary',  label: 'Summary',  icon: '📊', route: '/(parent)/(tabs)/summary' },
-  { id: 'settings', label: 'Settings', icon: '⚙️', route: '/(parent)/(tabs)/settings' },
+const TABS: Array<{ id: TabId; label: string; featherIcon: string; route: string }> = [
+  { id: 'home',     label: 'Home',     featherIcon: 'home',        route: '/(parent)/(tabs)/home' },
+  { id: 'records',  label: 'Records',  featherIcon: 'list',        route: '/(parent)/(tabs)/records' },
+  { id: 'summary',  label: 'Summary',  featherIcon: 'bar-chart-2', route: '/(parent)/(tabs)/summary' },
+  { id: 'settings', label: 'Settings', featherIcon: 'settings',    route: '/(parent)/(tabs)/settings' },
 ];
 
 interface Props {
@@ -33,7 +34,11 @@ export function BottomTabBar({ activeTab }: Props) {
               }}
               activeOpacity={0.65}
             >
-              <Text style={styles.icon}>{tab.icon}</Text>
+              <Feather
+                name={tab.featherIcon as any}
+                size={24}
+                color={isActive ? Colors.green700 : Colors.textMuted}
+              />
               <Text style={[styles.label, isActive && styles.labelActive]}>
                 {tab.label}
               </Text>
@@ -62,11 +67,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap:            2,
   },
-  icon: {
-    fontSize: 20,
-  },
   label: {
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize:   Typography.size.xs,
     color:      Colors.textMuted,
   },
