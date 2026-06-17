@@ -1,12 +1,10 @@
 import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
-import { Feather } from '@expo/vector-icons';
 import {
   Colors,
   StageColors,
   Typography,
   Spacing,
   Radius,
-  Shadow,
   Layout,
 } from '../theme';
 import type { HabitStage } from '../theme';
@@ -23,7 +21,7 @@ export function HabitCard({ taskIcon, taskName, stage, onPress }: Props) {
 
   return (
     <TouchableOpacity
-      style={[styles.card, { backgroundColor: cfg.bg }, Shadow.sm]}
+      style={[styles.card, { backgroundColor: cfg.bg }]}
       onPress={onPress}
       activeOpacity={0.85}
     >
@@ -33,10 +31,9 @@ export function HabitCard({ taskIcon, taskName, stage, onPress }: Props) {
           {taskName}
         </Text>
         <Text style={[styles.stageLabel, { color: cfg.text }]}>
-          {cfg.emoji} {cfg.label}
+          {cfg.label}
         </Text>
       </View>
-      <Feather name="chevron-right" size={20} color={cfg.text} style={{ opacity: 0.45 }} />
     </TouchableOpacity>
   );
 }
@@ -47,9 +44,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     minHeight: Layout.habitCardMinHeight,
     borderRadius: Radius.lg,
-    paddingVertical: Spacing.lg,
+    paddingVertical: Spacing.xl,
     paddingHorizontal: Spacing.lg,
     gap: Spacing.md,
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.07)',
   },
   icon: {
     fontSize: 28,
@@ -60,7 +59,7 @@ const styles = StyleSheet.create({
   },
   taskName: {
     fontFamily: 'Outfit_500Medium',
-    fontSize: Typography.size.base,
+    fontSize: Typography.size.md,
     color: Colors.textPrimary,
   },
   stageLabel: {

@@ -164,7 +164,6 @@ export const Radius = {
 } as const;
 
 export const Shadow = {
-  // Use sparingly — prefer flat design
   sm: {
     shadowColor: Colors.green700,
     shadowOffset: { width: 0, height: 2 },
@@ -180,7 +179,6 @@ export const Shadow = {
     elevation: 4,
   },
   checkmark: {
-    // Used on completed task circles
     shadowColor: Colors.green700,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.30,
