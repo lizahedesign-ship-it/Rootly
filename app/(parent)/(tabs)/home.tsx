@@ -97,13 +97,6 @@ export default function ParentHomeScreen() {
       <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
         <View style={styles.flex}>
 
-          {/* Header */}
-          <View style={styles.headerRow}>
-            <Text style={styles.appName}>Rootly</Text>
-            <TouchableOpacity onPress={() => router.push('/(parent)/create-profile')}>
-              <Feather name="plus" size={24} color={Colors.green700} />
-            </TouchableOpacity>
-          </View>
 
           {childProfiles.length === 0 ? (
             /* ── Empty state ── */
@@ -157,6 +150,14 @@ export default function ParentHomeScreen() {
                   </TouchableOpacity>
                 ))}
 
+                <TouchableOpacity
+                  style={styles.tabAdd}
+                  onPress={() => router.push('/(parent)/create-profile')}
+                  activeOpacity={0.7}
+                >
+                  <Feather name="plus" size={16} color={Colors.green700} />
+                </TouchableOpacity>
+
               </ScrollView>
 
               {/* Habit health cards — flex:1 fills remaining space */}
@@ -167,7 +168,6 @@ export default function ParentHomeScreen() {
               >
                 {selectedChild && (
                   <>
-                    <Text style={styles.greeting}>{selectedChild.name}'s habits</Text>
                     {habitsLoading ? (
                       <ActivityIndicator color={Colors.green600} style={styles.loader} />
                     ) : habits.length === 0 ? (
@@ -223,13 +223,12 @@ export default function ParentHomeScreen() {
               {selectedChild && (
                 <View style={styles.bottomActions}>
                   <TouchableOpacity
-                    style={styles.addTaskBtn}
+                    style={styles.addHabitBtn}
                     onPress={() => router.push('/(parent)/create-task')}
                     activeOpacity={0.85}
                   >
-                    <Text style={styles.addTaskBtnText}>＋ Add a new task together</Text>
+                    <Text style={styles.addHabitBtnText}>Add a habit</Text>
                   </TouchableOpacity>
-
                   <TouchableOpacity
                     style={styles.handToChildBtn}
                     onPress={handleHandToChild}
@@ -272,18 +271,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   flex: { flex: 1 },
-  headerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: Spacing.xl,
-    paddingBottom: Spacing.xs,
-  },
-  appName: {
-    fontFamily: 'Outfit_600SemiBold',
-    fontSize: Typography.size['2xl'],
-    color: Colors.green700,
-  },
   // ── Empty state ────────────────────────────────────────────────
   emptyState: {
     flex: 1,
@@ -341,6 +328,16 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.green700,
     borderColor: Colors.green700,
   },
+  tabAdd: {
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    borderRadius: Radius.full,
+    borderWidth: 1.5,
+    borderColor: Colors.green300,
+    backgroundColor: Colors.green100,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   tabText: {
     fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.base,
@@ -351,30 +348,35 @@ const styles = StyleSheet.create({
   },
   // ── Bottom actions ─────────────────────────────────────────────
   bottomActions: {
+    flexDirection: 'row',
     paddingHorizontal: Spacing.xl,
     paddingTop: 12,
     paddingBottom: Spacing.md,
-    gap: Spacing.sm,
+    gap: 8,
   },
-  addTaskBtn: {
-    paddingVertical: Spacing.md,
+  addHabitBtn: {
+    flex: 1,
+    height: 52,
     borderRadius: Radius.full,
     borderWidth: 1.5,
     borderColor: Colors.green600,
+    backgroundColor: Colors.white,
     alignItems: 'center',
-    backgroundColor: Colors.bgSecondary,
+    justifyContent: 'center',
   },
-  addTaskBtnText: {
+  addHabitBtnText: {
     fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.base,
     color: Colors.green700,
   },
   // ── Hand to child button ───────────────────────────────────────
   handToChildBtn: {
-    paddingVertical: Spacing.lg,
+    flex: 1,
+    height: 52,
     borderRadius: Radius.full,
     backgroundColor: Colors.green700,
     alignItems: 'center',
+    justifyContent: 'center',
   },
   handToChildText: {
     fontFamily: 'Outfit_600SemiBold',
@@ -387,13 +389,6 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     paddingBottom: Spacing.lg,
     gap: Spacing.md,
-  },
-  greeting: {
-    fontFamily: 'Outfit_500Medium',
-    fontSize: Typography.size.xl,
-    color: Colors.textPrimary,
-    marginTop: 0,
-    marginBottom: Spacing.xs,
   },
   loader: {
     marginTop: Spacing['2xl'],
