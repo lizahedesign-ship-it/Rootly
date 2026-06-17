@@ -126,9 +126,9 @@ export default function ParentHomeScreen() {
                   paddingVertical: 4,
                   gap: 8,
                   alignItems: 'center',
-                  height: 56,
+                  height: 68,
                 }}
-                style={{ flexShrink: 0, maxHeight: 56 }}
+                style={{ flexShrink: 0, maxHeight: 68 }}
               >
                 {childProfiles.map((child) => (
                   <TouchableOpacity
