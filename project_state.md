@@ -18,7 +18,7 @@ Next: Slice 15 (Summary screens: weekly/monthly/annual stats + bar chart — no 
 | 1 | Project scaffold: Expo init, folder structure, Supabase connection, theme.ts wired | All | ✅ Done |
 | 2 | Supabase schema + RLS: all tables, RLS policies, subscription_status + gender fields reserved | All | ✅ Done |
 | 3 | Auth: sign up / login (email + Apple ID + Google), email verification state, session expiry handling | J1, J2 | ✅ Done |
-| 4 | Child profile: create, store, max 4 guard, gender field, tab switcher on parent home | J1, J9 | ✅ Done |
+| 4 | Child profile: create, store, gender field, tab switcher on parent home | J1, J9 | ✅ Done |
 | 5 | Mode switch: "Hand to [child]" button on parent home, PIN setup + storage (expo-secure-store), PIN modal (bottom sheet) on child mode exit | J9, J8 | ✅ Done |
 | 6 | Child home screen: task list, checkmark animation, long-press uncheck (0.65s), progress bar, date + greeting | J8 | ✅ Done |
 | 7 | All done screen + milestone animation: standard vs special (day 7/30/100), milestone table write | J8 | ✅ Done |

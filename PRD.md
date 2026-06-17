@@ -24,7 +24,7 @@
 
 ### Included in V1
 - Parent account: email, Apple ID, or Google login
-- Up to 4 child profiles per parent account. Each profile includes: name, age, gender (Boy / Girl / Other — reserved for future theme personalization)
+- Child profiles per parent account (no limit). Each profile includes: name, age, gender (Boy / Girl / Other — reserved for future theme personalization)
 - App opens directly to parent home — no launch screen
 - Mode switch: parent home → "Hand to [child]" button → child mode (no PIN on entry). Exit child mode via PIN modal (bottom sheet, 4-digit). PIN is set by parent during onboarding.
 - Multi-child: top tab switcher on parent home. "Hand to [child]" button label updates to match selected tab.

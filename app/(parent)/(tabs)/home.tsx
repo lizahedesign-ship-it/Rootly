@@ -23,7 +23,7 @@ import { HabitCard } from '../../../src/components/HabitCard';
 
 export default function ParentHomeScreen() {
   const router = useRouter();
-  const signOut = useAuthStore((s) => s.signOut);
+
   const userId = useAuthStore((s) => s.currentUser?.id);
   const childProfiles = useChildStore((s) => s.childProfiles);
   const selectedChildId = useChildStore((s) => s.selectedChildId);
@@ -99,8 +99,8 @@ export default function ParentHomeScreen() {
           {/* Header */}
           <View style={styles.headerRow}>
             <Text style={styles.appName}>Rootly</Text>
-            <TouchableOpacity onPress={signOut}>
-              <Text style={styles.signOutText}>Sign out</Text>
+            <TouchableOpacity onPress={() => router.push('/(parent)/create-profile')}>
+              <Text style={styles.addChildBtn}>＋</Text>
             </TouchableOpacity>
           </View>
 
@@ -156,14 +156,6 @@ export default function ParentHomeScreen() {
                   </TouchableOpacity>
                 ))}
 
-                {childProfiles.length < 4 && (
-                  <TouchableOpacity
-                    style={styles.addTab}
-                    onPress={() => router.push('/(parent)/create-profile')}
-                  >
-                    <Text style={styles.addTabText}>＋ Add</Text>
-                  </TouchableOpacity>
-                )}
               </ScrollView>
 
               {/* Habit health cards — flex:1 fills remaining space */}
@@ -291,10 +283,11 @@ const styles = StyleSheet.create({
     fontSize: Typography.size['2xl'],
     color: Colors.green700,
   },
-  signOutText: {
-    fontFamily: 'Nunito_500Medium',
-    fontSize: Typography.size.sm,
-    color: Colors.textMuted,
+  addChildBtn: {
+    fontFamily: 'Nunito_600SemiBold',
+    fontSize: Typography.size['2xl'],
+    color: Colors.green700,
+    paddingHorizontal: Spacing.xs,
   },
   // ── Empty state ────────────────────────────────────────────────
   emptyState: {
@@ -360,19 +353,6 @@ const styles = StyleSheet.create({
   },
   tabTextSelected: {
     color: Colors.white,
-  },
-  addTab: {
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.sm,
-    borderRadius: Radius.full,
-    borderWidth: 1.5,
-    borderColor: Colors.borderMedium,
-    backgroundColor: Colors.bgSecondary,
-  },
-  addTabText: {
-    fontFamily: 'Nunito_600SemiBold',
-    fontSize: Typography.size.base,
-    color: Colors.textSecondary,
   },
   // ── Bottom actions ─────────────────────────────────────────────
   bottomActions: {
