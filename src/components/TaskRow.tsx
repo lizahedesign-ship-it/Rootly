@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Animated, StyleSheet, GestureResponderEvent } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { Colors, Typography, Spacing, Radius, Layout, Shadow } from '../theme';
+import { Colors, Typography, Spacing, Radius, Layout } from '../theme';
 import type { TaskItem } from '../hooks/useTasks';
 
 interface Props {
@@ -109,7 +109,6 @@ const styles = StyleSheet.create({
   },
   circleCompleted: {
     backgroundColor: Colors.green500,
-    ...Shadow.checkmark,
   },
   taskInfo: {
     flex: 1,

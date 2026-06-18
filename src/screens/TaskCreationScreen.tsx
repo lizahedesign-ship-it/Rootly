@@ -19,7 +19,6 @@ import {
   Typography,
   Spacing,
   Radius,
-  Shadow,
   CategoryConfig,
 } from '../theme';
 import type { TaskCategory } from '../theme';
@@ -788,7 +787,6 @@ const styles = StyleSheet.create({
     padding: Spacing['3xl'],
     alignItems: 'center',
     gap: Spacing.md,
-    ...Shadow.md,
   },
   commitEmoji: {
     fontSize: 72,

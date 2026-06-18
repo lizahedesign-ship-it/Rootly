@@ -164,27 +164,9 @@ export const Radius = {
 } as const;
 
 export const Shadow = {
-  sm: {
-    shadowColor: Colors.green700,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.12,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  md: {
-    shadowColor: Colors.green700,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.18,
-    shadowRadius: 10,
-    elevation: 4,
-  },
-  checkmark: {
-    shadowColor: Colors.green700,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.30,
-    shadowRadius: 8,
-    elevation: 4,
-  },
+  sm: {},
+  md: {},
+  checkmark: {},
 } as const;
 
 export const Animation = {

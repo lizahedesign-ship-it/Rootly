@@ -386,7 +386,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.xl,
     paddingTop: 0,
     paddingBottom: Spacing.lg,
-    gap: Spacing.md,
+    gap: 8,
   },
   loader: {
     marginTop: Spacing['2xl'],

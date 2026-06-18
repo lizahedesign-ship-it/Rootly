@@ -25,7 +25,6 @@ import {
   Typography,
   Spacing,
   Radius,
-  Shadow,
 } from '../../../src/theme';
 
 // ─── Static config ─────────────────────────────────────────────────────────────
@@ -295,7 +294,7 @@ export default function MilestoneCardScreen() {
           {/* ── Note ───────────────────────────────────────────────────────── */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Note</Text>
-            <View style={[styles.noteContainer, Shadow.sm]}>
+            <View style={styles.noteContainer}>
               <TextInput
                 style={styles.noteInput}
                 value={noteText}

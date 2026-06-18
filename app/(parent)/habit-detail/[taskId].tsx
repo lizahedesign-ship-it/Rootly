@@ -20,7 +20,6 @@ import {
   Typography,
   Spacing,
   Radius,
-  Shadow,
 } from '../../../src/theme';
 import type { HabitStage } from '../../../src/theme';
 
@@ -122,7 +121,7 @@ function formatDate(iso: string): string {
 
 function trendLabel(trend: HabitSnapshot['trend']): string {
   if (!trend) return '—';
-  return { up: 'Improving ↑', flat: 'Steady →', down: 'Declining ↓' }[trend];
+  return { up: 'Improving', flat: 'Steady', down: 'Needs attention' }[trend];
 }
 
 function trendColor(trend: HabitSnapshot['trend']): string {
@@ -146,10 +145,7 @@ export default function HabitDetailScreen() {
   const [loading, setLoading]     = useState(true);
   const [graduating, setGraduating] = useState(false);
 
-  // Tooltip open state for each signal
-  const [showConsistencyTip, setShowConsistencyTip] = useState(false);
-  const [showRecoveryTip, setShowRecoveryTip]       = useState(false);
-  const [showTrendTip, setShowTrendTip]             = useState(false);
+  const [showSignalInfo, setShowSignalInfo] = useState(false);
 
   useEffect(() => {
     if (!taskId) return;
@@ -325,7 +321,7 @@ export default function HabitDetailScreen() {
           <Text style={styles.heroName}>{task.name}</Text>
           <View style={[styles.stageBadge, { backgroundColor: stageCfg.bg }]}>
             <Text style={[styles.stageBadgeText, { color: stageCfg.text }]}>
-              {stageCfg.emoji}  {stageCfg.label}
+              {stageCfg.label}
             </Text>
           </View>
         </View>
@@ -352,7 +348,7 @@ export default function HabitDetailScreen() {
                     <View
                       style={[
                         styles.progressConnector,
-                        { backgroundColor: leftFilled ? Colors.green700 : Colors.border },
+                        { backgroundColor: leftFilled ? Colors.green300 : Colors.border },
                         isFirst && styles.progressConnectorInvisible,
                       ]}
                     />
@@ -360,16 +356,16 @@ export default function HabitDetailScreen() {
                       style={[
                         styles.progressNode,
                         isCurrent
-                          ? { borderColor: Colors.green700, borderWidth: 2.5 }
+                          ? { backgroundColor: Colors.green100, borderWidth: 2, borderColor: Colors.green300 }
                           : isPast
-                          ? { borderColor: Colors.green700, borderWidth: 1.5 }
-                          : {},
+                          ? { borderWidth: 2, borderColor: Colors.green300 }
+                          : { borderWidth: 1, borderColor: 'rgba(0,0,0,0.07)' },
                       ]}
                     >
                       <Text
                         style={[
                           styles.progressEmoji,
-                          !isCurrent && !isPast && { opacity: 0.4 },
+                          !isCurrent && !isPast && { opacity: 0.3 },
                         ]}
                       >
                         {cfg.emoji}
@@ -378,7 +374,7 @@ export default function HabitDetailScreen() {
                     <View
                       style={[
                         styles.progressConnector,
-                        { backgroundColor: rightFilled ? Colors.green700 : Colors.border },
+                        { backgroundColor: rightFilled ? Colors.green300 : Colors.border },
                         isLast && styles.progressConnectorInvisible,
                       ]}
                     />
@@ -387,9 +383,9 @@ export default function HabitDetailScreen() {
                   <Text
                     style={[
                       styles.progressLabel,
-                      isCurrent && { color: Colors.green700, fontFamily: 'Outfit_500Medium' },
-                      isPast    && { color: Colors.green700, fontFamily: 'Outfit_500Medium' },
-                      !isCurrent && !isPast && { opacity: 0.4 },
+                      isCurrent && { fontFamily: 'Outfit_600SemiBold', color: Colors.textPrimary },
+                      isPast    && { color: Colors.textPrimary },
+                      !isCurrent && !isPast && { opacity: 0.3, color: Colors.textMuted },
                     ]}
                     numberOfLines={1}
                   >
@@ -404,69 +400,61 @@ export default function HabitDetailScreen() {
         {/* ── Three signals ──────────────────────────────────────────────────── */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Signals</Text>
-          <View style={[styles.card, Shadow.sm]}>
+          <View style={styles.signalsCard}>
 
-            {/* Consistency rate */}
-            <View style={styles.signalRow}>
+            {/* Data row: 3 columns + info icon */}
+            <View style={styles.signalsRow}>
+              <View style={styles.signalCol}>
+                <Text style={styles.signalLabel}>Done rate</Text>
+                <Text style={styles.signalValue}>
+                  {snapshot?.consistency_rate != null
+                    ? `${Math.round(snapshot.consistency_rate)}%`
+                    : '—'}
+                </Text>
+              </View>
+
+              <View style={styles.signalCol}>
+                <Text style={styles.signalLabel}>Bounce back</Text>
+                <Text style={styles.signalValue}>
+                  {snapshot?.avg_recovery_days != null
+                    ? `${Math.round(snapshot.avg_recovery_days)} ${Math.round(snapshot.avg_recovery_days) === 1 ? 'day' : 'days'}`
+                    : '—'}
+                </Text>
+              </View>
+
+              <View style={styles.signalCol}>
+                <Text style={styles.signalLabel}>This month</Text>
+                <Text style={[styles.signalValue, { color: trendColor(snapshot?.trend ?? null) }]}>
+                  {trendLabel(snapshot?.trend ?? null)}
+                </Text>
+              </View>
+
               <TouchableOpacity
-                style={styles.signalLabelRow}
-                onPress={() => setShowConsistencyTip((v) => !v)}
+                style={styles.signalInfoBtn}
+                onPress={() => setShowSignalInfo((v) => !v)}
                 activeOpacity={0.7}
               >
-                <Text style={styles.signalName}>Consistency</Text>
-                <Feather name="info" size={14} color={Colors.textMuted} />
+                <Feather name="info" size={16} color={Colors.textMuted} />
               </TouchableOpacity>
-              <Text style={styles.signalValue}>
-                {snapshot?.consistency_rate != null
-                  ? `${Math.round(snapshot.consistency_rate)}%`
-                  : '—'}
-              </Text>
-              {showConsistencyTip && (
-                <Text style={styles.tooltipText}>{SIGNAL_TOOLTIPS.consistency}</Text>
-              )}
             </View>
 
-            <View style={styles.signalDivider} />
-
-            {/* Recovery speed */}
-            <View style={styles.signalRow}>
-              <TouchableOpacity
-                style={styles.signalLabelRow}
-                onPress={() => setShowRecoveryTip((v) => !v)}
-                activeOpacity={0.7}
-              >
-                <Text style={styles.signalName}>Recovery</Text>
-                <Feather name="info" size={14} color={Colors.textMuted} />
-              </TouchableOpacity>
-              <Text style={styles.signalValue}>
-                {snapshot?.avg_recovery_days != null
-                  ? `${snapshot.avg_recovery_days.toFixed(1)} days`
-                  : '—'}
-              </Text>
-              {showRecoveryTip && (
-                <Text style={styles.tooltipText}>{SIGNAL_TOOLTIPS.recovery}</Text>
-              )}
-            </View>
-
-            <View style={styles.signalDivider} />
-
-            {/* Trend */}
-            <View style={styles.signalRow}>
-              <TouchableOpacity
-                style={styles.signalLabelRow}
-                onPress={() => setShowTrendTip((v) => !v)}
-                activeOpacity={0.7}
-              >
-                <Text style={styles.signalName}>Trend</Text>
-                <Feather name="info" size={14} color={Colors.textMuted} />
-              </TouchableOpacity>
-              <Text style={[styles.signalValue, { color: trendColor(snapshot?.trend ?? null) }]}>
-                {trendLabel(snapshot?.trend ?? null)}
-              </Text>
-              {showTrendTip && (
-                <Text style={styles.tooltipText}>{SIGNAL_TOOLTIPS.trend}</Text>
-              )}
-            </View>
+            {/* Expandable explanation */}
+            {showSignalInfo && (
+              <View style={styles.signalInfoBox}>
+                <Text style={styles.signalInfoLine}>
+                  <Text style={styles.signalInfoBold}>Done rate — </Text>
+                  {SIGNAL_TOOLTIPS.consistency}
+                </Text>
+                <Text style={styles.signalInfoLine}>
+                  <Text style={styles.signalInfoBold}>Bounce back — </Text>
+                  {SIGNAL_TOOLTIPS.recovery}
+                </Text>
+                <Text style={styles.signalInfoLine}>
+                  <Text style={styles.signalInfoBold}>This month — </Text>
+                  {SIGNAL_TOOLTIPS.trend}
+                </Text>
+              </View>
+            )}
 
           </View>
         </View>
@@ -474,7 +462,7 @@ export default function HabitDetailScreen() {
         {/* ── What's happening ───────────────────────────────────────────────── */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>What's happening</Text>
-          <View style={[styles.card, Shadow.sm]}>
+          <View style={styles.card}>
             <Text style={styles.insightText}>{insights.whatsHappening}</Text>
           </View>
         </View>
@@ -482,17 +470,11 @@ export default function HabitDetailScreen() {
         {/* ── What helps ─────────────────────────────────────────────────────── */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>What helps</Text>
-          <View style={[styles.card, Shadow.sm]}>
+          <View style={styles.card}>
             <Text style={styles.insightText}>{insights.whatHelps}</Text>
-          </View>
-        </View>
-
-        {/* ── Say to your child ──────────────────────────────────────────────── */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Say to your child</Text>
-          <View style={[styles.sayCard, { borderLeftColor: stageCfg.text }, Shadow.sm]}>
-            <Text style={[styles.sayQuoteMark, { color: stageCfg.text }]}>"</Text>
-            <Text style={styles.sayText}>{insights.sayToChild}</Text>
+            <Text style={styles.trySayingText}>
+              Try saying: "{insights.sayToChild}"
+            </Text>
           </View>
         </View>
 
@@ -505,7 +487,7 @@ export default function HabitDetailScreen() {
               <Text style={styles.emptyMilestoneText}>No milestones yet. Keep going!</Text>
             </View>
           ) : (
-            <View style={[styles.card, Shadow.sm]}>
+            <View style={styles.card}>
               {milestones.map((m, idx) => {
                 const cfg = MILESTONE_CONFIG[m.type];
                 return (
@@ -654,6 +636,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
+    backgroundColor: Colors.white,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -670,40 +653,64 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: Colors.white,
     borderRadius: Radius.lg,
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.07)',
     paddingVertical: Spacing.sm,
     paddingHorizontal: Spacing.lg,
   },
 
   // ── Signal rows ─────────────────────────────────────────────────────────────
-  signalRow: {
-    paddingVertical: Spacing.md,
+  signalsCard: {
+    backgroundColor: Colors.white,
+    borderRadius: Radius.lg,
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.07)',
+    paddingVertical: Spacing.lg,
+    paddingHorizontal: Spacing.lg,
   },
-  signalLabelRow: {
+  signalsRow: {
     flexDirection: 'row',
+    alignItems: 'flex-start',
+  },
+  signalCol: {
+    flex: 1,
     alignItems: 'center',
     gap: Spacing.xs,
-    marginBottom: Spacing.xs,
   },
-  signalName: {
-    fontFamily: 'Outfit_600SemiBold',
-    fontSize: Typography.size.sm,
-    color: Colors.textSecondary,
+  signalLabel: {
+    fontFamily: 'Outfit_500Medium',
+    fontSize: Typography.size.xs,
+    color: Colors.textMuted,
+    textAlign: 'center',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   signalValue: {
-    fontFamily: 'Outfit_500Medium',
+    fontFamily: 'Outfit_600SemiBold',
     fontSize: Typography.size.md,
     color: Colors.textPrimary,
+    textAlign: 'center',
   },
-  tooltipText: {
+  signalInfoBtn: {
+    paddingTop: 2,
+    paddingLeft: Spacing.xs,
+  },
+  signalInfoBox: {
+    marginTop: Spacing.lg,
+    paddingTop: Spacing.md,
+    borderTopWidth: 1,
+    borderTopColor: Colors.border,
+    gap: Spacing.sm,
+  },
+  signalInfoLine: {
     fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.sm,
     color: Colors.textSecondary,
     lineHeight: Typography.size.sm * 1.55,
-    marginTop: Spacing.xs,
-    backgroundColor: Colors.bgSecondary,
-    borderRadius: Radius.sm,
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
+  },
+  signalInfoBold: {
+    fontFamily: 'Outfit_600SemiBold',
+    color: Colors.textPrimary,
   },
   signalDivider: {
     height: 1,
@@ -721,27 +728,13 @@ const styles = StyleSheet.create({
   },
 
   // ── Say to your child ───────────────────────────────────────────────────────
-  sayCard: {
-    backgroundColor: Colors.white,
-    borderRadius: Radius.lg,
-    borderLeftWidth: 4,
-    paddingVertical: Spacing.md,
-    paddingLeft: Spacing.lg,
-    paddingRight: Spacing.lg,
-  },
-  sayQuoteMark: {
-    fontFamily: 'Outfit_600SemiBold',
-    fontSize: Typography.size['3xl'],
-    lineHeight: Typography.size['3xl'],
-    marginBottom: Spacing.xs,
-    opacity: 0.55,
-  },
-  sayText: {
-    fontFamily: 'Outfit_600SemiBold',
-    fontSize: Typography.size.base,
-    color: Colors.textPrimary,
-    lineHeight: Typography.size.base * 1.6,
+  trySayingText: {
+    fontFamily: 'Outfit_500Medium',
+    fontSize: Typography.size.sm,
+    color: Colors.textMuted,
+    lineHeight: Typography.size.sm * 1.6,
     fontStyle: 'italic',
+    marginTop: Spacing.md,
   },
 
   // ── Milestones ──────────────────────────────────────────────────────────────
