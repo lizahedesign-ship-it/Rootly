@@ -181,7 +181,7 @@ export default function SummaryScreen() {
           <Text style={styles.emptyText}>
             {!selectedChild
               ? 'Add a child profile to see their summary.'
-              : `Complete some tasks ${viewLabel} to see stats here.`}
+              : `Complete some habits ${viewLabel} to see stats here.`}
           </Text>
         </View>
       ) : (
@@ -193,7 +193,7 @@ export default function SummaryScreen() {
           {/* Overall rate */}
           <View style={styles.statCard}>
             <Text style={styles.statPct}>{overallPct}%</Text>
-            <Text style={styles.statLabel}>of scheduled tasks completed {viewLabel}</Text>
+            <Text style={styles.statLabel}>of scheduled habits completed {viewLabel}</Text>
             <Text style={styles.statSub}>{totalCompleted} completed · {totalScheduled} scheduled</Text>
           </View>
 

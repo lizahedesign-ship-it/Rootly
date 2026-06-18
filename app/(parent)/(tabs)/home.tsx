@@ -172,7 +172,7 @@ export default function ParentHomeScreen() {
                       <ActivityIndicator color={Colors.green600} style={styles.loader} />
                     ) : habits.length === 0 ? (
                       <Text style={styles.noHabitsText}>
-                        No habits yet. Add a task to get started.
+                        No habits yet. Tap "Add a habit" to get started.
                       </Text>
                     ) : (
                       habits.map((h) => (
@@ -234,9 +234,7 @@ export default function ParentHomeScreen() {
                     onPress={handleHandToChild}
                     activeOpacity={0.85}
                   >
-                    <Text style={styles.handToChildText}>
-                      Hand to {selectedChild.name}
-                    </Text>
+                    <Text style={styles.handToChildText}>Child mode</Text>
                   </TouchableOpacity>
                 </View>
               )}

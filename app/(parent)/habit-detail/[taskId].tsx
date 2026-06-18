@@ -249,7 +249,7 @@ export default function HabitDetailScreen() {
   function handleGraduate() {
     Alert.alert(
       'Graduate this habit?',
-      "This habit will be removed from the daily task list. All history, milestones, and progress are preserved forever. You can restore it any time.",
+      "This habit will be removed from the daily habit list. All history, milestones, and progress are preserved forever. You can restore it any time.",
       [
         { text: 'Cancel', style: 'cancel' },
         { text: 'Graduate 🎓', style: 'default', onPress: confirmGraduate },
