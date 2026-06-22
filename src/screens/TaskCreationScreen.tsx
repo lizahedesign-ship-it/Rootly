@@ -9,7 +9,6 @@ import {
   KeyboardAvoidingView,
   Platform,
   ActivityIndicator,
-  useWindowDimensions,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -24,70 +23,7 @@ import {
 import type { TaskCategory } from '../theme';
 import { useChildStore } from '../store/childStore';
 import { useCreateTask } from '../hooks/useCreateTask';
-
-// ─── Emoji data ────────────────────────────────────────────────────────────────
-
-interface EmojiItem {
-  emoji: string;
-  keywords: string[];
-}
-
-const EMOJI_LIST: EmojiItem[] = [
-  { emoji: '📚', keywords: ['book', 'read', 'study', 'learning', 'school'] },
-  { emoji: '📖', keywords: ['read', 'book', 'story', 'library'] },
-  { emoji: '✏️', keywords: ['write', 'draw', 'pencil', 'school', 'homework'] },
-  { emoji: '📝', keywords: ['write', 'note', 'list', 'journal', 'homework'] },
-  { emoji: '🎨', keywords: ['art', 'draw', 'paint', 'creative', 'color'] },
-  { emoji: '🎵', keywords: ['music', 'song', 'sing', 'practice'] },
-  { emoji: '🎶', keywords: ['music', 'notes', 'song', 'practice', 'sing'] },
-  { emoji: '🎸', keywords: ['guitar', 'music', 'instrument', 'practice'] },
-  { emoji: '🎹', keywords: ['piano', 'music', 'instrument', 'keyboard', 'practice'] },
-  { emoji: '🎭', keywords: ['drama', 'act', 'theatre', 'creative', 'play'] },
-  { emoji: '🏃', keywords: ['run', 'exercise', 'sport', 'physical', 'walk', 'jog'] },
-  { emoji: '🚴', keywords: ['bike', 'cycle', 'exercise', 'sport', 'ride'] },
-  { emoji: '⚽', keywords: ['soccer', 'football', 'sport', 'ball', 'play', 'kick'] },
-  { emoji: '🏊', keywords: ['swim', 'pool', 'water', 'sport', 'swimming'] },
-  { emoji: '🤸', keywords: ['gymnastics', 'exercise', 'stretch', 'sport', 'flip'] },
-  { emoji: '🧘', keywords: ['yoga', 'meditation', 'calm', 'relax', 'breathe', 'mindful'] },
-  { emoji: '💪', keywords: ['strong', 'exercise', 'muscle', 'power', 'sport', 'workout'] },
-  { emoji: '👟', keywords: ['shoes', 'walk', 'run', 'exercise', 'sport', 'active'] },
-  { emoji: '🦷', keywords: ['teeth', 'brush', 'hygiene', 'clean', 'morning'] },
-  { emoji: '🛁', keywords: ['bath', 'shower', 'clean', 'hygiene', 'wash'] },
-  { emoji: '💤', keywords: ['sleep', 'rest', 'bed', 'nap', 'night'] },
-  { emoji: '🌙', keywords: ['sleep', 'night', 'bed', 'rest', 'bedtime'] },
-  { emoji: '☀️', keywords: ['morning', 'sunshine', 'wake', 'day', 'bright'] },
-  { emoji: '❤️', keywords: ['love', 'heart', 'kindness', 'care', 'family'] },
-  { emoji: '🤝', keywords: ['help', 'together', 'share', 'teamwork', 'friend', 'kind'] },
-  { emoji: '🙏', keywords: ['grateful', 'thankful', 'pray', 'please', 'mindful'] },
-  { emoji: '🌱', keywords: ['grow', 'plant', 'garden', 'nature', 'earth', 'sprout'] },
-  { emoji: '🌿', keywords: ['plant', 'nature', 'green', 'garden', 'grow'] },
-  { emoji: '🌸', keywords: ['flower', 'spring', 'bloom', 'pretty', 'blossom'] },
-  { emoji: '🌻', keywords: ['sunflower', 'flower', 'happy', 'sunny', 'nature'] },
-  { emoji: '🌈', keywords: ['rainbow', 'color', 'happy', 'bright', 'colorful'] },
-  { emoji: '🦋', keywords: ['butterfly', 'grow', 'change', 'nature', 'beautiful'] },
-  { emoji: '🐾', keywords: ['pet', 'animal', 'dog', 'cat', 'care', 'walk'] },
-  { emoji: '🍎', keywords: ['apple', 'fruit', 'healthy', 'eat', 'food'] },
-  { emoji: '🥦', keywords: ['vegetable', 'healthy', 'eat', 'food', 'green'] },
-  { emoji: '🥕', keywords: ['carrot', 'vegetable', 'healthy', 'eat', 'food'] },
-  { emoji: '💧', keywords: ['water', 'drink', 'hydrate', 'healthy', 'thirst'] },
-  { emoji: '🧃', keywords: ['drink', 'juice', 'healthy', 'hydrate'] },
-  { emoji: '🍳', keywords: ['cook', 'breakfast', 'kitchen', 'food', 'egg', 'chef'] },
-  { emoji: '🥗', keywords: ['salad', 'healthy', 'vegetables', 'food', 'eat', 'greens'] },
-  { emoji: '🧹', keywords: ['clean', 'sweep', 'tidy', 'chores', 'help', 'house'] },
-  { emoji: '🛏️', keywords: ['bed', 'make', 'tidy', 'room', 'sleep', 'chores'] },
-  { emoji: '🏠', keywords: ['home', 'house', 'family', 'chores', 'help', 'tidy'] },
-  { emoji: '🎯', keywords: ['goal', 'focus', 'target', 'aim', 'practice', 'achieve'] },
-  { emoji: '🏆', keywords: ['win', 'achievement', 'trophy', 'goal', 'best', 'champion'] },
-  { emoji: '⭐', keywords: ['star', 'achievement', 'great', 'excellent', 'shine'] },
-  { emoji: '🌟', keywords: ['star', 'shine', 'great', 'sparkle', 'excellent'] },
-  { emoji: '🧠', keywords: ['think', 'learn', 'smart', 'brain', 'study', 'knowledge'] },
-  { emoji: '🔬', keywords: ['science', 'explore', 'learn', 'experiment', 'discover'] },
-  { emoji: '🧩', keywords: ['puzzle', 'think', 'game', 'problem', 'solve'] },
-  { emoji: '🎲', keywords: ['game', 'play', 'fun', 'board', 'family'] },
-  { emoji: '🎮', keywords: ['game', 'play', 'video', 'screen', 'limit'] },
-  { emoji: '🎁', keywords: ['gift', 'give', 'kindness', 'share', 'generous'] },
-  { emoji: '🤔', keywords: ['think', 'mindful', 'focus', 'reflect', 'learn', 'wonder'] },
-];
+import { EmojiPicker } from '../components/EmojiPicker';
 
 // ─── Frequency config ──────────────────────────────────────────────────────────
 
@@ -128,7 +64,6 @@ const CATEGORY_KEYS = Object.keys(CategoryConfig) as TaskCategory[];
 
 export default function TaskCreationScreen() {
   const router = useRouter();
-  const { width: screenWidth } = useWindowDimensions();
 
   const childProfiles = useChildStore((s) => s.childProfiles);
   const selectedChildId = useChildStore((s) => s.selectedChildId);
@@ -146,35 +81,21 @@ export default function TaskCreationScreen() {
   const [selectedCategory, setSelectedCategory] = useState<TaskCategory | null>(null);
   const [selectedFrequency, setSelectedFrequency] = useState<Frequency | null>(null);
   const [customDays, setCustomDays] = useState<number[]>([]);
-  const [searchQuery, setSearchQuery] = useState('');
   const [createError, setCreateError] = useState<string | null>(null);
 
-  // ── Emoji filtering ───────────────────────────────────────────────────────
-  const filteredEmojis =
-    searchQuery.trim() === ''
-      ? EMOJI_LIST
-      : EMOJI_LIST.filter(({ keywords }) =>
-          keywords.some((kw) => kw.includes(searchQuery.toLowerCase().trim()))
-        );
-
-  // ── Emoji grid cell size (6 columns) ─────────────────────────────────────
-  const EMOJI_COLS = 6;
-  const emojiCellSize = Math.floor(
-    (screenWidth - Spacing.xl * 2 - Spacing.sm * (EMOJI_COLS - 1)) / EMOJI_COLS
-  );
-
   // ── Validation ────────────────────────────────────────────────────────────
-  const step1Valid = name.trim().length > 0;
-  const step2Valid = selectedEmoji !== '';
-  const step3Valid =
+  // Step 1: name  Step 2: category + frequency  Step 3: icon (optional)  Step 4: confirm
+  const step1Valid =
+    name.trim().length > 0;
+  const step2Valid =
     selectedCategory !== null &&
     selectedFrequency !== null &&
     (selectedFrequency !== 'custom' || customDays.length > 0);
+  // step 3 (icon) is always valid — icon is optional
 
   const nextDisabled =
     (step === 1 && !step1Valid) ||
     (step === 2 && !step2Valid) ||
-    (step === 3 && !step3Valid) ||
     (step === 4 && creating);
 
   // ── Handlers ──────────────────────────────────────────────────────────────
@@ -204,7 +125,7 @@ export default function TaskCreationScreen() {
     const { error } = await createTask({
       childId: selectedChildId,
       name: name.trim(),
-      icon: selectedEmoji,
+      icon: selectedEmoji || '⭐',
       category: selectedCategory,
       frequency: selectedFrequency,
       customDays,
@@ -270,54 +191,8 @@ export default function TaskCreationScreen() {
     </View>
   );
 
-  // ── Step 2: Emoji ─────────────────────────────────────────────────────────
+  // ── Step 2: Category + Frequency ─────────────────────────────────────────
   const renderStep2 = () => (
-    <View style={styles.stepContent}>
-      <Text style={styles.stepTitle}>Pick an emoji</Text>
-      <Text style={styles.stepSubtitle}>
-        Let {child?.name ?? 'your child'} choose their icon
-      </Text>
-
-      <View style={styles.emojiPreview}>
-        {selectedEmoji ? (
-          <Text style={styles.emojiPreviewText}>{selectedEmoji}</Text>
-        ) : (
-          <Text style={styles.emojiPreviewPlaceholder}>?</Text>
-        )}
-      </View>
-
-      <TextInput
-        style={styles.searchInput}
-        value={searchQuery}
-        onChangeText={setSearchQuery}
-        placeholder="Search emojis…"
-        placeholderTextColor={Colors.textMuted}
-        clearButtonMode="while-editing"
-        autoCorrect={false}
-        autoCapitalize="none"
-      />
-
-      <View style={styles.emojiGrid}>
-        {filteredEmojis.map(({ emoji }) => (
-          <TouchableOpacity
-            key={emoji}
-            style={[
-              styles.emojiCell,
-              { width: emojiCellSize, height: emojiCellSize },
-              selectedEmoji === emoji && styles.emojiCellSelected,
-            ]}
-            onPress={() => setSelectedEmoji(emoji)}
-            activeOpacity={0.7}
-          >
-            <Text style={styles.emojiCellText}>{emoji}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-    </View>
-  );
-
-  // ── Step 3: Category + Frequency ──────────────────────────────────────────
-  const renderStep3 = () => (
     <View style={styles.stepContent}>
       <Text style={styles.stepTitle}>Category & Frequency</Text>
       <Text style={styles.stepSubtitle}>
@@ -411,6 +286,26 @@ export default function TaskCreationScreen() {
     </View>
   );
 
+  // ── Step 3: Icon (optional) ───────────────────────────────────────────────
+  const renderStep3 = () => (
+    <View style={styles.stepContent}>
+      <Text style={styles.stepTitle}>Add an icon</Text>
+      <Text style={styles.stepSubtitle}>
+        Optional — tap any icon below or skip
+      </Text>
+
+      <View style={styles.emojiPreview}>
+        <Text style={styles.emojiPreviewText}>{selectedEmoji || '⭐'}</Text>
+      </View>
+
+      <EmojiPicker
+        selectedEmoji={selectedEmoji}
+        onSelect={setSelectedEmoji}
+        defaultCategory={selectedCategory ?? 'learning'}
+      />
+    </View>
+  );
+
   // ── Step 4: Commitment card ───────────────────────────────────────────────
   const renderStep4 = () => {
     const freqText = selectedFrequency
@@ -426,7 +321,7 @@ export default function TaskCreationScreen() {
         </Text>
 
         <View style={styles.commitCard}>
-          <Text style={styles.commitEmoji}>{selectedEmoji}</Text>
+          <Text style={styles.commitEmoji}>{selectedEmoji || '⭐'}</Text>
           <Text style={styles.commitName}>{name.trim()}</Text>
 
           {catConfig && (
@@ -635,43 +530,6 @@ const styles = StyleSheet.create({
   emojiPreviewText: {
     fontSize: 52,
   },
-  emojiPreviewPlaceholder: {
-    fontFamily: 'Outfit_500Medium',
-    fontSize: Typography.size['2xl'],
-    color: Colors.textMuted,
-  },
-  searchInput: {
-    fontFamily: 'Outfit_500Medium',
-    fontSize: Typography.size.base,
-    color: Colors.textPrimary,
-    backgroundColor: Colors.white,
-    borderWidth: 1.5,
-    borderColor: Colors.border,
-    borderRadius: Radius.full,
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.sm,
-    marginBottom: Spacing.lg,
-  },
-  emojiGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: Spacing.sm,
-  },
-  emojiCell: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: Radius.md,
-    backgroundColor: Colors.bgSecondary,
-  },
-  emojiCellSelected: {
-    backgroundColor: Colors.green100,
-    borderWidth: 2,
-    borderColor: Colors.green500,
-  },
-  emojiCellText: {
-    fontSize: 26,
-  },
-
   // ── Step 3: Category ──────────────────────────────────────────────────────
   sectionLabel: {
     fontFamily: 'Outfit_500Medium',

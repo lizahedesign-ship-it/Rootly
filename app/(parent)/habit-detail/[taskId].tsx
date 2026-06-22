@@ -7,6 +7,10 @@ import {
   StyleSheet,
   ActivityIndicator,
   Alert,
+  Modal,
+  TextInput,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
@@ -21,13 +25,19 @@ import {
   Spacing,
   Radius,
 } from '../../../src/theme';
-import type { HabitStage } from '../../../src/theme';
+import type { HabitStage, TaskCategory } from '../../../src/theme';
+import { EmojiPicker } from '../../../src/components/EmojiPicker';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
+
+type FrequencyType = 'daily' | 'weekdays' | 'weekends' | 'custom';
 
 interface TaskDetail {
   name: string;
   icon: string;
+  category: TaskCategory;
+  frequency: FrequencyType;
+  custom_days: number[] | null;
 }
 
 interface HabitSnapshot {
@@ -100,6 +110,24 @@ const MILESTONE_CONFIG = {
   count_100:  { emoji: '💯', label: '100 completions' },
 } as const;
 
+
+const FREQUENCY_OPTIONS: { value: FrequencyType; label: string }[] = [
+  { value: 'daily',    label: 'Every day' },
+  { value: 'weekdays', label: 'Weekdays' },
+  { value: 'weekends', label: 'Weekends' },
+  { value: 'custom',   label: 'Custom' },
+];
+
+const DAYS = [
+  { label: 'Mon', value: 1 },
+  { label: 'Tue', value: 2 },
+  { label: 'Wed', value: 3 },
+  { label: 'Thu', value: 4 },
+  { label: 'Fri', value: 5 },
+  { label: 'Sat', value: 6 },
+  { label: 'Sun', value: 7 },
+];
+
 const SIGNAL_TOOLTIPS = {
   consistency:
     'The % of scheduled days this habit has been completed since it was created. This number never resets.',
@@ -147,6 +175,14 @@ export default function HabitDetailScreen() {
 
   const [showSignalInfo, setShowSignalInfo] = useState(false);
 
+  // ── Edit modal ───────────────────────────────────────────────────────────────
+  const [showEditModal, setShowEditModal]   = useState(false);
+  const [editName, setEditName]             = useState('');
+  const [editEmoji, setEditEmoji]           = useState('');
+  const [editFrequency, setEditFrequency]   = useState<FrequencyType>('daily');
+  const [editCustomDays, setEditCustomDays] = useState<number[]>([]);
+  const [editSaving, setEditSaving]         = useState(false);
+
   useEffect(() => {
     if (!taskId) return;
     void loadAll();
@@ -161,7 +197,12 @@ export default function HabitDetailScreen() {
       snapshot: HabitSnapshot;
       milestones: MilestoneItem[];
     };
-    setTask(cached.task);
+    setTask({
+      ...cached.task,
+      category:    cached.task.category    ?? 'learning',
+      frequency:   cached.task.frequency   ?? 'daily',
+      custom_days: cached.task.custom_days ?? null,
+    });
     setSnapshot(cached.snapshot);
     setMilestones(cached.milestones);
   }
@@ -185,7 +226,7 @@ export default function HabitDetailScreen() {
       const [taskRes, snapRes, msRes] = await Promise.all([
         supabase
           .from('task')
-          .select('name, icon')
+          .select('name, icon, category, frequency, custom_days')
           .eq('id', taskId)
           .single(),
         supabase
@@ -204,7 +245,13 @@ export default function HabitDetailScreen() {
 
       if (!taskRes.data) throw new Error('task_not_found');
 
-      const taskDetail: TaskDetail = { name: taskRes.data.name, icon: taskRes.data.icon };
+      const taskDetail: TaskDetail = {
+        name:        taskRes.data.name,
+        icon:        taskRes.data.icon,
+        category:    (taskRes.data.category ?? 'learning') as TaskCategory,
+        frequency:   (taskRes.data.frequency ?? 'daily') as FrequencyType,
+        custom_days: taskRes.data.custom_days ?? null,
+      };
       const habitSnapshot: HabitSnapshot = snapRes.data
         ? {
             stage:             snapRes.data.stage as HabitStage,
@@ -269,6 +316,77 @@ export default function HabitDetailScreen() {
     }
   }
 
+  // ── Edit ─────────────────────────────────────────────────────────────────────
+
+  function openEditModal() {
+    if (!task) return;
+    setEditName(task.name);
+    setEditEmoji(task.icon);
+    setEditFrequency(task.frequency);
+    setEditCustomDays(task.custom_days ?? []);
+    setShowEditModal(true);
+  }
+
+  function handleSaveEdit() {
+    if (!taskId || !task || !editName.trim()) return;
+    if (editFrequency === 'custom' && editCustomDays.length === 0) return;
+
+    const sortedEdit = [...editCustomDays].sort((a, b) => a - b);
+    const sortedOrig = [...(task.custom_days ?? [])].sort((a, b) => a - b);
+    const frequencyChanged =
+      editFrequency !== task.frequency ||
+      (editFrequency === 'custom' &&
+        JSON.stringify(sortedEdit) !== JSON.stringify(sortedOrig));
+
+    if (frequencyChanged) {
+      Alert.alert(
+        'Change frequency?',
+        "Changing the frequency will reset this habit's progress. Your history and milestones are kept, but the stage and consistency scores will restart from today.",
+        [
+          { text: 'Cancel', style: 'cancel' },
+          {
+            text: 'Change frequency',
+            style: 'destructive',
+            onPress: () => void performSave(true),
+          },
+        ],
+      );
+    } else {
+      void performSave(false);
+    }
+  }
+
+  async function performSave(resetProgress: boolean) {
+    if (!taskId) return;
+    setEditSaving(true);
+
+    const updates: Record<string, unknown> = {
+      name: editName.trim(),
+      icon: editEmoji || '⭐',
+    };
+
+    if (resetProgress) {
+      updates.frequency   = editFrequency;
+      updates.custom_days = editFrequency === 'custom' ? editCustomDays : null;
+      updates.created_at  = new Date().toISOString();
+    }
+
+    const { error } = await supabase
+      .from('task')
+      .update(updates)
+      .eq('id', taskId);
+
+    if (error) {
+      Alert.alert('Error', 'Could not save changes. Please try again.');
+      setEditSaving(false);
+      return;
+    }
+
+    setShowEditModal(false);
+    setEditSaving(false);
+    await loadAll();
+  }
+
   // ── Loading ──────────────────────────────────────────────────────────────────
 
   if (loading) {
@@ -305,10 +423,15 @@ export default function HabitDetailScreen() {
   return (
     <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
 
-      {/* Back nav */}
-      <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
-        <Feather name="arrow-left" size={20} color={Colors.green700} />
-      </TouchableOpacity>
+      {/* Nav row */}
+      <View style={styles.navRow}>
+        <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
+          <Feather name="arrow-left" size={20} color={Colors.green700} />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.editBtn} onPress={openEditModal}>
+          <Feather name="edit-2" size={18} color={Colors.green700} />
+        </TouchableOpacity>
+      </View>
 
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -531,6 +654,136 @@ export default function HabitDetailScreen() {
         )}
 
       </ScrollView>
+
+      {/* ── Edit modal ───────────────────────────────────────────────────────── */}
+      <Modal
+        visible={showEditModal}
+        animationType="slide"
+        presentationStyle="pageSheet"
+        onRequestClose={() => setShowEditModal(false)}
+      >
+        <SafeAreaView style={styles.modalContainer}>
+          <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          >
+            {/* Modal header */}
+            <View style={styles.modalHeader}>
+              <TouchableOpacity onPress={() => setShowEditModal(false)} style={styles.modalHeaderBtn}>
+                <Text style={styles.modalCancel}>Cancel</Text>
+              </TouchableOpacity>
+              <Text style={styles.modalTitle}>Edit habit</Text>
+              <TouchableOpacity
+                onPress={handleSaveEdit}
+                disabled={
+                  editSaving ||
+                  !editName.trim() ||
+                  (editFrequency === 'custom' && editCustomDays.length === 0)
+                }
+                style={styles.modalHeaderBtn}
+              >
+                {editSaving ? (
+                  <ActivityIndicator size="small" color={Colors.green700} />
+                ) : (
+                  <Text style={[
+                    styles.modalSave,
+                    (!editName.trim() || (editFrequency === 'custom' && editCustomDays.length === 0)) && styles.modalSaveDisabled,
+                  ]}>
+                    Save
+                  </Text>
+                )}
+              </TouchableOpacity>
+            </View>
+
+            <ScrollView
+              style={{ flex: 1 }}
+              contentContainerStyle={styles.modalScroll}
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled"
+            >
+              {/* Name */}
+              <Text style={styles.editLabel}>Name</Text>
+              <TextInput
+                style={styles.editInput}
+                value={editName}
+                onChangeText={setEditName}
+                placeholder="Habit name"
+                placeholderTextColor={Colors.textMuted}
+                maxLength={60}
+                autoCorrect={false}
+              />
+              <Text style={styles.editCharHint}>{editName.length} / 60</Text>
+
+              {/* Frequency */}
+              <Text style={[styles.editLabel, { marginTop: Spacing['2xl'] }]}>Frequency</Text>
+              <View style={styles.freqOptionsRow}>
+                {FREQUENCY_OPTIONS.map(({ value, label }) => (
+                  <TouchableOpacity
+                    key={value}
+                    style={[
+                      styles.freqOption,
+                      editFrequency === value && styles.freqOptionSelected,
+                    ]}
+                    onPress={() => setEditFrequency(value)}
+                    activeOpacity={0.7}
+                  >
+                    <Text style={[
+                      styles.freqOptionText,
+                      editFrequency === value && styles.freqOptionTextSelected,
+                    ]}>
+                      {label}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+
+              {editFrequency === 'custom' && (
+                <>
+                  <Text style={[styles.editLabel, { marginTop: Spacing.sm }]}>Days</Text>
+                  <View style={styles.daysRow}>
+                    {DAYS.map(({ label, value }) => {
+                      const selected = editCustomDays.includes(value);
+                      return (
+                        <TouchableOpacity
+                          key={value}
+                          style={[styles.dayChip, selected && styles.dayChipSelected]}
+                          onPress={() =>
+                            setEditCustomDays((prev) =>
+                              selected ? prev.filter((d) => d !== value) : [...prev, value]
+                            )
+                          }
+                          activeOpacity={0.7}
+                        >
+                          <Text style={[styles.dayChipText, selected && styles.dayChipTextSelected]}>
+                            {label}
+                          </Text>
+                        </TouchableOpacity>
+                      );
+                    })}
+                  </View>
+                </>
+              )}
+
+              {/* Icon (optional) */}
+              <Text style={[styles.editLabel, { marginTop: Spacing['2xl'] }]}>Icon (optional)</Text>
+              <View style={styles.editEmojiPreview}>
+                {editEmoji ? (
+                  <Text style={styles.editEmojiPreviewText}>{editEmoji}</Text>
+                ) : (
+                  <Text style={styles.editEmojiPreviewPlaceholder}>⭐</Text>
+                )}
+              </View>
+
+              <EmojiPicker
+                selectedEmoji={editEmoji}
+                onSelect={setEditEmoji}
+                defaultCategory={task?.category ?? 'learning'}
+              />
+            </ScrollView>
+          </KeyboardAvoidingView>
+        </SafeAreaView>
+      </Modal>
+
     </SafeAreaView>
   );
 }
@@ -548,8 +801,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  // Back nav
+  // Nav row
+  navRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
   backBtn: {
+    paddingHorizontal: Spacing.xl,
+    paddingVertical: Spacing.md,
+  },
+  editBtn: {
     paddingHorizontal: Spacing.xl,
     paddingVertical: Spacing.md,
   },
@@ -777,6 +1039,152 @@ const styles = StyleSheet.create({
     fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.sm,
     color: Colors.textMuted,
+  },
+
+  // ── Edit modal ───────────────────────────────────────────────────────────────
+  modalContainer: {
+    flex: 1,
+    backgroundColor: Colors.bgPrimary,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: Spacing.xl,
+    paddingTop: Spacing['2xl'],
+    paddingBottom: Spacing.md,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.border,
+  },
+  modalHeaderBtn: {
+    minWidth: 56,
+  },
+  modalTitle: {
+    fontFamily: 'Outfit_600SemiBold',
+    fontSize: Typography.size.base,
+    color: Colors.textPrimary,
+  },
+  modalCancel: {
+    fontFamily: 'Outfit_500Medium',
+    fontSize: Typography.size.base,
+    color: Colors.textSecondary,
+  },
+  modalSave: {
+    fontFamily: 'Outfit_600SemiBold',
+    fontSize: Typography.size.base,
+    color: Colors.green700,
+    textAlign: 'right',
+  },
+  modalSaveDisabled: {
+    opacity: 0.4,
+  },
+  modalScroll: {
+    paddingHorizontal: Spacing.xl,
+    paddingTop: Spacing['2xl'],
+    paddingBottom: Spacing['4xl'],
+  },
+  editLabel: {
+    fontFamily: 'Outfit_500Medium',
+    fontSize: Typography.size.sm,
+    color: Colors.textMuted,
+    textTransform: 'uppercase',
+    letterSpacing: 0.8,
+    marginBottom: Spacing.sm,
+  },
+  editInput: {
+    backgroundColor: Colors.white,
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.07)',
+    borderRadius: Radius.md,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.md,
+    fontFamily: 'Outfit_500Medium',
+    fontSize: Typography.size.md,
+    color: Colors.textPrimary,
+  },
+  editCharHint: {
+    fontFamily: 'Outfit_500Medium',
+    fontSize: Typography.size.xs,
+    color: Colors.textMuted,
+    textAlign: 'right',
+    marginTop: Spacing.xs,
+  },
+  editEmojiPreview: {
+    alignSelf: 'center',
+    width: 80,
+    height: 80,
+    borderRadius: Radius.xl,
+    backgroundColor: Colors.bgSecondary,
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.07)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: Spacing.xl,
+  },
+  editEmojiPreviewText: {
+    fontSize: 44,
+  },
+  editEmojiPreviewPlaceholder: {
+    fontFamily: 'Outfit_500Medium',
+    fontSize: Typography.size['2xl'],
+    color: Colors.textMuted,
+  },
+  // ── Frequency picker ────────────────────────────────────────────────────────
+  freqOptionsRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: Spacing.sm,
+    marginBottom: Spacing.lg,
+  },
+  freqOption: {
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.sm,
+    borderRadius: Radius.full,
+    borderWidth: 1.5,
+    borderColor: Colors.borderMedium,
+    backgroundColor: Colors.white,
+  },
+  freqOptionSelected: {
+    borderColor: Colors.green600,
+    backgroundColor: Colors.green50,
+  },
+  freqOptionText: {
+    fontFamily: 'Outfit_500Medium',
+    fontSize: Typography.size.base,
+    color: Colors.textSecondary,
+  },
+  freqOptionTextSelected: {
+    fontFamily: 'Outfit_600SemiBold',
+    color: Colors.green700,
+  },
+  daysRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: Spacing.sm,
+    marginBottom: Spacing.lg,
+  },
+  dayChip: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    borderWidth: 1.5,
+    borderColor: Colors.borderMedium,
+    backgroundColor: Colors.white,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  dayChipSelected: {
+    borderColor: Colors.green600,
+    backgroundColor: Colors.green100,
+  },
+  dayChipText: {
+    fontFamily: 'Outfit_500Medium',
+    fontSize: Typography.size.sm,
+    color: Colors.textSecondary,
+  },
+  dayChipTextSelected: {
+    fontFamily: 'Outfit_600SemiBold',
+    color: Colors.green700,
   },
 
   // ── Graduate button ──────────────────────────────────────────────────────────
