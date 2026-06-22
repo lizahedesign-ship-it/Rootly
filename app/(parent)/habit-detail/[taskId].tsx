@@ -182,6 +182,7 @@ export default function HabitDetailScreen() {
   const [editFrequency, setEditFrequency]   = useState<FrequencyType>('daily');
   const [editCustomDays, setEditCustomDays] = useState<number[]>([]);
   const [editSaving, setEditSaving]         = useState(false);
+  const [deleting, setDeleting]             = useState(false);
 
   useEffect(() => {
     if (!taskId) return;
@@ -385,6 +386,34 @@ export default function HabitDetailScreen() {
     setShowEditModal(false);
     setEditSaving(false);
     await loadAll();
+  }
+
+  // ── Delete ───────────────────────────────────────────────────────────────────
+
+  function handleDeleteHabit() {
+    if (!task) return;
+    Alert.alert(
+      'Delete this habit?',
+      `This will permanently delete "${task.name}" and all its history including completions and milestones. This cannot be undone.`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Delete', style: 'destructive', onPress: () => void confirmDeleteHabit() },
+      ],
+    );
+  }
+
+  async function confirmDeleteHabit() {
+    if (!taskId) return;
+    setDeleting(true);
+
+    await supabase.from('habit_health_snapshot').delete().eq('task_id', taskId);
+    await supabase.from('milestone').delete().eq('task_id', taskId);
+    await supabase.from('task_completion').delete().eq('task_id', taskId);
+    await supabase.from('task').delete().eq('id', taskId);
+
+    setDeleting(false);
+    setShowEditModal(false);
+    router.back();
   }
 
   // ── Loading ──────────────────────────────────────────────────────────────────
@@ -777,8 +806,25 @@ export default function HabitDetailScreen() {
               <EmojiPicker
                 selectedEmoji={editEmoji}
                 onSelect={setEditEmoji}
-                defaultCategory={task?.category ?? 'learning'}
+                defaultCategory="all"
               />
+
+              {/* Delete habit */}
+              <TouchableOpacity
+                style={styles.deleteBtn}
+                onPress={handleDeleteHabit}
+                disabled={deleting}
+                activeOpacity={0.7}
+              >
+                {deleting ? (
+                  <ActivityIndicator size="small" color={Colors.danger} />
+                ) : (
+                  <>
+                    <Feather name="trash-2" size={16} color={Colors.danger} />
+                    <Text style={styles.deleteBtnText}>Delete habit</Text>
+                  </>
+                )}
+              </TouchableOpacity>
             </ScrollView>
           </KeyboardAvoidingView>
         </SafeAreaView>
@@ -1185,6 +1231,21 @@ const styles = StyleSheet.create({
   dayChipTextSelected: {
     fontFamily: 'Outfit_600SemiBold',
     color: Colors.green700,
+  },
+
+  // ── Delete button ────────────────────────────────────────────────────────────
+  deleteBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: Spacing.sm,
+    marginTop: Spacing['3xl'],
+    paddingVertical: Spacing.md,
+  },
+  deleteBtnText: {
+    fontFamily: 'Outfit_600SemiBold',
+    fontSize: Typography.size.base,
+    color: Colors.danger,
   },
 
   // ── Graduate button ──────────────────────────────────────────────────────────

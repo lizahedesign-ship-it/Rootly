@@ -158,10 +158,10 @@ const FALLBACK_EMOJI = '⭐';
 interface Props {
   selectedEmoji: string;
   onSelect: (emoji: string) => void;
-  defaultCategory?: TaskCategory;
+  defaultCategory?: ActiveTab;
 }
 
-export function EmojiPicker({ selectedEmoji, onSelect, defaultCategory = 'learning' }: Props) {
+export function EmojiPicker({ selectedEmoji, onSelect, defaultCategory = 'all' }: Props) {
   const { width: screenWidth } = useWindowDimensions();
   const [activeCategory, setActiveCategory] = useState<ActiveTab>(defaultCategory);
   const [isExpanded, setIsExpanded]         = useState(false);
