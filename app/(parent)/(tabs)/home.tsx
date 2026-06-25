@@ -16,6 +16,7 @@ import { supabase } from '../../../src/services/supabase';
 import { useAuthStore } from '../../../src/store/authStore';
 import { useChildStore } from '../../../src/store/childStore';
 import { useChildProfile } from '../../../src/hooks/useChildProfile';
+import { ChildSelector } from '../../../src/components/ChildSelector';
 import { usePin } from '../../../src/hooks/usePin';
 import { useHabitHealth } from '../../../src/hooks/useHabitHealth';
 import { useGraduatedHabits } from '../../../src/hooks/useGraduatedHabits';
@@ -28,7 +29,6 @@ export default function ParentHomeScreen() {
   const userId = useAuthStore((s) => s.currentUser?.id);
   const childProfiles = useChildStore((s) => s.childProfiles);
   const selectedChildId = useChildStore((s) => s.selectedChildId);
-  const setSelectedChildId = useChildStore((s) => s.setSelectedChildId);
   const setIsChildMode = useChildStore((s) => s.setIsChildMode);
   const { loadProfiles } = useChildProfile();
   const { hasPin } = usePin();
@@ -97,7 +97,6 @@ export default function ParentHomeScreen() {
       <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
         <View style={styles.flex}>
 
-
           {childProfiles.length === 0 ? (
             /* ── Empty state ── */
             <View style={styles.emptyState}>
@@ -114,51 +113,19 @@ export default function ParentHomeScreen() {
               </TouchableOpacity>
             </View>
           ) : (
-            /* ── Child tabs + content — flat siblings, no wrapper View ── */
+            /* ── Content ── */
             <>
-              {/* Tab strip — immediately below header */}
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                alwaysBounceVertical={false}
-                contentContainerStyle={{
-                  paddingHorizontal: 20,
-                  paddingVertical: 4,
-                  gap: 8,
-                  alignItems: 'center',
-                  height: 68,
-                }}
-                style={{ flexShrink: 0, maxHeight: 68 }}
-              >
-                {childProfiles.map((child) => (
-                  <TouchableOpacity
-                    key={child.id}
-                    style={[
-                      styles.tab,
-                      selectedChildId === child.id && styles.tabSelected,
-                    ]}
-                    onPress={() => setSelectedChildId(child.id)}
-                  >
-                    <Text
-                      style={[
-                        styles.tabText,
-                        selectedChildId === child.id && styles.tabTextSelected,
-                      ]}
-                    >
-                      {child.name}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-
+              {/* ── Top bar: child selector left, circle + button right ── */}
+              <View style={styles.topBar}>
+                <ChildSelector compact />
                 <TouchableOpacity
-                  style={styles.tabAdd}
-                  onPress={() => router.push('/(parent)/create-profile')}
-                  activeOpacity={0.7}
+                  style={styles.circleAddBtn}
+                  onPress={() => router.push('/(parent)/create-task')}
+                  activeOpacity={0.85}
                 >
-                  <Feather name="plus" size={16} color={Colors.green700} />
+                  <Feather name="plus" size={24} color={Colors.white} />
                 </TouchableOpacity>
-
-              </ScrollView>
+              </View>
 
               {/* Habit health cards — flex:1 fills remaining space */}
               <ScrollView
@@ -223,18 +190,11 @@ export default function ParentHomeScreen() {
               {selectedChild && (
                 <View style={styles.bottomActions}>
                   <TouchableOpacity
-                    style={styles.addHabitBtn}
-                    onPress={() => router.push('/(parent)/create-task')}
-                    activeOpacity={0.85}
-                  >
-                    <Text style={styles.addHabitBtnText}>Add a habit</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
                     style={styles.handToChildBtn}
                     onPress={handleHandToChild}
                     activeOpacity={0.85}
                   >
-                    <Text style={styles.handToChildText}>Child mode</Text>
+                    <Text style={styles.handToChildText}>Switch to child mode</Text>
                   </TouchableOpacity>
                 </View>
               )}
@@ -305,72 +265,31 @@ const styles = StyleSheet.create({
     fontSize: Typography.size.base,
     color: Colors.white,
   },
-  // ── Tab strip ──────────────────────────────────────────────────
-  tabStrip: {
+  // ── Top bar ────────────────────────────────────────────────────
+  topBar: {
     flexDirection: 'row',
-    paddingHorizontal: Spacing.xl,
-    paddingVertical: Spacing.sm,
-    paddingBottom: 12,
-    gap: Spacing.sm,
+    justifyContent: 'space-between',
     alignItems: 'center',
+    paddingHorizontal: Spacing.xl,
+    paddingVertical: Spacing.md,
   },
-  tab: {
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.sm,
-    borderRadius: Radius.full,
-    borderWidth: 1.5,
-    borderColor: Colors.border,
-    backgroundColor: Colors.white,
-  },
-  tabSelected: {
+  circleAddBtn: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     backgroundColor: Colors.green700,
-    borderColor: Colors.green700,
-  },
-  tabAdd: {
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
-    borderRadius: Radius.full,
-    borderWidth: 1.5,
-    borderColor: Colors.green300,
-    backgroundColor: Colors.green100,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  tabText: {
-    fontFamily: 'Outfit_500Medium',
-    fontSize: Typography.size.base,
-    color: Colors.textPrimary,
-  },
-  tabTextSelected: {
-    color: Colors.white,
+    marginLeft: 12,
   },
   // ── Bottom actions ─────────────────────────────────────────────
   bottomActions: {
-    flexDirection: 'row',
     paddingHorizontal: Spacing.xl,
-    paddingTop: 12,
-    paddingBottom: Spacing.md,
-    gap: 8,
+    paddingVertical: 8,
   },
-  addHabitBtn: {
-    flex: 1,
-    height: 52,
-    borderRadius: Radius.full,
-    borderWidth: 1.5,
-    borderColor: Colors.green600,
-    backgroundColor: Colors.white,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  addHabitBtnText: {
-    fontFamily: 'Outfit_500Medium',
-    fontSize: Typography.size.base,
-    color: Colors.green700,
-  },
-  // ── Hand to child button ───────────────────────────────────────
+  // ── Child mode button — full width ─────────────────────────────
   handToChildBtn: {
-    flex: 1,
-    height: 52,
+    height: 44,
     borderRadius: Radius.full,
     backgroundColor: Colors.green700,
     alignItems: 'center',

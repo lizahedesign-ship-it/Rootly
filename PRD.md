@@ -42,7 +42,7 @@
 - Graduate a habit: Blooming-only. Removes from daily list, preserves all history.
 - Milestone card: parent adds photo + text note, saved permanently
 - Push notifications: milestone, weekly summary (Sunday), Never Miss Twice (day 2 only), annual summary (Dec 31)
-- Records tab: milestone timeline with task emoji + photo thumbnails
+- Records tab: milestone timeline with task emoji + photo thumbnails ✅
 - Summary screens: weekly, monthly, and annual stats + bar chart
 - Offline task completion with sync on reconnect
 - Settings: notification preferences, PIN management, child profile editing

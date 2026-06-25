@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -69,6 +70,16 @@ export default function TaskCreationScreen() {
   const selectedChildId = useChildStore((s) => s.selectedChildId);
   const child = childProfiles.find((c) => c.id === selectedChildId);
   const { createTask, creating, taskCount } = useCreateTask(selectedChildId);
+
+  // Show a one-time alert when the non-blooming active habit count hits the limit.
+  useEffect(() => {
+    if (taskCount >= 5) {
+      Alert.alert(
+        'You have 5 active habits',
+        'Children do best with a focused set. Consider graduating a completed habit before adding a new one.',
+      );
+    }
+  }, [taskCount]);
 
   const scrollRef = useRef<ScrollView>(null);
 
@@ -167,15 +178,6 @@ export default function TaskCreationScreen() {
         Decide together with {child?.name ?? 'your child'} what habit to build
       </Text>
 
-      {taskCount >= 5 && (
-        <View style={styles.warningBanner}>
-          <Text style={styles.warningText}>
-            ⚠️  You already have {taskCount} active habits — that's a lot to keep up with!
-            Consider if you're ready to add one more.
-          </Text>
-        </View>
-      )}
-
       <TextInput
         style={styles.nameInput}
         value={name}
@@ -184,10 +186,10 @@ export default function TaskCreationScreen() {
         placeholderTextColor={Colors.textMuted}
         returnKeyType="next"
         onSubmitEditing={() => step1Valid && handleNext()}
-        maxLength={60}
+        maxLength={30}
         autoFocus
       />
-      <Text style={styles.charHint}>{name.length} / 60</Text>
+      <Text style={styles.charHint}>{name.length} / 30</Text>
     </View>
   );
 
@@ -475,22 +477,6 @@ const styles = StyleSheet.create({
     color: Colors.textSecondary,
     lineHeight: Typography.size.base * 1.5,
     marginBottom: Spacing['2xl'],
-  },
-
-  // ── Warning banner ─────────────────────────────────────────────────────────
-  warningBanner: {
-    backgroundColor: Colors.warningBg,
-    borderRadius: Radius.md,
-    borderWidth: 1,
-    borderColor: Colors.warning,
-    padding: Spacing.md,
-    marginBottom: Spacing.lg,
-  },
-  warningText: {
-    fontFamily: 'Outfit_600SemiBold',
-    fontSize: Typography.size.sm,
-    color: '#854F0B',
-    lineHeight: Typography.size.sm * 1.5,
   },
 
   // ── Step 1: Name input ─────────────────────────────────────────────────────

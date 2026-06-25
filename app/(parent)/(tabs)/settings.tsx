@@ -189,11 +189,6 @@ export default function SettingsScreen() {
   return (
     <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
 
-      {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.title}>Settings</Text>
-      </View>
-
       <ScrollView
         style={styles.flex}
         contentContainerStyle={styles.scrollContent}
@@ -449,19 +444,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.bgSecondary,
   },
   flex: { flex: 1 },
-
-  // ── Header ───────────────────────────────────────────────────────────────
-  header: {
-    paddingHorizontal: Spacing.xl,
-    paddingTop: Spacing.md,
-    paddingBottom: Spacing.xs,
-    backgroundColor: Colors.bgSecondary,
-  },
-  title: {
-    fontFamily: 'Outfit_600SemiBold',
-    fontSize: Typography.size['2xl'],
-    color: Colors.green700,
-  },
 
   // ── Scroll ───────────────────────────────────────────────────────────────
   scrollContent: {

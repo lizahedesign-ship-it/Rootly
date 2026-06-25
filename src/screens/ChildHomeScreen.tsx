@@ -165,13 +165,13 @@ export default function ChildHomeScreen() {
         />
       )}
 
-      {/* ── "Parent exit · PIN" — fixed at bottom ── */}
+      {/* ── "Switch to parent mode · PIN" — fixed at bottom ── */}
       <TouchableOpacity
         style={styles.exitBtn}
         onPress={() => setShowPin(true)}
         activeOpacity={0.7}
       >
-        <Text style={styles.exitText}>Parent exit · PIN</Text>
+        <Text style={styles.exitText}>Switch to parent mode</Text>
       </TouchableOpacity>
 
       <PinModal
@@ -187,8 +187,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.bgPrimary,
-    borderWidth: 3,
-    borderColor: Colors.childModeBorder,
   },
   scroll: {
     flex: 1,

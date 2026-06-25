@@ -19,15 +19,47 @@ export function useCreateTask(childId: string | null) {
 
   useEffect(() => {
     if (!childId) return;
-    supabase
-      .from('task')
-      .select('*', { count: 'exact', head: true })
-      .eq('child_id', childId)
-      .eq('is_active', true)
-      .eq('is_graduated', false)
-      .then(({ count }) => {
-        setTaskCount(count ?? 0);
-      });
+
+    // Count active habits that are NOT blooming and NOT graduated.
+    // Stage lives in habit_health_snapshot, not on task, so we need two queries.
+    (async () => {
+      // 1. Fetch all active, non-graduated task IDs for this child.
+      const { data: tasks } = await supabase
+        .from('task')
+        .select('id')
+        .eq('child_id', childId)
+        .eq('is_active', true)
+        .eq('is_graduated', false);
+
+      if (!tasks || tasks.length === 0) {
+        setTaskCount(0);
+        return;
+      }
+
+      const taskIds = tasks.map((t: any) => t.id as string);
+
+      // 2. Get the latest snapshot per task to determine current stage.
+      const { data: snaps } = await supabase
+        .from('habit_health_snapshot')
+        .select('task_id, stage, computed_at')
+        .in('task_id', taskIds)
+        .order('computed_at', { ascending: false });
+
+      const latestStage = new Map<string, string>();
+      for (const snap of snaps ?? []) {
+        if (!latestStage.has(snap.task_id)) {
+          latestStage.set(snap.task_id, snap.stage as string);
+        }
+      }
+
+      // 3. Exclude blooming habits. Tasks with no snapshot default to 'sprouting'.
+      const count = taskIds.filter((id) => {
+        const stage = latestStage.get(id) ?? 'sprouting';
+        return stage !== 'blooming';
+      }).length;
+
+      setTaskCount(count);
+    })();
   }, [childId]);
 
   const createTask = async (data: CreateTaskData): Promise<{ error: string | null }> => {

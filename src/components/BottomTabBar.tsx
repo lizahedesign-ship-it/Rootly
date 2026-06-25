@@ -8,10 +8,13 @@ export type TabId = 'home' | 'records' | 'summary' | 'settings';
 
 const TABS: Array<{ id: TabId; label: string; featherIcon: string; route: string }> = [
   { id: 'home',     label: 'Home',     featherIcon: 'home',        route: '/(parent)/(tabs)/home' },
-  { id: 'records',  label: 'Records',  featherIcon: 'list',        route: '/(parent)/(tabs)/records' },
+  { id: 'records',  label: 'Milestones',  featherIcon: 'list',        route: '/(parent)/(tabs)/records' },
   { id: 'summary',  label: 'Summary',  featherIcon: 'bar-chart-2', route: '/(parent)/(tabs)/summary' },
   { id: 'settings', label: 'Settings', featherIcon: 'settings',    route: '/(parent)/(tabs)/settings' },
 ];
+
+const COLOR_ACTIVE   = Colors.green700; // #2D6A4F
+const COLOR_INACTIVE = Colors.textPrimary; // #1A2E1F — matches habit card title
 
 interface Props {
   activeTab: TabId;
@@ -23,25 +26,20 @@ export function BottomTabBar({ activeTab }: Props) {
   return (
     <SafeAreaView edges={['bottom']} style={styles.safeArea}>
       <View style={styles.bar}>
-        {TABS.map(tab => {
+        {TABS.map((tab) => {
           const isActive = tab.id === activeTab;
+          const color    = isActive ? COLOR_ACTIVE : COLOR_INACTIVE;
           return (
             <TouchableOpacity
               key={tab.id}
-              style={styles.tab}
+              style={styles.tabItem}
               onPress={() => {
                 if (!isActive) router.navigate(tab.route as any);
               }}
-              activeOpacity={0.65}
+              activeOpacity={0.7}
             >
-              <Feather
-                name={tab.featherIcon as any}
-                size={24}
-                color={isActive ? Colors.green700 : Colors.textMuted}
-              />
-              <Text style={[styles.label, isActive && styles.labelActive]}>
-                {tab.label}
-              </Text>
+              <Feather name={tab.featherIcon as any} size={22} color={color} />
+              <Text style={[styles.label, { color }]}>{tab.label}</Text>
             </TouchableOpacity>
           );
         })}
@@ -53,15 +51,14 @@ export function BottomTabBar({ activeTab }: Props) {
 const styles = StyleSheet.create({
   safeArea: {
     backgroundColor: Colors.white,
-    borderTopWidth: 1,
-    borderTopColor: Colors.border,
+    borderTopWidth:  0.5,
+    borderTopColor:  'rgba(0,0,0,0.1)',
   },
   bar: {
     flexDirection: 'row',
-    paddingTop:    Spacing.sm,
-    paddingBottom: Spacing.xs,
+    paddingVertical: Spacing.sm,
   },
-  tab: {
+  tabItem: {
     flex:           1,
     alignItems:     'center',
     justifyContent: 'center',
@@ -70,9 +67,5 @@ const styles = StyleSheet.create({
   label: {
     fontFamily: 'Outfit_600SemiBold',
     fontSize:   Typography.size.xs,
-    color:      Colors.textMuted,
-  },
-  labelActive: {
-    color: Colors.green700,
   },
 });

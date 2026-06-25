@@ -24,6 +24,8 @@ export default function SignUpScreen() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [localError, setLocalError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // Email verification pending state
   const [verificationSent, setVerificationSent] = useState(false);
@@ -128,29 +130,55 @@ export default function SignUpScreen() {
               textContentType="emailAddress"
               returnKeyType="next"
             />
-            <TextInput
-              style={styles.input}
-              placeholder="Password (min. 6 characters)"
-              placeholderTextColor={Colors.textMuted}
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-              autoComplete="new-password"
-              textContentType="newPassword"
-              returnKeyType="next"
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Confirm password"
-              placeholderTextColor={Colors.textMuted}
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
-              secureTextEntry
-              autoComplete="new-password"
-              textContentType="newPassword"
-              returnKeyType="done"
-              onSubmitEditing={handleSignUp}
-            />
+            <View style={styles.inputRow}>
+              <TextInput
+                style={styles.inputInner}
+                placeholder="Password (min. 6 characters)"
+                placeholderTextColor={Colors.textMuted}
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry={!showPassword}
+                autoComplete="new-password"
+                textContentType="newPassword"
+                returnKeyType="next"
+              />
+              <TouchableOpacity
+                style={styles.eyeBtn}
+                onPress={() => setShowPassword((v) => !v)}
+                activeOpacity={0.7}
+              >
+                <Feather
+                  name={showPassword ? 'eye' : 'eye-off'}
+                  size={18}
+                  color={Colors.textMuted}
+                />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.inputRow}>
+              <TextInput
+                style={styles.inputInner}
+                placeholder="Confirm password"
+                placeholderTextColor={Colors.textMuted}
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+                secureTextEntry={!showConfirmPassword}
+                autoComplete="new-password"
+                textContentType="newPassword"
+                returnKeyType="done"
+                onSubmitEditing={handleSignUp}
+              />
+              <TouchableOpacity
+                style={styles.eyeBtn}
+                onPress={() => setShowConfirmPassword((v) => !v)}
+                activeOpacity={0.7}
+              >
+                <Feather
+                  name={showConfirmPassword ? 'eye' : 'eye-off'}
+                  size={18}
+                  color={Colors.textMuted}
+                />
+              </TouchableOpacity>
+            </View>
 
             <TouchableOpacity
               style={[styles.btn, isLoading && styles.btnDisabled]}
@@ -237,9 +265,38 @@ const styles = StyleSheet.create({
     borderColor: Colors.border,
     backgroundColor: Colors.white,
     paddingHorizontal: Spacing.lg,
+    paddingVertical: 0,
     fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.base,
     color: Colors.textPrimary,
+    textAlignVertical: 'center',
+  },
+  // Password field with eye toggle
+  inputRow: {
+    height: 52,
+    borderRadius: Radius.lg,
+    borderWidth: 1.5,
+    borderColor: Colors.border,
+    backgroundColor: Colors.white,
+    flexDirection: 'row',
+    alignItems: 'center',
+    overflow: 'hidden',
+  },
+  inputInner: {
+    flex: 1,
+    height: 52,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: 0,
+    fontFamily: 'Outfit_500Medium',
+    fontSize: Typography.size.base,
+    color: Colors.textPrimary,
+    textAlignVertical: 'center',
+  },
+  eyeBtn: {
+    width: 44,
+    height: 52,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   btn: {
     height: 52,

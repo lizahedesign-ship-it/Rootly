@@ -30,25 +30,28 @@ export default function IndexScreen() {
         return;
       }
 
-      // If the parent already has child profiles, skip onboarding entirely.
-      const { data: profiles } = await supabase
-        .from('child_profile')
-        .select('id')
-        .eq('parent_id', session.user.id)
-        .limit(1);
+      // TODO: remove before TestFlight
+      router.replace('/onboarding');
 
-      if (profiles && profiles.length > 0) {
-        router.replace('/(parent)/(tabs)/home');
-        return;
-      }
+      // // If the parent already has child profiles, skip onboarding entirely.
+      // const { data: profiles } = await supabase
+      //   .from('child_profile')
+      //   .select('id')
+      //   .eq('parent_id', session.user.id)
+      //   .limit(1);
 
-      // No children — fall back to the onboarding flag.
-      const done = await AsyncStorage.getItem('onboarding_complete');
-      if (done) {
-        router.replace('/(parent)/(tabs)/home');
-      } else {
-        router.replace('/onboarding');
-      }
+      // if (profiles && profiles.length > 0) {
+      //   router.replace('/(parent)/(tabs)/home');
+      //   return;
+      // }
+
+      // // No children — fall back to the onboarding flag.
+      // const done = await AsyncStorage.getItem('onboarding_complete');
+      // if (done) {
+      //   router.replace('/(parent)/(tabs)/home');
+      // } else {
+      //   router.replace('/onboarding');
+      // }
     });
   }, []);
 

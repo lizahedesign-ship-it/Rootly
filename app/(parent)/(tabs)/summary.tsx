@@ -11,6 +11,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from 'expo-router';
 import { Colors, Typography, Spacing, Radius } from '../../../src/theme';
 import { useChildStore } from '../../../src/store/childStore';
+import { ChildSelector } from '../../../src/components/ChildSelector';
 import { useSummary, SummaryView, ChartBar, TaskStat } from '../../../src/hooks/useSummary';
 
 const VIEWS: Array<{ id: SummaryView; label: string }> = [
@@ -101,9 +102,8 @@ function TaskStatRow({ stat }: { stat: TaskStat }) {
 // ─── Screen ──────────────────────────────────────────────────────────────────
 
 export default function SummaryScreen() {
-  const childProfiles    = useChildStore(s => s.childProfiles);
-  const selectedChildId  = useChildStore(s => s.selectedChildId);
-  const setSelectedChildId = useChildStore(s => s.setSelectedChildId);
+  const childProfiles   = useChildStore(s => s.childProfiles);
+  const selectedChildId = useChildStore(s => s.selectedChildId);
 
   const [view, setView] = useState<SummaryView>('weekly');
 
@@ -124,32 +124,8 @@ export default function SummaryScreen() {
       {/* ── Top chrome ─────────────────────────────────────────────────────── */}
       <SafeAreaView edges={['top', 'left', 'right']} style={styles.topArea}>
 
-        {/* Header */}
-        <View style={styles.header}>
-          <Text style={styles.title}>Summary</Text>
-        </View>
-
-        {/* Child tab strip */}
-        {childProfiles.length > 0 && (
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.childTabsContent}
-            style={styles.childTabs}
-          >
-            {childProfiles.map(child => (
-              <TouchableOpacity
-                key={child.id}
-                style={[styles.childTab, selectedChildId === child.id && styles.childTabSelected]}
-                onPress={() => setSelectedChildId(child.id)}
-              >
-                <Text style={[styles.childTabText, selectedChildId === child.id && styles.childTabTextSelected]}>
-                  {child.name}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        )}
+        {/* Child selector */}
+        <ChildSelector />
 
         {/* Weekly / Monthly / Annual switcher */}
         <View style={styles.viewSwitcher}>
@@ -235,48 +211,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: Spacing['3xl'],
     gap: Spacing.md,
-  },
-
-  // Header
-  header: {
-    paddingHorizontal: Spacing.xl,
-    paddingTop:        Spacing.md,
-    paddingBottom:     Spacing.xs,
-  },
-  title: {
-    fontFamily: 'Outfit_600SemiBold',
-    fontSize:   Typography.size['2xl'],
-    color:      Colors.green700,
-  },
-
-  // Child tab strip
-  childTabs: {
-    flexGrow: 0,
-  },
-  childTabsContent: {
-    paddingHorizontal: Spacing.xl,
-    paddingVertical:   Spacing.sm,
-    gap:               Spacing.sm,
-  },
-  childTab: {
-    paddingHorizontal: Spacing.lg,
-    paddingVertical:   Spacing.sm,
-    borderRadius:      Radius.full,
-    borderWidth:       1.5,
-    borderColor:       Colors.border,
-    backgroundColor:   Colors.white,
-  },
-  childTabSelected: {
-    backgroundColor: Colors.green700,
-    borderColor:     Colors.green700,
-  },
-  childTabText: {
-    fontFamily: 'Outfit_500Medium',
-    fontSize:   Typography.size.base,
-    color:      Colors.textPrimary,
-  },
-  childTabTextSelected: {
-    color: Colors.white,
   },
 
   // View switcher

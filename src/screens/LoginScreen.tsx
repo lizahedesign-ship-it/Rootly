@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Feather } from '@expo/vector-icons';
 import { Colors, Typography, Spacing, Radius } from '../theme';
 import { useAuthStore } from '../store/authStore';
 
@@ -22,6 +23,7 @@ export default function LoginScreen() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   // Navigate to parent home once session is established
   useEffect(() => {
@@ -73,18 +75,31 @@ export default function LoginScreen() {
               textContentType="emailAddress"
               returnKeyType="next"
             />
-            <TextInput
-              style={styles.input}
-              placeholder="Password"
-              placeholderTextColor={Colors.textMuted}
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-              autoComplete="password"
-              textContentType="password"
-              returnKeyType="done"
-              onSubmitEditing={handleEmailSignIn}
-            />
+            <View style={styles.inputRow}>
+              <TextInput
+                style={styles.inputInner}
+                placeholder="Password"
+                placeholderTextColor={Colors.textMuted}
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry={!showPassword}
+                autoComplete="password"
+                textContentType="password"
+                returnKeyType="done"
+                onSubmitEditing={handleEmailSignIn}
+              />
+              <TouchableOpacity
+                style={styles.eyeBtn}
+                onPress={() => setShowPassword((v) => !v)}
+                activeOpacity={0.7}
+              >
+                <Feather
+                  name={showPassword ? 'eye' : 'eye-off'}
+                  size={18}
+                  color={Colors.textMuted}
+                />
+              </TouchableOpacity>
+            </View>
             <TouchableOpacity
               style={[styles.btn, styles.btnPrimary, isLoading && styles.btnDisabled]}
               onPress={handleEmailSignIn}
@@ -203,9 +218,38 @@ const styles = StyleSheet.create({
     borderColor: Colors.border,
     backgroundColor: Colors.white,
     paddingHorizontal: Spacing.lg,
+    paddingVertical: 0,
     fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.base,
     color: Colors.textPrimary,
+    textAlignVertical: 'center',
+  },
+  // Password field with eye toggle
+  inputRow: {
+    height: 52,
+    borderRadius: Radius.lg,
+    borderWidth: 1.5,
+    borderColor: Colors.border,
+    backgroundColor: Colors.white,
+    flexDirection: 'row',
+    alignItems: 'center',
+    overflow: 'hidden',
+  },
+  inputInner: {
+    flex: 1,
+    height: 52,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: 0,
+    fontFamily: 'Outfit_500Medium',
+    fontSize: Typography.size.base,
+    color: Colors.textPrimary,
+    textAlignVertical: 'center',
+  },
+  eyeBtn: {
+    width: 44,
+    height: 52,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   // Buttons
