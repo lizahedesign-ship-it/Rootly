@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
   // ── Milestone list ───────────────────────────────────────────────────────────
   listContent: {
     paddingHorizontal: Spacing.xl,
-    paddingTop: Spacing.md,
+    paddingTop: 0,
     paddingBottom: Spacing['4xl'],
     gap: Spacing.sm,
   },
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
     borderRadius: Radius.lg,
     borderWidth: 1,
     borderColor: 'rgba(0,0,0,0.07)',
-    paddingVertical: Spacing.md,
+    paddingVertical: Spacing.lg,
     paddingHorizontal: Spacing.lg,
     gap: Spacing.md,
   },

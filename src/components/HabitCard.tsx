@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     minHeight: Layout.habitCardMinHeight,
     borderRadius: Radius.lg,
-    paddingVertical: Spacing.xl,
+    paddingVertical: Spacing.lg,
     paddingHorizontal: Spacing.lg,
     gap: Spacing.md,
     borderWidth: 1,
