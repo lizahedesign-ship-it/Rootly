@@ -252,7 +252,10 @@ export default function SettingsScreen() {
             onPress={() => setPinPhase('verify')}
             activeOpacity={0.7}
           >
-            <Text style={styles.rowLabel}>Change PIN</Text>
+            <View style={styles.rowLeft}>
+              <Text style={styles.rowLabel}>Change PIN</Text>
+              <Text style={styles.rowSub}>Required to enter parent mode.</Text>
+            </View>
             <Feather name="chevron-right" size={20} color={Colors.textMuted} />
           </TouchableOpacity>
         </View>
@@ -304,12 +307,14 @@ export default function SettingsScreen() {
       <PinModal
         visible={pinPhase === 'verify'}
         mode="verify"
+        context="change"
         onSuccess={onVerifySuccess}
         onCancel={() => setPinPhase('idle')}
       />
       <PinModal
         visible={pinPhase === 'setup'}
         mode="setup"
+        context="change"
         onSuccess={onSetupSuccess}
         onCancel={() => setPinPhase('idle')}
       />

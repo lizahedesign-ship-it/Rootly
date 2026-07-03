@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Animated,
 } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import { Colors, Typography, Spacing, Radius } from '../theme';
 import { usePin } from '../hooks/usePin';
 
@@ -15,6 +16,8 @@ interface Props {
   /** 'setup' — parent creates PIN (2-phase: enter + confirm).
    *  'verify' — parent enters PIN to exit child mode. */
   mode: 'setup' | 'verify';
+  /** 'change' — used in Settings Change PIN flow; adjusts titles for both verify and setup steps. */
+  context?: 'change';
   onSuccess: () => void;
   /** Only provided in setup mode — lets parent abort */
   onCancel?: () => void;
@@ -23,7 +26,7 @@ interface Props {
 // Row-major numpad: 1-9, then blank / 0 / ⌫
 const NUMPAD = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', '⌫'] as const;
 
-export function PinModal({ visible, mode, onSuccess, onCancel }: Props) {
+export function PinModal({ visible, mode, context, onSuccess, onCancel }: Props) {
   const { savePin, verifyPin } = usePin();
 
   const [pin, setPin] = useState('');
@@ -98,14 +101,16 @@ export function PinModal({ visible, mode, onSuccess, onCancel }: Props) {
 
   const title =
     mode === 'verify'
-      ? 'Enter PIN to exit'
+      ? context === 'change' ? 'Enter current PIN' : 'Enter parent PIN'
       : phase === 'enter'
-      ? 'Create a PIN'
+      ? context === 'change' ? 'Create a new PIN' : 'Create a parent PIN'
       : 'Confirm your PIN';
 
   const subtitle =
-    mode === 'setup' && phase === 'enter'
-      ? "You'll use this to exit child mode"
+    mode === 'verify' && context === 'change'
+      ? 'Required to enter parent mode.'
+      : mode === 'setup' && phase === 'enter'
+      ? 'Required to enter parent mode.'
       : mode === 'setup' && phase === 'confirm'
       ? 'Enter the same PIN again'
       : null;
@@ -162,9 +167,11 @@ export function PinModal({ visible, mode, onSuccess, onCancel }: Props) {
                       activeOpacity={isEmpty ? 1 : 0.55}
                       disabled={isEmpty}
                     >
-                      <Text style={key === '⌫' ? styles.deleteText : styles.numText}>
-                        {key}
-                      </Text>
+                      {key === '⌫' ? (
+                        <Feather name="delete" size={24} color={Colors.green700} />
+                      ) : (
+                        <Text style={styles.numText}>{key}</Text>
+                      )}
                     </TouchableOpacity>
                   );
                 })}
@@ -268,11 +275,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size['2xl'],
     color: Colors.textPrimary,
-  },
-  deleteText: {
-    fontFamily: 'Outfit_500Medium',
-    fontSize: Typography.size.xl,
-    color: Colors.textSecondary,
   },
   cancelBtn: {
     marginTop: Spacing.xl,
