@@ -18,8 +18,7 @@ import { useAuthStore } from '../store/authStore';
 
 export default function LoginScreen() {
   const router = useRouter();
-  const { signInWithEmail, signInWithApple, signInWithGoogle, isLoading, error, clearError, isLoggedIn } =
-    useAuthStore();
+  const { signInWithEmail, isLoading, error, clearError, isLoggedIn } = useAuthStore();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -111,34 +110,6 @@ export default function LoginScreen() {
               ) : (
                 <Text style={[styles.btnLabel, styles.btnLabelPrimary]}>Sign In</Text>
               )}
-            </TouchableOpacity>
-          </View>
-
-          {/* ── Divider ── */}
-          <View style={styles.dividerRow}>
-            <View style={styles.dividerLine} />
-            <Text style={styles.dividerText}>or</Text>
-            <View style={styles.dividerLine} />
-          </View>
-
-          {/* ── Social buttons ── */}
-          <View style={styles.social}>
-            <TouchableOpacity
-              style={[styles.btn, styles.btnApple]}
-              onPress={signInWithApple}
-              disabled={isLoading}
-              activeOpacity={0.85}
-            >
-              <Text style={[styles.btnLabel, styles.btnLabelApple]}>Continue with Apple</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[styles.btn, styles.btnGoogle]}
-              onPress={signInWithGoogle}
-              disabled={isLoading}
-              activeOpacity={0.85}
-            >
-              <Text style={[styles.btnLabel, styles.btnLabelGoogle]}>Continue with Google</Text>
             </TouchableOpacity>
           </View>
 
@@ -265,49 +236,12 @@ const styles = StyleSheet.create({
   btnPrimary: {
     backgroundColor: Colors.green700,
   },
-  btnApple: {
-    backgroundColor: Colors.black,
-  },
-  btnGoogle: {
-    backgroundColor: Colors.white,
-    borderWidth: 1.5,
-    borderColor: Colors.borderMedium,
-  },
   btnLabel: {
     fontFamily: 'Outfit_500Medium',
     fontSize: Typography.size.base,
   },
   btnLabelPrimary: {
     color: Colors.white,
-  },
-  btnLabelApple: {
-    color: Colors.white,
-  },
-  btnLabelGoogle: {
-    color: Colors.textPrimary,
-  },
-
-  // Divider
-  dividerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: Spacing.xl,
-  },
-  dividerLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: Colors.border,
-  },
-  dividerText: {
-    fontFamily: 'Outfit_500Medium',
-    fontSize: Typography.size.sm,
-    color: Colors.textMuted,
-    marginHorizontal: Spacing.md,
-  },
-
-  // Social
-  social: {
-    gap: Spacing.md,
   },
 
   // Footer

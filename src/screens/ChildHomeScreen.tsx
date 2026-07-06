@@ -94,6 +94,7 @@ export default function ChildHomeScreen() {
     router.back();
   }
 
+
   const progress = totalCount > 0 ? completedCount / totalCount : 0;
   const hasNoTasks = !loading && totalCount === 0;
 

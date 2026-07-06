@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import {
+  Alert,
   View,
   Text,
   TextInput,
@@ -8,7 +9,6 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  ActivityIndicator,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
@@ -18,12 +18,13 @@ import { useAuthStore } from '../store/authStore';
 
 export default function SignUpScreen() {
   const router = useRouter();
-  const { signUpWithEmail, isLoading, error, clearError, isLoggedIn } = useAuthStore();
+  const { signUpWithEmail, clearError, isLoggedIn } = useAuthStore();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [localError, setLocalError] = useState<string | null>(null);
+  const [emailTaken, setEmailTaken] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -38,6 +39,7 @@ export default function SignUpScreen() {
 
   const handleSignUp = async () => {
     setLocalError(null);
+    setEmailTaken(false);
     clearError();
 
     if (!email.trim() || !password || !confirmPassword) {
@@ -54,6 +56,15 @@ export default function SignUpScreen() {
     }
 
     const result = await signUpWithEmail(email.trim().toLowerCase(), password);
+
+    if (result.errorMessage) {
+      Alert.alert('Sign up failed', result.errorMessage);
+      return;
+    }
+    if (result.emailExists) {
+      setEmailTaken(true);
+      return;
+    }
     if (result.needsVerification) {
       setSubmittedEmail(email.trim().toLowerCase());
       setVerificationSent(true);
@@ -87,8 +98,6 @@ export default function SignUpScreen() {
   }
 
   // ── Sign-up form ──────────────────────────────────────────────────────────
-  const displayError = localError ?? error;
-
   return (
     <SafeAreaView style={styles.safe}>
       <KeyboardAvoidingView
@@ -110,26 +119,36 @@ export default function SignUpScreen() {
           </View>
 
           {/* ── Error ── */}
-          {displayError ? (
+          {localError ? (
             <View style={styles.errorBox}>
-              <Text style={styles.errorText}>{displayError}</Text>
+              <Text style={styles.errorText}>{localError}</Text>
             </View>
           ) : null}
 
           {/* ── Form ── */}
           <View style={styles.form}>
-            <TextInput
-              style={styles.input}
-              placeholder="Email"
-              placeholderTextColor={Colors.textMuted}
-              value={email}
-              onChangeText={setEmail}
-              autoCapitalize="none"
-              keyboardType="email-address"
-              autoComplete="email"
-              textContentType="emailAddress"
-              returnKeyType="next"
-            />
+            <View>
+              <TextInput
+                style={[styles.input, emailTaken && styles.inputError]}
+                placeholder="Email"
+                placeholderTextColor={Colors.textMuted}
+                value={email}
+                onChangeText={(v) => { setEmail(v); setEmailTaken(false); }}
+                autoCapitalize="none"
+                keyboardType="email-address"
+                autoComplete="email"
+                textContentType="emailAddress"
+                returnKeyType="next"
+              />
+              {emailTaken ? (
+                <View style={styles.fieldErrorRow}>
+                  <Text style={styles.fieldErrorText}>Already registered. </Text>
+                  <TouchableOpacity onPress={() => { clearError(); router.replace('/(auth)/login'); }}>
+                    <Text style={styles.fieldErrorLink}>Sign in instead</Text>
+                  </TouchableOpacity>
+                </View>
+              ) : null}
+            </View>
             <View style={styles.inputRow}>
               <TextInput
                 style={styles.inputInner}
@@ -181,16 +200,11 @@ export default function SignUpScreen() {
             </View>
 
             <TouchableOpacity
-              style={[styles.btn, isLoading && styles.btnDisabled]}
+              style={styles.btn}
               onPress={handleSignUp}
-              disabled={isLoading}
               activeOpacity={0.85}
             >
-              {isLoading ? (
-                <ActivityIndicator color={Colors.white} />
-              ) : (
-                <Text style={styles.btnLabel}>Create Account</Text>
-              )}
+              <Text style={styles.btnLabel}>Create Account</Text>
             </TouchableOpacity>
           </View>
 
@@ -254,9 +268,30 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
+
   // Form
   form: {
     gap: Spacing.md,
+  },
+  inputError: {
+    borderColor: Colors.danger,
+  },
+  fieldErrorRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: Spacing.xs,
+    paddingHorizontal: Spacing.xs,
+  },
+  fieldErrorText: {
+    fontFamily: 'Outfit_500Medium',
+    fontSize: Typography.size.sm,
+    color: Colors.danger,
+  },
+  fieldErrorLink: {
+    fontFamily: 'Outfit_600SemiBold',
+    fontSize: Typography.size.sm,
+    color: Colors.danger,
+    textDecorationLine: 'underline',
   },
   input: {
     height: 52,

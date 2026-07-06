@@ -28,7 +28,6 @@ const NUMPAD = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', '⌫'] as 
 
 export function PinModal({ visible, mode, context, onSuccess, onCancel }: Props) {
   const { savePin, verifyPin } = usePin();
-
   const [pin, setPin] = useState('');
   const [phase, setPhase] = useState<'enter' | 'confirm'>('enter');
   const [firstPin, setFirstPin] = useState('');

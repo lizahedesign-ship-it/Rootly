@@ -157,6 +157,7 @@ export default function ChildAllDoneScreen() {
     router.replace('/(parent)/home');
   }
 
+
   // ── Dynamic styling ──
   const isMilestoneReady = !checking && isMilestone;
   // Standard: medium green (celebratory). Milestone: deep green (dramatic).
