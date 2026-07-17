@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { Stack } from 'expo-router';
+import * as Linking from 'expo-linking';
+import { Stack, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import {
   useFonts,
@@ -17,6 +18,7 @@ import {
   registerForPushNotifications,
 } from '../src/services/notificationsService';
 import { useOfflineSync } from '../src/hooks/useOfflineSync';
+import { parseRecoveryTokensFromUrl } from '../src/utils/authLinking';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -25,6 +27,8 @@ setNotificationHandler();
 
 export default function RootLayout() {
   useOfflineSync();
+
+  const router = useRouter();
 
   const setSession  = useAuthStore((s) => s.setSession);
   const isLoggedIn  = useAuthStore((s) => s.isLoggedIn);
@@ -47,6 +51,27 @@ export default function RootLayout() {
       setSession(session);
     });
     return () => subscription.unsubscribe();
+  }, []);
+
+  // Handle the rootly://reset-password recovery deep link: establish the
+  // temporary recovery session from its tokens, then route to the screen
+  // that lets the user set a new password.
+  useEffect(() => {
+    const handleUrl = async (url: string) => {
+      const tokens = parseRecoveryTokensFromUrl(url);
+      if (!tokens) return;
+      await supabase.auth.setSession({
+        access_token: tokens.accessToken,
+        refresh_token: tokens.refreshToken,
+      });
+      router.push('/(auth)/reset-password');
+    };
+
+    Linking.getInitialURL().then((url) => {
+      if (url) handleUrl(url);
+    });
+    const subscription = Linking.addEventListener('url', ({ url }) => handleUrl(url));
+    return () => subscription.remove();
   }, []);
 
   // Register push token when the parent is authenticated.

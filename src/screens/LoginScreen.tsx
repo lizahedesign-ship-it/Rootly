@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import {
+  Alert,
   View,
   Text,
   TextInput,
@@ -15,6 +16,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
 import { Colors, Typography, Spacing, Radius } from '../theme';
 import { useAuthStore } from '../store/authStore';
+import { supabase } from '../services/supabase';
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -33,6 +35,15 @@ export default function LoginScreen() {
     if (!email.trim() || !password.trim()) return;
     clearError();
     await signInWithEmail(email.trim().toLowerCase(), password);
+  };
+
+  const handleForgotPassword = async () => {
+    if (!email.trim()) {
+      Alert.alert('Please enter your email address first.');
+      return;
+    }
+    await supabase.auth.resetPasswordForEmail(email.trim().toLowerCase());
+    Alert.alert('Check your email for a password reset link.');
   };
 
   return (
@@ -99,6 +110,13 @@ export default function LoginScreen() {
                 />
               </TouchableOpacity>
             </View>
+            <TouchableOpacity
+              style={styles.forgotPasswordBtn}
+              onPress={handleForgotPassword}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.forgotPasswordText}>Forgot password?</Text>
+            </TouchableOpacity>
             <TouchableOpacity
               style={[styles.btn, styles.btnPrimary, isLoading && styles.btnDisabled]}
               onPress={handleEmailSignIn}
@@ -222,12 +240,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  forgotPasswordBtn: {
+    alignSelf: 'flex-end',
+    marginTop: -Spacing.sm,
+  },
+  forgotPasswordText: {
+    fontFamily: 'Outfit_500Medium',
+    fontSize: Typography.size.sm,
+    color: Colors.textMuted,
+  },
 
   // Buttons
   btn: {
     height: 52,
     borderRadius: Radius.lg,
     alignItems: 'center',
+    marginTop: Spacing.sm,
     justifyContent: 'center',
   },
   btnDisabled: {
