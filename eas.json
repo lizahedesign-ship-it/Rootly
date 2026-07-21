@@ -7,8 +7,8 @@
     "development": {
       "developmentClient": true,
       "distribution": "internal",
-      "node": {
-        "npmInstallFlags": ["--legacy-peer-deps"]
+      "env": {
+        "NPM_CONFIG_LEGACY_PEER_DEPS": "true"
       }
     },
     "preview": {
@@ -16,14 +16,14 @@
       "ios": {
         "simulator": false
       },
-      "node": {
-        "npmInstallFlags": ["--legacy-peer-deps"]
+      "env": {
+        "NPM_CONFIG_LEGACY_PEER_DEPS": "true"
       }
     },
     "production": {
       "autoIncrement": true,
-      "node": {
-        "npmInstallFlags": ["--legacy-peer-deps"]
+      "env": {
+        "NPM_CONFIG_LEGACY_PEER_DEPS": "true"
       }
     }
   },
