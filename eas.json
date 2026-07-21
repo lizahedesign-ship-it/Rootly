@@ -1,20 +1,30 @@
 {
   "cli": {
-    "version": ">= 16.0.0"
+    "version": ">= 16.0.0",
+    "appVersionSource": "remote"
   },
   "build": {
     "development": {
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "node": {
+        "npmInstallFlags": ["--legacy-peer-deps"]
+      }
     },
     "preview": {
       "distribution": "internal",
       "ios": {
         "simulator": false
+      },
+      "node": {
+        "npmInstallFlags": ["--legacy-peer-deps"]
       }
     },
     "production": {
-      "autoIncrement": true
+      "autoIncrement": true,
+      "node": {
+        "npmInstallFlags": ["--legacy-peer-deps"]
+      }
     }
   },
   "submit": {
