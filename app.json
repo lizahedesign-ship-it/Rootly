@@ -14,7 +14,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.rootly"
+      "bundleIdentifier": "com.lizahe.rootly"
     },
     "android": {
       "adaptiveIcon": {
