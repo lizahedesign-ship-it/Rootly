@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy — Rootzy</title>
+<style>
+  :root {
+    --ink: #23303a;
+    --ink-soft: #51626d;
+    --bg: #fbfaf7;
+    --card: #ffffff;
+    --accent: #2f7a5f;
+    --accent-soft: #e6f4ee;
+    --border: #e6e1d6;
+    --max-w: 760px;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+  a:hover { opacity: 0.8; }
+
+  header.top {
+    background: var(--accent-soft);
+    border-bottom: 1px solid var(--border);
+    padding: 32px 20px 28px;
+  }
+  header.top .inner {
+    max-width: var(--max-w);
+    margin: 0 auto;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--accent);
+    text-decoration: none;
+    margin-bottom: 14px;
+  }
+  .brand:hover { opacity: 0.85; }
+  header.top h1 {
+    margin: 0 0 6px;
+    font-size: 1.7rem;
+    line-height: 1.3;
+  }
+  header.top p.sub {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+  }
+
+  main {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 36px 20px 80px;
+  }
+
+  .summary-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 10px;
+    padding: 20px 22px;
+    margin-bottom: 40px;
+  }
+  .summary-box h2 {
+    margin: 0 0 10px;
+    font-size: 1.05rem;
+  }
+  .summary-box ul {
+    margin: 0;
+    padding-left: 20px;
+  }
+  .summary-box li { margin-bottom: 6px; }
+  .summary-box li:last-child { margin-bottom: 0; }
+
+  section {
+    margin-bottom: 40px;
+  }
+  section h2 {
+    font-size: 1.3rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 10px;
+    margin: 0 0 16px;
+  }
+  section h3 {
+    font-size: 1.05rem;
+    margin: 22px 0 8px;
+  }
+  p { margin: 0 0 14px; color: var(--ink); }
+  ul, ol { padding-left: 22px; margin: 0 0 14px; }
+  li { margin-bottom: 8px; }
+
+  .no-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 0 0 14px;
+  }
+  .no-list li {
+    padding-left: 26px;
+    position: relative;
+  }
+  .no-list li::before {
+    content: "✕";
+    position: absolute;
+    left: 0;
+    color: #b3473f;
+    font-weight: 700;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 0 14px;
+    font-size: 0.95rem;
+  }
+  th, td {
+    text-align: left;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    vertical-align: top;
+  }
+  th {
+    background: var(--accent-soft);
+    font-weight: 600;
+  }
+
+  .coppa-list {
+    padding-left: 0;
+    list-style: none;
+    counter-reset: coppa;
+  }
+  .coppa-list > li {
+    counter-increment: coppa;
+    position: relative;
+    padding-left: 32px;
+    margin-bottom: 16px;
+  }
+  .coppa-list > li::before {
+    content: counter(coppa, lower-alpha) ")";
+    position: absolute;
+    left: 0;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .meta {
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+  }
+
+  footer {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 0 20px 60px;
+    color: var(--ink-soft);
+    font-size: 0.85rem;
+  }
+  footer a { color: var(--ink-soft); }
+
+  @media (max-width: 480px) {
+    header.top { padding: 24px 16px 22px; }
+    header.top h1 { font-size: 1.4rem; }
+    main { padding: 28px 16px 60px; }
+    section h2 { font-size: 1.15rem; }
+    .summary-box { padding: 16px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="inner">
+    <a class="brand" href="../index.html">🌱 Rootzy</a>
+    <h1>Privacy Policy</h1>
+    <p class="sub">Last updated: July 22, 2026</p>
+  </div>
+</header>
+
+<main>
+
+  <div class="summary-box">
+    <h2>The short version</h2>
+    <ul>
+      <li>Rootzy is used by <strong>parents</strong> to track their child's daily habits. Children do not create accounts or log in themselves.</li>
+      <li>We collect only what's needed to run the app: parent email, child info entered by the parent, habit data, optional milestone photos, and push notification tokens.</li>
+      <li>We <strong>never sell</strong> your data or your child's data, and we <strong>never</strong> use it for advertising.</li>
+      <li>You can review, edit, or delete your child's data at any time.</li>
+    </ul>
+  </div>
+
+  <section id="what-we-collect">
+    <h2>1. What Data We Collect</h2>
+    <p>All information in Rootzy is entered by the parent through their own account. We collect:</p>
+    <table>
+      <thead>
+        <tr><th>Data</th><th>Why we collect it</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Parent's email address</td>
+          <td>To create and secure your account, and to sign you in</td>
+        </tr>
+        <tr>
+          <td>Child's name and profile info</td>
+          <td>Entered by the parent, so the app can display and organize your child's habits</td>
+        </tr>
+        <tr>
+          <td>Habit tracking data</td>
+          <td>Daily check-ins, streaks, and progress — the core function of the app</td>
+        </tr>
+        <tr>
+          <td>Milestone photos</td>
+          <td>Optional photos a parent chooses to upload to celebrate their child's progress</td>
+        </tr>
+        <tr>
+          <td>Push notification token</td>
+          <td>Lets us send reminders and milestone alerts to your device</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>We do not collect any information directly from children. See <a href="#childrens-privacy">Section 4</a> for more detail.</p>
+  </section>
+
+  <section id="how-stored">
+    <h2>2. How Data Is Stored</h2>
+    <p>
+      Rootzy's data is stored using <strong>Supabase</strong>, a managed backend provider. Habit data and account
+      information live in a Postgres database, and milestone photos are stored using Supabase Storage. Data is
+      protected using industry-standard <strong>encryption in transit</strong> (HTTPS/TLS) and <strong>encryption at
+      rest</strong>.
+    </p>
+  </section>
+
+  <section id="sharing">
+    <h2>3. Data Sharing and Advertising</h2>
+    <p>We want to be direct about this, because it matters most when children are involved:</p>
+    <ul class="no-list">
+      <li>We do <strong>not</strong> sell your data or your child's data to advertisers, data brokers, or anyone else, under any circumstances.</li>
+      <li>We do <strong>not</strong> use your child's data for targeted advertising or behavioral profiling.</li>
+      <li>We do <strong>not</strong> share your data or your child's data with third parties for marketing purposes.</li>
+    </ul>
+    <p>
+      Data is only shared with service providers that are strictly necessary to operate the app — for example,
+      Supabase, which hosts our database, file storage, and authentication; and Expo/EAS's push notification
+      infrastructure together with Apple's Push Notification service (APNs), which process device push tokens
+      solely to deliver reminders and milestone alerts. These providers are contractually bound to protect your
+      data and are not permitted to use it for their own purposes.
+    </p>
+  </section>
+
+  <section id="childrens-privacy">
+    <h2>4. Children's Privacy (COPPA)</h2>
+    <p>
+      Rootzy is designed to be used by parents on behalf of their children. We built the app this way specifically
+      to comply with the Children's Online Privacy Protection Act (COPPA) and to keep children's data safe:
+    </p>
+    <ol class="coppa-list">
+      <li>
+        <strong>Accounts belong exclusively to parents.</strong> The Rootzy account is created and owned by the
+        parent or guardian. Children do not register their own account, do not enter their own email address, and
+        do not go through any account creation or sign-up flow themselves.
+      </li>
+      <li>
+        <strong>Child information is entered by the parent, not collected from the child.</strong> Any information
+        related to a child profile — name, other profile details, habit-tracking data, and photos — is voluntarily
+        entered into the app by the parent on the child's behalf. We do not collect this information directly from
+        the child at any point.
+      </li>
+      <li>
+        <strong>Creating an account is how a parent gives consent.</strong> By creating a Rootzy account and
+        agreeing to this Privacy Policy, the parent is providing consent for the collection and use of their
+        child's information. Rootzy is designed for account creation and management by parents only.
+      </li>
+      <li>
+        <strong>No stranger contact, no chat, no ads shown to children.</strong> Rootzy contains no features that
+        allow children to communicate with strangers, no social or chat functionality of any kind, and no
+        advertising is shown to children within the app.
+      </li>
+      <li>
+        <strong>Parents can review, edit, or delete their child's data at any time.</strong> You can do this through
+        in-app account deletion, or by contacting us directly (see <a href="#contact">Section 8</a>). Before acting
+        on any request to access or delete a child's data, we will verify that the request is coming from the
+        parent who holds the account.
+      </li>
+      <li>
+        <strong>Deletion is permanent.</strong> When an account is deleted, all child-related data — photos, habit
+        records, and profile information — is permanently deleted within 30 days, except where we're required to
+        retain certain records by law.
+      </li>
+    </ol>
+  </section>
+
+  <section id="retention">
+    <h2>5. Data Retention</h2>
+    <p>
+      We retain your data, and your child's data, only for as long as your account remains active. If you close
+      your account or request deletion, your data — including your child's information — is deleted as described
+      in <a href="#childrens-privacy">Section 4</a>.
+    </p>
+  </section>
+
+  <section id="security">
+    <h2>6. Security Measures</h2>
+    <p>We take a number of steps to keep your data secure:</p>
+    <ul>
+      <li>Encryption of data in transit (HTTPS/TLS) and at rest</li>
+      <li>Access controls that restrict who and what can read or modify your data</li>
+      <li>Reliance on Supabase's infrastructure security practices, including database-level row security policies scoped to each account</li>
+    </ul>
+    <p>No system is 100% immune to risk, but we design Rootzy to minimize what data is collected and who can access it.</p>
+  </section>
+
+  <section id="changes">
+    <h2>7. Changes to This Policy</h2>
+    <p>
+      If we update this Privacy Policy, we'll revise the "Last updated" date at the top of this page. For material
+      changes — ones that meaningfully affect how we collect or use your or your child's data — we will also
+      provide notice inside the app.
+    </p>
+  </section>
+
+  <section id="contact">
+    <h2>8. Contact Us</h2>
+    <p>
+      If you have questions about this policy, want to review or delete your child's data, or have any other
+      privacy concern, please reach out:
+    </p>
+    <p>📧 <a href="mailto:lizahe.design@gmail.com">lizahe.design@gmail.com</a></p>
+  </section>
+
+  <p class="meta">
+    This policy reflects our current practices as of the date above. As Rootzy grows, we plan to work with legal
+    counsel to further refine our privacy and children's data practices.
+  </p>
+
+  <p class="meta">Last updated: July 22, 2026</p>
+
+</main>
+
+<footer>
+  <p><a href="../index.html">← Back to Rootzy home</a></p>
+</footer>
+
+</body>
+</html>
