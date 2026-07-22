@@ -60,7 +60,7 @@ export default function LoginScreen() {
           {/* ── Logo ── */}
           <View style={styles.logoSection}>
             <Text style={styles.logoEmoji}>🌱</Text>
-            <Text style={styles.appName}>Rootly</Text>
+            <Text style={styles.appName}>Rootzy</Text>
             <Text style={styles.tagline}>Build habits that last</Text>
           </View>
 

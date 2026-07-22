@@ -1,5 +1,5 @@
 # ARCH.md — Architecture Decisions
-> Rootly · Children's Habit Tracker · Last updated: March 2026
+> Rootzy · Children's Habit Tracker · Last updated: March 2026
 
 ---
 
@@ -45,7 +45,7 @@
 ## 3. Directory Structure
 
 ```
-rootly/
+rootzy/
 ├── PRD.md
 ├── ARCH.md
 ├── project_state.md

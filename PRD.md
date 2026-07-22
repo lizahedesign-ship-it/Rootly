@@ -1,4 +1,4 @@
-# PRD.md — Rootly: Children's Habit Tracker
+# PRD.md — Rootzy: Children's Habit Tracker
 > Version 5 · MVP scope only · Last updated: March 2026
 
 ---

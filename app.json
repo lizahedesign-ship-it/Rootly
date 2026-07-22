@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "Rootly",
+    "name": "Rootzy",
     "slug": "rootly",
-    "scheme": "rootly",
+    "scheme": "rootzy",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -14,7 +14,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.lizahe.rootly",
+      "bundleIdentifier": "com.lizahe.rootzy",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }

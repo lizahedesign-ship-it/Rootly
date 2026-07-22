@@ -106,7 +106,7 @@ Deno.serve(async (req: Request) => {
     const message = {
       to: pushToken,
       title: 'Milestone reached! ⭐',
-      body: `${name} just hit a big milestone. Open Rootly to celebrate.`,
+      body: `${name} just hit a big milestone. Open Rootzy to celebrate.`,
       sound: 'default',
     }
 

@@ -1,5 +1,5 @@
 -- =============================================================
--- Rootly — 001_initial_schema.sql
+-- Rootzy — 001_initial_schema.sql
 -- Slice 2: all tables + RLS + indexes
 -- Run via: Supabase Dashboard > SQL Editor, or supabase db push
 -- =============================================================

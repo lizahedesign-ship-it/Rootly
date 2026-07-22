@@ -1,6 +1,6 @@
 import * as SecureStore from 'expo-secure-store';
 
-const PIN_KEY = 'rootly_parent_pin';
+const PIN_KEY = 'rootzy_parent_pin';
 
 export const pinService = {
   async set(pin: string): Promise<void> {

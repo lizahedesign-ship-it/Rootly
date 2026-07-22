@@ -1,4 +1,4 @@
-// Parses the Supabase password-recovery tokens out of a rootly://reset-password
+// Parses the Supabase password-recovery tokens out of a rootzy://reset-password
 // deep link. Supabase appends them as a URL fragment (#access_token=...&type=recovery)
 // since the client is configured for the implicit auth flow.
 export function parseRecoveryTokensFromUrl(

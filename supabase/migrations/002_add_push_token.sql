@@ -1,5 +1,5 @@
 -- =============================================================
--- Rootly — 002_add_push_token.sql
+-- Rootzy — 002_add_push_token.sql
 -- Slice 13: Notifications
 -- Run via: Supabase Dashboard > SQL Editor
 -- =============================================================

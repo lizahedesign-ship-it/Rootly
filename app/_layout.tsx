@@ -53,7 +53,7 @@ export default function RootLayout() {
     return () => subscription.unsubscribe();
   }, []);
 
-  // Handle the rootly://reset-password recovery deep link: establish the
+  // Handle the rootzy://reset-password recovery deep link: establish the
   // temporary recovery session from its tokens, then route to the screen
   // that lets the user set a new password.
   useEffect(() => {
